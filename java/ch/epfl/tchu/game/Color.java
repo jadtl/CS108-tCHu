@@ -3,8 +3,15 @@ package ch.epfl.tchu.game;
 import java.util.Arrays;
 import java.util.List;
 
-public enum Color {
+/**
+ * creation of a list of 
+ * all existing colors 
+ * for wagons
+ */
 
+
+public enum Color
+{
     BLACK,
     VIOLET,
     BLUE,
@@ -14,9 +21,8 @@ public enum Color {
     RED,
     WHITE;
 
-
-
     public static final List<Color> ALL = Arrays.asList(Color.values());
-    public static final int COUNT = ALL.size();
 
+    public static final int COUNT = ALL.size();
 }
+
