@@ -1,4 +1,11 @@
+
 package ch.epfl.tchu;
+
+/**
+ * This method is created to 
+ * emit error messages when 
+ * certain conditions are not met
+ */
 
 public final class Preconditions
 {
