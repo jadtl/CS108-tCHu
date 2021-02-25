@@ -1,12 +1,21 @@
 package ch.epfl.tchu.game;
 
 /**
- * method establishes if 2 stations are connected
+ * An interface for the station connectivity logic
+ *
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
  */
-
 public interface StationConnectivity {
-
-	public abstract boolean connected(Station s1, Station s2);
+    /**
+     * Returns the connection status of the two
+     * given stations in the player's network
+     *
+     * @param s1 the departure station
+     * @param s2 the arrival station
+     * @return true if the two stations are connected
+     */
+    boolean connected(Station s1, Station s2);
 
 }
 

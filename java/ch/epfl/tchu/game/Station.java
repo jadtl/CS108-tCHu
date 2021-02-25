@@ -2,36 +2,53 @@ package ch.epfl.tchu.game;
 
 import ch.epfl.tchu.Preconditions;
 
+/**
+ * A station with a name and a unique identifier number
+ *
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
+ */
 public final class Station {
-	
-	private int id;
-	private String name;
+    private int id;
+    private String name;
 
+    /**
+     * Constructs a station with the given identifier number and name
+     *
+     * @param id the station identifier
+     * @param name the station name
+     * @throws IllegalArgumentException if the identifier is strictly negative
+     */
+    public Station(int id, String name) {
+        Preconditions.checkArgument(id >= 0);
 
+        this.id = id;
+        this.name = name;
+    }
 
-	public Station(int id, String name) {
+    /**
+     * Returns the station unique identifier number
+     * @return the station unique identifier number
+     */
+    public int id() {
+        return id;
+    }
 
-		Preconditions.checkArgument(id >= 0);
+    /**
+     * Returns the station name
+     * @return the station name
+     */
+    public String name() {
+        return name;
+    }
 
-		this.id = id;
-		this.name = name;
-
-	}
-	
-	public int id() {
-
-		return id;
-	}
-
-	public String name() {
-
-		return name;
-	}
-
-	@Override
-	public String toString()
-	{
-		return name;
-	}
+    /**
+     * Returns the station name
+     * @return the station name
+     */
+    @Override
+    public String toString() {
+        return name;
+    }
 }
 

@@ -4,14 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * creation of a list of 
- * all existing colors 
- * for wagons
+ * An enumeration of the eight colors
+ * used in the game for wagons and roads
+ *
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
  */
-
-
-public enum Color
-{
+public enum Color {
     BLACK,
     VIOLET,
     BLUE,
@@ -22,7 +21,6 @@ public enum Color
     WHITE;
 
     public static final List<Color> ALL = Arrays.asList(Color.values());
-
     public static final int COUNT = ALL.size();
 }
 

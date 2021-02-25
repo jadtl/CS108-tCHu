@@ -3,8 +3,15 @@ package ch.epfl.tchu.game;
 import java.util.Arrays;
 import java.util.List;
 
-public enum Card
-{
+/**
+ * An enumeration of the different types
+ * of game cards, i.e. eight wagon cards
+ * types and the locomotive card type.
+ *
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
+ */
+public enum Card {
     BLACK,
     VIOLET,
     BLUE,
@@ -15,51 +22,38 @@ public enum Card
     WHITE,
     LOCOMOTIVE;
 
-
-	
     public static final List<Card> ALL = Arrays.asList(Card.values());
-
     public static final int COUNT = ALL.size();
-
-    // same list as ALL, except without LOCOMOTIVE
     public static final List<Card> CARS = ALL.subList(0, ALL.size() - 1);
-    
+
+    private Color color;
+
     /**
-     * returns type of wagon 
-     * corresponding to color
+     * Returns a wagon card type according to the given color
+     *
+     * @param color the color of the wanted wagon
      */
-    
-    public static Card of(Color color)
-    {
-        for (Card card : CARS)
-        {
-            // return current card if equal to given color
+    public static Card of(Color color) {
+        for (Card card : CARS) {
             if (card.toString().equals(color.toString()))
                 return card;
         }
         return null;
     }
-    
+
     /**
-     * @param color
+     * Returns the card color
+     *
+     * @return a color for a wagon and null for a locomotive
      */
-
-    private Color color;
-
-    public Color color()
-    {
+    public Color color() {
         return color;
     }
-    
+
     /**
-     * Returns the card color 
-     * for a wagon and null for
-     * a locomotive (have no color)
+     * Constructs a card with the given color or null for a locomotive card
      */
-
-
-     Card()
-    {
+    Card() {
         color = this.toString().equals("LOCOMOTIVE") ? null : Color.valueOf(this.toString());
     }
 }

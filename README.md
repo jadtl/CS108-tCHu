@@ -4,10 +4,4 @@
 
 #### Sofiya
 
-Javadoc: Preconditions, Color, Card, StationConnectivity
-
 #### Jad
-
-Javadoc: Station, Ticket, Trip
-
-Optimize computeText
