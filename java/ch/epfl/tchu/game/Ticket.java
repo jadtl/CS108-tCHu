@@ -11,7 +11,7 @@ import java.util.*;
  * @author Jad Tala (310821)
  */
 public final class Ticket implements Comparable<Ticket> {
-    private List<Trip> trips;
+    private final List<Trip> trips;
     private final String text;
 
     /**
@@ -51,11 +51,11 @@ public final class Ticket implements Comparable<Ticket> {
      * @return the textual representation of the trips
      */
     private static String computeText(List<Trip> trips) {
-        Map map = new HashMap();
+        Map<String, Integer> map = new HashMap<>();
         Collection<String> arrivalNoDuplicates = new TreeSet<>();
 
         // Print the beginning of the text
-        String text = trips.get(0).from().name() + " - ";
+        StringBuilder text = new StringBuilder(trips.get(0).from().name() + " - ");
 
         // Removing duplicate arrival stations
         for (Trip trip : trips)
@@ -71,17 +71,17 @@ public final class Ticket implements Comparable<Ticket> {
 
         // Print the remaining of the text depending on whether the ticket holds a unique trip or more
         if (arrivalNoDuplicates.size() == 1) {
-            text += String.format("%s (%s)", arrivalNoDuplicates.toArray()[0], trips.get(0).points());
+            text.append(String.format("%s (%s)", arrivalNoDuplicates.toArray()[0], trips.get(0).points()));
         }
         else {
-            text += "{";
+            text.append("{");
             for (String arrivalStation : arrivalNoDuplicates) {
-                text += String.format("%s (%s), ", arrivalStation, map.get(arrivalStation));
+                text.append(String.format("%s (%s), ", arrivalStation, map.get(arrivalStation)));
             }
-            text = text.substring(0, text.length() - 2) + "}";
+            text = new StringBuilder(text.substring(0, text.length() - 2) + "}");
         }
 
-        return text;
+        return text.toString();
     }
 
     /**
