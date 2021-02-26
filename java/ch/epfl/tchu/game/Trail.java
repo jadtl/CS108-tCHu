@@ -5,57 +5,78 @@ import java.util.List;
 
 public class Trail {
 
-	private final List<Route> routes;
-	private final int length;
+    private final List<Route> routes;
+    private final int length;
 
-	private Trail(List<Route> routes) {
+    private Trail(List<Route> routes) {
 
-		this.routes = routes;
-		int length = 0;
-		for (Route route : routes) {
+        this.routes = routes;
+        int length = 0;
+        if (routes != null) {
+            for (Route route : routes) {
 
-			length += route.length();
+                length += route.length();
 
-		}
-		
-		this.length = length;
+            }
+        }
 
-	}
+        this.length = length;
 
-	private static final Trail longest(List<Route> routes) {
+    }
 
-		List<Trail> longestTrails = new ArrayList<>();
-		
-		for (Route route : routes) {
-			
-			longestTrails.add(new Trail(List.of(route)));
-		}
+    public static final Trail longest(List<Route> routes) {
 
-		return longestTrails.get(0);
-		
-		
-	}
+        List<List<Route>> longestRoutes = new ArrayList<>();
 
-	public int length() {
+        for (Route route : routes) {
+            List<Route> initialRoute = new ArrayList<>();
+            initialRoute.add(route);
+            longestRoutes.add(initialRoute);
+        }
+        List<List<Route>> addedRoutes = new ArrayList<>();
+        do {
+            addedRoutes = new ArrayList<>();
+            for (List<Route> currentRoutes : longestRoutes) {
 
-		return length;
-	}
+                List<Route> availableRoutes = new ArrayList<>();
+                availableRoutes.addAll(routes);
+                availableRoutes.removeAll(currentRoutes);
 
-	public Station station1() {
+                for (Route candidateRoute : availableRoutes) {
+                    if (currentRoutes.get(currentRoutes.size() - 1).station2().id() == candidateRoute.station1().id()) {
+                        List<Route> newRoutes = currentRoutes;
+                        newRoutes.add(candidateRoute);
 
-		return routes.get(0).station1();
-	}
+                        addedRoutes.add(newRoutes);
+                    }
+                }
+            }
+            if (addedRoutes.size() != 0)
+                longestRoutes = addedRoutes;
+        } while(addedRoutes.size() != 0);
 
-	public Station station2() {
+        return (longestRoutes.size() == 0) ? new Trail(null) : new Trail(longestRoutes.get(0));
+    }
 
-		return routes.get(routes.size() - 1).station2();
-	}
+    public int length() {
 
-	@Override
+        return length;
+    }
 
-	public String toString() {
+    public Station station1() {
 
-		return (station1() + " - " + station2() + " (" + length() + ")");
-	}
+        return (length == 0) ? null : routes.get(0).station1();
+    }
+
+    public Station station2() {
+
+        return (length == 0) ? null : routes.get(routes.size() - 1).station2();
+    }
+
+    @Override
+    public String toString() {
+
+        return (station1() + " - " + station2() + " (" + length() + ")");
+    }
 
 }
