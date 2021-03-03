@@ -1,5 +1,6 @@
 package ch.epfl.tchu.game;
 
+import ch.epfl.tchu.SortedBag;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -58,5 +59,29 @@ class RouteTest {
 
         assertEquals(List.of(Card.RED, Card.RED), route.possibleClaimCards().get(6).toList());
         assertEquals(8, route.possibleClaimCards().size());
+    }
+
+    @Test
+    void additionalClaimCardsCountWorksOnTrivialCards() {
+        Route route = new Route("0", new Station(0, "Lausanne"), new Station(1, "Zürich"),
+                2, Route.Level.UNDERGROUND, null);
+
+        SortedBag<Card> claimCards = new SortedBag.Builder<Card>().add(3, Card.LOCOMOTIVE).build();
+        SortedBag<Card> drawnCards = new SortedBag.Builder<Card>().add(2, Card.LOCOMOTIVE).add(1, Card.RED).build();
+        assertEquals(2, route.additionalClaimCardsCount(claimCards, drawnCards));
+
+        claimCards = new SortedBag.Builder<Card>().add(2, Card.RED).add(1, Card.LOCOMOTIVE).build();
+        drawnCards = new SortedBag.Builder<Card>().add(1, Card.GREEN).add(1, Card.RED).add(1, Card.LOCOMOTIVE).build();
+        assertEquals(2, route.additionalClaimCardsCount(claimCards, drawnCards));
+    }
+
+    @Test
+    void additionalClaimCardsCountFailsOnIncorrectDrawnCards() {
+        Route route = new Route("0", new Station(0, "Lausanne"), new Station(1, "Zürich"),
+                2, Route.Level.UNDERGROUND, null);
+
+        SortedBag<Card> claimCards = new SortedBag.Builder<Card>().add(3, Card.LOCOMOTIVE).build();
+        SortedBag<Card> drawnCards = new SortedBag.Builder<Card>().add(2, Card.LOCOMOTIVE).add(2, Card.RED).build();
+        assertThrows(IllegalArgumentException.class, () -> { route.additionalClaimCardsCount(claimCards, drawnCards); });
     }
 }

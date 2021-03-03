@@ -30,6 +30,7 @@ public final class Route {
     public enum Level { UNDERGROUND, OVERGROUND }
 
     /**
+     * Constructs a route
      *
      * @param id
      * @param station1
@@ -119,8 +120,8 @@ public final class Route {
      */
     public int additionalClaimCardsCount(SortedBag<Card> claimCards, SortedBag<Card> drawnCards) {
         Preconditions.checkArgument(level() == Level.UNDERGROUND && drawnCards.size() == 3);
-        int claimCardsCount = 0;
 
+        int claimCardsCount = 0;
         for (Card card : drawnCards) {
             if (Objects.isNull(card.color()) || card.color().equals(claimCards.get(0).color()))
                 ++claimCardsCount;
