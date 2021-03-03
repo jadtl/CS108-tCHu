@@ -2,6 +2,7 @@ package ch.epfl.tchu.game;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * An enumeration of the different types
@@ -36,7 +37,7 @@ public enum Card {
      */
     public static Card of(Color color) {
         Card result = null;
-        if (color == null) return LOCOMOTIVE;
+        if (Objects.isNull(color)) return LOCOMOTIVE;
         for (Card card : CARS) {
             if (card.toString().equals(color.toString()))
                 result = card;

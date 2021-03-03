@@ -22,7 +22,7 @@ public final class Route {
     private final int length;
     private final Level level;
     private final Color color;
-    List<SortedBag<Card>> possibleClaimCards;
+    private List<SortedBag<Card>> possibleClaimCards;
 
     /**
      *
@@ -48,6 +48,8 @@ public final class Route {
         this.length = length;
         this.level = Objects.requireNonNull(level);
         this.color = color;
+
+        computePossibleClaimCards();
     }
 
     /**
@@ -98,46 +100,16 @@ public final class Route {
      * @return
      */
     public Station stationOpposite(Station station) {
-        Preconditions.checkArgument(station.id() == station1.id() || station.id() == station2.id());
+        Preconditions.checkArgument(station.equals(station1) || station.equals(station2));
 
-        return station.id() == station1.id() ? station2 : station1;
+        return station.equals(station1) ? station2 : station1;
     }
 
     /**
      *
      * @return
      */
-    public List<SortedBag<Card>> possibleClaimCards() {
-        possibleClaimCards = new ArrayList<>();
-        SortedBag.Builder<Card> builder = new SortedBag.Builder<>();
-
-        if (color() == null) {
-            for (Color color : Color.values()) {
-                for (int i = 0; i < length(); i++) {
-                    builder.add(Card.of(color));
-                }
-                possibleClaimCards.add(builder.build());
-                builder = new SortedBag.Builder<>();
-            }
-        }
-
-        else {
-            for (int i = 0; i < length(); i++) {
-                builder.add(Card.of(color()));
-            }
-            possibleClaimCards.add(builder.build());
-            builder = new SortedBag.Builder<>();
-        }
-
-        if (level() == Level.UNDERGROUND) {
-            for (int i = 0; i < length(); i++) {
-                builder.add(Card.of(null));
-            }
-            possibleClaimCards.add(builder.build());
-        }
-
-        return possibleClaimCards;
-    }
+    public List<SortedBag<Card>> possibleClaimCards() { return possibleClaimCards; }
 
     /**
      *
@@ -147,15 +119,15 @@ public final class Route {
      */
     public int additionalClaimCardsCount(SortedBag<Card> claimCards, SortedBag<Card> drawnCards) {
         Preconditions.checkArgument(level() == Level.UNDERGROUND && drawnCards.size() == 3);
-        int result = 0;
+        int claimCardsCount = 0;
 
         for (Card card : drawnCards) {
-            if (card.color() == null || card.color() == claimCards.get(0).color())
-                ++result;
+            if (Objects.isNull(card.color()) || card.color().equals(claimCards.get(0).color()))
+                ++claimCardsCount;
 
         }
 
-        return result;
+        return claimCardsCount;
     }
 
     /**
@@ -163,4 +135,39 @@ public final class Route {
      * @return
      */
     public int claimPoints() { return Constants.ROUTE_CLAIM_POINTS.get(length()); }
+
+    /**
+     * Computes the possible claim cards for the routed
+     */
+    private void computePossibleClaimCards() {
+        possibleClaimCards = new ArrayList<>();
+        SortedBag.Builder<Card> builder = new SortedBag.Builder<>();
+        int claimCardsWithLocomotive = level().equals(Level.UNDERGROUND) ? length() : 0;
+
+        for (int i = 0; i < claimCardsWithLocomotive + 1; i++) {
+            if (Objects.isNull(color())) {
+                if (i < length()) {
+                    for (Color color : Color.values()) {
+                        builder.add(length() - i, Card.of(color));
+                        builder.add(i, Card.of(null));
+                        possibleClaimCards.add(builder.build());
+                        builder = new SortedBag.Builder<>();
+                    }
+                }
+                else {
+                    builder.add(length(), Card.of(null));
+                    possibleClaimCards.add(builder.build());
+                    builder = new SortedBag.Builder<>();
+                }
+            }
+            else {
+                builder.add(length() - i, Card.of(color));
+                builder.add(i, Card.of(null));
+                possibleClaimCards.add(builder.build());
+                builder = new SortedBag.Builder<>();
+            }
+        }
+
+        this.possibleClaimCards = possibleClaimCards;
+    }
 }
