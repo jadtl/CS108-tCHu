@@ -3,29 +3,30 @@ package ch.epfl.tchu.game;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ */
 public class Trail {
-
     private final List<Route> routes;
     private final int length;
 
+    /**
+     *
+     * @param routes
+     */
     private Trail(List<Route> routes) {
-
-        this.routes = routes;
         int length = 0;
         if (routes != null) {
             for (Route route : routes) {
-
                 length += route.length();
-
             }
         }
 
         this.length = length;
-
+        this.routes = routes;
     }
 
     public static final Trail longest(List<Route> routes) {
-
         List<List<Route>> longestRoutes = new ArrayList<>();
 
         for (Route route : routes) {
@@ -33,7 +34,7 @@ public class Trail {
             initialRoute.add(route);
             longestRoutes.add(initialRoute);
         }
-        List<List<Route>> addedRoutes = new ArrayList<>();
+        List<List<Route>> addedRoutes;
         do {
             addedRoutes = new ArrayList<>();
             for (List<Route> currentRoutes : longestRoutes) {
@@ -58,25 +59,13 @@ public class Trail {
         return (longestRoutes.size() == 0) ? new Trail(null) : new Trail(longestRoutes.get(0));
     }
 
-    public int length() {
+    public int length() { return length; }
 
-        return length;
-    }
+    public Station station1() { return (length == 0) ? null : routes.get(0).station1(); }
 
-    public Station station1() {
-
-        return (length == 0) ? null : routes.get(0).station1();
-    }
-
-    public Station station2() {
-
-        return (length == 0) ? null : routes.get(routes.size() - 1).station2();
-    }
+    public Station station2() { return (length == 0) ? null : routes.get(routes.size() - 1).station2(); }
 
     @Override
-    public String toString() {
-
-        return (station1() + " - " + station2() + " (" + length() + ")");
-    }
+    public String toString() { return (station1() + " - " + station2() + " (" + length() + ")"); }
 
 }

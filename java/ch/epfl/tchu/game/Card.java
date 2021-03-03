@@ -30,15 +30,18 @@ public enum Card {
 
     /**
      * Returns a wagon card type according to the given color
+     * or a locomotive card if color is null
      *
      * @param color the color of the wanted wagon
      */
     public static Card of(Color color) {
+        Card result = null;
+        if (color == null) return LOCOMOTIVE;
         for (Card card : CARS) {
             if (card.toString().equals(color.toString()))
-                return card;
+                result = card;
         }
-        return null;
+        return result;
     }
 
     /**

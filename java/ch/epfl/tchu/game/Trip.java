@@ -43,6 +43,7 @@ public final class Trip {
      */
     public static List<Trip> all(List<Station> from, List<Station> to, int points) {
         List<Trip> tripPossibilities = new ArrayList<>();
+
         for (Station departure : from) {
             for (Station arrival : to) {
                 tripPossibilities.add(new Trip(departure, arrival, points));
@@ -56,28 +57,19 @@ public final class Trip {
      * Returns the departure station
      * @return the departure station
      */
-    public Station from() {
-
-        return from;
-    }
+    public Station from() { return from; }
 
     /**
      * Returns the arrival station
      * @return the arrival station
      */
-    public Station to() {
-
-        return to;
-    }
+    public Station to() { return to; }
 
     /**
      * Returns the trip value
      * @return the trip value
      */
-    public int points() {
-
-        return points;
-    }
+    public int points() { return points; }
 
     /**
      * Returns the number of points won or lost by the player depending
@@ -86,8 +78,5 @@ public final class Trip {
      * @param connectivity the station connectivity of the player network
      * @return positive points if both stations are connected, negative otherwise
      */
-    public int points(StationConnectivity connectivity) {
-
-        return connectivity.connected(from, to) ? points : -points;
-    }
+    public int points(StationConnectivity connectivity) { return connectivity.connected(from, to) ? points : -points; }
 }

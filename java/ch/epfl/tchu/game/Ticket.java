@@ -39,10 +39,7 @@ public final class Ticket implements Comparable<Ticket> {
      * @param to the arrival station
      * @param points the trip value
      */
-    public Ticket(Station from, Station to, int points) {
-
-        this(new ArrayList<>(List.of(new Trip(from, to, points))));
-    }
+    public Ticket(Station from, Station to, int points) { this(new ArrayList<>(List.of(new Trip(from, to, points)))); }
 
     /**
      * Returns the textual representation of the trips
@@ -88,10 +85,7 @@ public final class Ticket implements Comparable<Ticket> {
      * Returns the textual representation of the ticket
      * @return the textual representation of the ticket
      */
-    public String text() {
-
-        return text;
-    }
+    public String text() { return text; }
 
     /**
      * Returns the points value of the ticket according the the player connectivity
@@ -134,18 +128,12 @@ public final class Ticket implements Comparable<Ticket> {
      *              zero if equal and strictly positive otherwise
      */
     @Override
-    public int compareTo(Ticket that) {
-
-        return this.text().compareTo(that.text());
-    }
+    public int compareTo(Ticket that) { return this.text().compareTo(that.text()); }
 
     /**
      * Returns the textual representation of the ticket
      * @return the textual representation of the ticket
      */
     @Override
-    public String toString() {
-
-        return this.text();
-    }
+    public String toString() { return this.text(); }
 }
