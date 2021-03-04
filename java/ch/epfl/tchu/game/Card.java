@@ -27,7 +27,7 @@ public enum Card {
     public static final int COUNT = ALL.size();
     public static final List<Card> CARS = ALL.subList(0, ALL.size() - 1);
 
-    private Color color;
+    private final Color color;
 
     /**
      * Returns a wagon card type according to the given color

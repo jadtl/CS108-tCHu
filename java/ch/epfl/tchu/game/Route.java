@@ -168,7 +168,5 @@ public final class Route {
                 builder = new SortedBag.Builder<>();
             }
         }
-
-        this.possibleClaimCards = possibleClaimCards;
     }
 }

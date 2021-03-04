@@ -15,7 +15,7 @@ import java.util.Objects;
 public final class Trip {
     private final Station from;
     private final Station to;
-    private int points;
+    private final int points;
 
     /**
      * Constructs a trip from a station to another with a given value
