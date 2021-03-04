@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RouteTest {
     @Test
@@ -83,5 +82,12 @@ class RouteTest {
         SortedBag<Card> claimCards = new SortedBag.Builder<Card>().add(3, Card.LOCOMOTIVE).build();
         SortedBag<Card> drawnCards = new SortedBag.Builder<Card>().add(2, Card.LOCOMOTIVE).add(2, Card.RED).build();
         assertThrows(IllegalArgumentException.class, () -> { route.additionalClaimCardsCount(claimCards, drawnCards); });
+    }
+
+    @Test
+    void stationOppositeWorksOnTrivialRoute() {
+        Route route = new Route("0", new Station(0, "Lausanne"), new Station(1, "Zürich"),
+                2, Route.Level.UNDERGROUND, null);
+        assertEquals(route.station2() , route.stationOpposite(route.station1()));
     }
 }
