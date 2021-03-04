@@ -25,19 +25,22 @@ public final class Route {
     private List<SortedBag<Card>> possibleClaimCards;
 
     /**
-     *
+     * The two levels a route can be on
      */
     public enum Level { UNDERGROUND, OVERGROUND }
 
     /**
-     * Constructs a route
+     * Constructs a route with its identifier, stations, length, level and colors
      *
-     * @param id
-     * @param station1
-     * @param station2
-     * @param length
-     * @param level
-     * @param color
+     * @param id the identifier
+     * @param station1 the first station
+     * @param station2 the second station
+     * @param length the route length
+     * @param level the route level
+     * @param color the route color
+     *
+     * @throws IllegalArgumentException if both stations are equal or if the length is incorrect
+     * @throws NullPointerException if the identifier, the stations or the level are null
      */
     public Route(String id, Station station1, Station station2, int length, Level level, Color color) {
         Preconditions.checkArgument(length <= Constants.MAX_ROUTE_LENGTH
@@ -54,69 +57,85 @@ public final class Route {
     }
 
     /**
+     * Returns the identifier of the route
      *
-     * @return
+     * @return the identifier of the route
      */
     public String id() { return id; }
 
     /**
+     * Returns the first station of the route
      *
-     * @return
+     * @return the first station of the route
      */
     public Station station1() { return station1; }
 
     /**
+     * Returns the second station of the route
      *
-     * @return
+     * @return the second station of the route
      */
     public Station station2() { return station2; }
 
     /**
+     * Returns the length of the route
      *
-     * @return
+     * @return the length of the route
      */
     public int length() { return length; }
 
     /**
+     * Returns the level of the route
      *
-     * @return
+     * @return the level of the route
      */
     public Level level() { return level; }
 
     /**
+     * Returns the color of the route
      *
-     * @return
+     * @return the color of the route
      */
     public Color color() { return color; }
 
     /**
+     * Returns a list composed of the two route stations
      *
-     * @return
+     * @return a list composed of the two route stations
      */
     public List<Station> stations() { return List.of(station1(), station2()); }
 
     /**
+     * Returns the station opposite to a given one
      *
-     * @param station
-     * @return
+     * @param station the given station
+     *
+     * @return the station opposite to the given one
+     *
+     * @throws IllegalArgumentException if the given station doesn't belong to the route stations
      */
     public Station stationOpposite(Station station) {
-        Preconditions.checkArgument(station.equals(station1) || station.equals(station2));
+        Preconditions.checkArgument(stations().contains(station));
 
         return station.equals(station1) ? station2 : station1;
     }
 
     /**
+     * Returns the possible sets of cards a player can use to claim the route
      *
-     * @return
+     * @return the possible sets of cards a player can use to claim the route
      */
     public List<SortedBag<Card>> possibleClaimCards() { return possibleClaimCards; }
 
     /**
+     * Returns the additional number of cards the player must have to claim the route
      *
-     * @param claimCards
-     * @param drawnCards
-     * @return
+     * @param claimCards the cards that the player attempts to claim the route with
+     * @param drawnCards the cards that were drawn to decide of the additional cards count
+     *
+     * @return the additional number of cards the player must have to claim the route
+     *
+     * @throws IllegalArgumentException if the route is not underground or if the drawn cards are not three
      */
     public int additionalClaimCardsCount(SortedBag<Card> claimCards, SortedBag<Card> drawnCards) {
         Preconditions.checkArgument(level() == Level.UNDERGROUND && drawnCards.size() == 3);
@@ -132,13 +151,14 @@ public final class Route {
     }
 
     /**
+     * Returns the claim points for the route
      *
-     * @return
+     * @return the claim points depending on the length of the route
      */
     public int claimPoints() { return Constants.ROUTE_CLAIM_POINTS.get(length()); }
 
     /**
-     * Computes the possible claim cards for the routed
+     * Computes the possible claim cards for the route
      */
     private void computePossibleClaimCards() {
         possibleClaimCards = new ArrayList<>();

@@ -18,6 +18,7 @@ public final class Ticket implements Comparable<Ticket> {
      * Constructs a ticket from a list of trips of the same departure station
      *
      * @param trips the list of trips
+     *
      * @throws IllegalArgumentException if the trips list is empty or
      *                      if there are more than one departure station
      */
@@ -45,6 +46,7 @@ public final class Ticket implements Comparable<Ticket> {
      * Returns the textual representation of the trips
      *
      * @param trips a list of trips
+     *
      * @return the textual representation of the trips
      */
     private static String computeText(List<Trip> trips) {
@@ -83,6 +85,7 @@ public final class Ticket implements Comparable<Ticket> {
 
     /**
      * Returns the textual representation of the ticket
+     *
      * @return the textual representation of the ticket
      */
     public String text() { return text; }
@@ -91,6 +94,7 @@ public final class Ticket implements Comparable<Ticket> {
      * Returns the points value of the ticket according the the player connectivity
      *
      * @param connectivity the station connectivity of the player network
+     *
      * @return the points value of the ticket according the the player connectivity
      */
     public int points(StationConnectivity connectivity) {
@@ -124,6 +128,7 @@ public final class Ticket implements Comparable<Ticket> {
      * in alphabetical order of their textual representation
      *
      * @param that the ticket to compare the first to
+     *
      * @return a strictly negative integer if this is smaller than that,
      *              zero if equal and strictly positive otherwise
      */
@@ -132,6 +137,7 @@ public final class Ticket implements Comparable<Ticket> {
 
     /**
      * Returns the textual representation of the ticket
+     *
      * @return the textual representation of the ticket
      */
     @Override

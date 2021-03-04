@@ -17,6 +17,7 @@ public final class Station {
      *
      * @param id the station identifier
      * @param name the station name
+     *
      * @throws IllegalArgumentException if the identifier is strictly negative
      */
     public Station(int id, String name) {
@@ -28,6 +29,7 @@ public final class Station {
 
     /**
      * Returns the station unique identifier number
+     *
      * @return the station unique identifier number
      */
     public int id() {
@@ -36,6 +38,7 @@ public final class Station {
 
     /**
      * Returns the station name
+     *
      * @return the station name
      */
     public String name() {
@@ -44,6 +47,7 @@ public final class Station {
 
     /**
      * Returns the station name
+     *
      * @return the station name
      */
     @Override

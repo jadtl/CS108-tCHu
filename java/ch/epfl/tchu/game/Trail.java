@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * A Trail between two stations in the network
  *
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
  */
 public class Trail {
     private final Station station1;
@@ -14,10 +17,11 @@ public class Trail {
     private final int length;
 
     /**
+     * Constructs a trail with its two extreme stations and its length
      *
-     * @param station1
-     * @param station2
-     * @param length
+     * @param station1 the first station
+     * @param station2 the second station opposite to the first
+     * @param length the length of the trail
      */
     private Trail(Station station1, Station station2, int length) {
         this.station1 = station1;
@@ -26,9 +30,10 @@ public class Trail {
     }
 
     /**
+     * The longest path in the network composed of the given routes
      *
-     * @param routes
-     * @return
+     * @param routes the list of routes that the player controls
+     * @return a trail with the maximum length for the given routes
      */
     public static Trail longest(List<Route> routes) {
         List<List<Station>> toExtendTrails = new ArrayList<>();
@@ -59,8 +64,7 @@ public class Trail {
                 // Looking for a route that can extend the trail
                 for (Route candidateRoute : candidateRoutes) {
                     // A route can extend the trail iff one of its two stations is the last trail's station
-                    if (candidateRoute.station1().equals(toExtendTrail.get(1))
-                            || candidateRoute.station2().equals(toExtendTrail.get(1))) {
+                    if (candidateRoute.stations().contains(toExtendTrail.get(1))) {
                         canBeExtended = true;
                         // The new last trail station is the opposite station of the extending route
                         updatedTrails.add(List.of(toExtendTrail.get(0), candidateRoute.stationOpposite(toExtendTrail.get(1))));
@@ -70,7 +74,7 @@ public class Trail {
                         associatedRoutes.put(updatedTrails.get(updatedTrails.size() - 1), updatedRoutes);
                     }
                 }
-                // If the current trail can't be extend, then it's a dead end
+                // If the current trail can't be extended, then it's a dead end
                 if (!canBeExtended) deadEndTrails.add(toExtendTrail);
             }
         }
@@ -96,26 +100,26 @@ public class Trail {
     }
 
     /**
-     *
-     * @return
+     * Returns the length of the trail
+     * @return the length of the trail
      */
     public int length() { return length; }
 
     /**
-     *
-     * @return
+     * Returns the first station of the trail
+     * @return the first station of the trail
      */
     public Station station1() { return station1; }
 
     /**
-     *
-     * @return
+     * Returns he second station of the trail
+     * @return the second station of the trail
      */
     public Station station2() { return station2; }
 
     /**
-     *
-     * @return
+     * Returns he string representation of the trail
+     * @return the string representation of the trail
      */
     @Override
     public String toString() { return (station1() + " - " + station2() + " (" + length() + ")"); }

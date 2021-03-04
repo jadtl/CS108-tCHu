@@ -13,6 +13,7 @@ public interface StationConnectivity {
      *
      * @param s1 the departure station
      * @param s2 the arrival station
+     *
      * @return true if the two stations are connected
      */
     boolean connected(Station s1, Station s2);
