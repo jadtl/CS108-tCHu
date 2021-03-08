@@ -3,7 +3,6 @@ package ch.epfl.tchu.game;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.SortedMap;
 
 import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;

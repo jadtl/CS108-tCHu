@@ -28,7 +28,7 @@ public final class Deck<C extends Comparable<C>> {
 		List<C> shuffledCards = cards.toList();
 		Collections.shuffle(shuffledCards, rng);
 
-		return new Deck(shuffledCards);
+		return new Deck<C>(shuffledCards);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public final class Deck<C extends Comparable<C>> {
 	public SortedBag<C> topCards(int count) {
 		Preconditions.checkArgument(count >= 0 && count <= size());
 
-		SortedBag.Builder builder = new SortedBag.Builder();
+		SortedBag.Builder<C> builder = new SortedBag.Builder<C>();
 		for (C element : cards.subList(0, count)) {
 			builder.add(element);
 		}
