@@ -1,5 +1,6 @@
 package ch.epfl.tchu.game;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -62,7 +63,7 @@ public final class CardState extends PublicCardState {
 
 		SortedBag<Card> updatedDiscardedCards = new SortedBag.Builder<Card>().add(discardedCards)
 				.add(faceUpCards().get(slot)).build();
-		List<Card> faceUpCards = List.copyOf(faceUpCards());
+		List<Card> faceUpCards = new ArrayList<Card>(faceUpCards());
 		faceUpCards.set(slot, topDeckCard());
 
 		return new CardState(faceUpCards, deck.withoutTopCard(), updatedDiscardedCards);
