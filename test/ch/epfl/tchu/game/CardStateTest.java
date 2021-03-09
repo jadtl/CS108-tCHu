@@ -16,5 +16,7 @@ class CardStateTest {
     CardState cardState = CardState.of(deck);
 
     assertEquals(deck.withoutTopCards(5).topCard(), cardState.topDeckCard());
+    assertEquals(deck.size() - 5, cardState.deckSize());
+    assertEquals(0, cardState.discardsSize());
   }
 }
