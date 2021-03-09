@@ -1,4 +1,4 @@
-package ch.epfl.tchu;
+package ch.epfl.test;
 
 import java.util.Random;
 

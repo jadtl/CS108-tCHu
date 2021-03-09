@@ -1,6 +1,6 @@
 package ch.epfl.tchu.game;
 
-import ch.epfl.tchu.TestRandomizer;
+import ch.epfl.test.TestRandomizer;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
