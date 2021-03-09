@@ -20,7 +20,8 @@ public final class Info {
   /**
    * Constructs a log generator linked to the player name
    * 
-   * @param playerName the name of the player
+   * @param playerName 
+   *        The name of the player
    */
   public Info(String playerName) {
     this.playerName = playerName;
@@ -29,8 +30,11 @@ public final class Info {
   /**
    * Returns the French card name in singular or plural depending on count
    * 
-   * @param card the card referred to
-   * @param count the number of cards referred to
+   * @param card 
+   *        The card referred to
+   * 
+   * @param count 
+   *        The number of cards referred to
    * 
    * @return card name in singular iff. the absolute value of count is 1
    */
@@ -45,12 +49,15 @@ public final class Info {
   }
 
   /**
+   * Returns a message that announces the game ended in a draw while winning the given points
    * 
+   * @param playerNames 
+   *        The names of the players in-game
    * 
-   * @param playerNames
-   * @param count
+   * @param count 
+   *        The score they ended up with
    * 
-   * @return 
+   * @return a message that announces the game ended in a draw while winning the given points
    */
   public static String draw(List<String> playerNames, int count) {
     return String.format(StringsFr.DRAW, String.join
@@ -58,20 +65,23 @@ public final class Info {
   }
 
   /**
+   * Returns a message that announces the player will play first
    * 
-   * 
-   * @return
+   * @return a message that announcesthe player will play first
    */
   public String willPlayFirst() {
     return String.format(StringsFr.WILL_PLAY_FIRST, playerName);
   }
 
   /**
-   * 
+   * Returns a message announcing that the player kept
+   * the given number of tickets
    * 
    * @param count
+   *        The number of tickets kept by the player
    * 
-   * @return
+   * @return a message announcing that the player kept
+   * the given number of tickets
    */
   public String keptTickets(int count) {
     return String.format(StringsFr.DREW_TICKETS, playerName, 
@@ -79,20 +89,23 @@ public final class Info {
   }
 
   /**
+   * Returns a message announcing that the player can play
    * 
-   * 
-   * @return
+   * @return a message announcing that the player can play
    */
   public String canPlay() {
     return String.format(StringsFr.CAN_PLAY, playerName);
   }
 
   /**
-   * 
+   * Returns a message announcing that the player drew 
+   * the given number of tickets
    * 
    * @param count
+   *        The number of tickets drawn by the player
    * 
-   * @return
+   * @return a message announcing that the player drew 
+   * the given number of tickets
    */
   public String drewTickets(int count) {
     return String.format(StringsFr.DREW_TICKETS, playerName, 
@@ -100,20 +113,25 @@ public final class Info {
   }
 
   /**
+   * Returns a message announcing that the player drew a card
+   * from the top of the deck
    * 
-   * 
-   * @return
+   * @return a message announcing that the player drew a card
+   * from the top of the deck
    */
   public String drewBlindCard() {
     return String.format(StringsFr.DREW_BLIND_CARD, playerName);
   }
 
   /**
-   * 
+   * Returns a message announcing that the player drew
+   * the given face-up card
    * 
    * @param card
+   *        The card the player drew
    * 
-   * @return
+   * @return a message announcing that the player drew
+   * the given face-up card
    */
   public String drewVisibleCard(Card card) {
     return String.format(StringsFr.DREW_VISIBLE_CARD, 
@@ -121,38 +139,53 @@ public final class Info {
   }
 
   /**
-   * 
+   * Returns a message announcing that the players has claimed
+   * the route using the given cards
    * 
    * @param route
-   * @param cards
+   *        The route the player claimed
    * 
-   * @return
+   * @param cards
+   *        The cards the player claimed the route with
+   * 
+   * @return a message announcing that the players claimed
+   * the route using the given cards
    */
   public String claimedRoute(Route route, SortedBag<Card> cards) {
     return String.format(StringsFr.CLAIMED_ROUTE, playerName, 
-    route.toString(), cardsEnumeration(cards));
+    routeText(route), cardsEnumeration(cards));
   }
 
   /**
-   * 
+   * Returns a message announcing that the player wants to control
+   * the tunnel using the given cards
    * 
    * @param route
-   * @param initialCards
+   *        The tunnel the player attemps to claim
    * 
-   * @return
+   * @param initialCards
+   *        The cards the player attemps to claim the tunnel with
+   * 
+   * @return a message announcing that the player wants to control
+   * the tunnel using the given cards
    */
   public String attemptsTunnelClaim(Route route, SortedBag<Card> initialCards) {
     return String.format(StringsFr.ATTEMPTS_TUNNEL_CLAIM, playerName, 
-    route.toString(), cardsEnumeration(initialCards));
+    routeText(route), cardsEnumeration(initialCards));
   }
 
   /**
-   * 
+   * Returns a message announcing that the player drew 
+   * the additional cards and their induced additional cost
    * 
    * @param drawnCards
-   * @param additionnalCost
+   *        The additional cards the player drew
    * 
-   * @return
+   * @param additionnalCost
+   *        The additional cost associated to the drawn cards
+   * 
+   * @return a message announcing that the player drew 
+   * the additional cards and their induced additional cost
    */
   public String drewAdditionalCards(SortedBag<Card> drawnCards, int additionnalCost) {
     return new StringBuilder().append(String.format(StringsFr.ADDITIONAL_CARDS_ARE, 
@@ -161,22 +194,26 @@ public final class Info {
   }
 
   /**
-   * 
+   * Returns a message announcing that the player didn't or 
+   * couldn't claim the route
    * 
    * @param route
+   *        The route that the player did not claim
    * 
-   * @return
+   * @return a message announcing that the player didn't or 
+   * couldn't claim the route
    */
   public String didNotClaimRoute(Route route) {
-    return String.format(StringsFr.DID_NOT_CLAIM_ROUTE, playerName, route.toString());
+    return String.format(StringsFr.DID_NOT_CLAIM_ROUTE, playerName, routeText(route));
   }
 
   /**
-   * 
+   * Returns a message announcing that the last turn starts
    * 
    * @param carCount
+   *        The number of cars that is left for the player
    * 
-   * @return
+   * @return a message announcing that the last turn starts
    */
   public String lastTurnBegins(int carCount) {
     return String.format(StringsFr.LAST_TURN_BEGINS, playerName, 
@@ -184,29 +221,45 @@ public final class Info {
   }
 
   /**
-   * 
+   * Returns a message announcing the bonus points won 
+   * from the player's longest trail
    * 
    * @param longestTrail
+   *        The longest trail of the player's network
    * 
-   * @return
+   * @return a message announcing the bonus points won 
+   * from the player's longest trail
    */
   public String getsLongestTrailBonus(Trail longestTrail) {
     return String.format(StringsFr.GETS_BONUS, playerName, longestTrail.toString());
   }
 
   /**
-   * 
+   * Returns a message announcing that the player won the 
+   * game, breaking the points down
    * 
    * @param points
-   * @param loserPoints
+   *        The points won by the player
    * 
-   * @return
+   * @param loserPoints
+   *        The points won by the player's opponent
+   * 
+   * @return a message announcing that the player won the 
+   * game, breaking the points down
    */
   public String won(int points, int loserPoints) {
     return String.format(StringsFr.WINS, playerName, String.valueOf(points), 
     StringsFr.plural(points), String.valueOf(loserPoints), StringsFr.plural(loserPoints));
   }
 
+  /**
+   * Returns a string enumeration of the given cards
+   * 
+   * @param cards 
+   *        The list of cards to enumerate
+   * 
+   * @return a string enumeration of the given cards
+   */
   private String cardsEnumeration(SortedBag<Card> cards) {
       StringBuilder stringBuilder = new StringBuilder();
       List<String> words = new ArrayList<String>();
@@ -219,5 +272,18 @@ public final class Info {
       
       return stringBuilder.append(String.join(", ", words.subList(0, words.size() - 1)))
       .append(StringsFr.AND_SEPARATOR).append(words.get(words.size() -1)).toString();
+  }
+
+  /**
+   * Returns a message that describes the route
+   * 
+   * @param route
+   *        The route to describe
+   * 
+   * @return a message that describes the route
+   */
+  private String routeText(Route route) {
+    return new StringBuilder().append(String.join(" ", List.of(route.station1().toString(), 
+    StringsFr.EN_DASH_SEPARATOR, route.station2().toString()))).toString();
   }
 }
