@@ -27,7 +27,6 @@ class PublicCardStateTest {
   }
 
   @Test
-
   void faceUpCardWorks() {
     List<Card> faceUpCards = List.of(Card.RED, Card.WHITE, Card.BLACK, Card.LOCOMOTIVE, Card.VIOLET);
     int deckSize = 10;
