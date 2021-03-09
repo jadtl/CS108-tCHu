@@ -28,4 +28,15 @@ class CardStateTest {
     assertEquals(deck.withoutTopCards(6).topCard(), cardState.withoutTopDeckCard().topDeckCard());
     assertEquals(deck.size() - 6, cardState.withoutTopDeckCard().deckSize());
   }
+
+  @Test
+  void withDeckRecreatedFromDiscardsWorks() {
+    Deck<Card> deck = Deck.of(SortedBag.of(3, Card.BLACK, 3, Card.RED), new Random());
+    CardState cardState = CardState.of(deck);
+    cardState = cardState.withDrawnFaceUpCard(0);
+    cardState = cardState.withDeckRecreatedFromDiscards(new Random());
+
+    assertEquals(1, cardState.deckSize());
+    assertEquals(deck.topCard(), cardState.topDeckCard());
+  }
 }
