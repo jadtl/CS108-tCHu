@@ -26,7 +26,7 @@ public class PublicCardState {
 	 * @throws IllegalArgumentException if the numbers of face-up cards, deck cards or discard cards are incorrect
 	 */
 	public PublicCardState(List<Card> faceUpCards, int deckSize, int discardsSize) {
-		Preconditions.checkArgument(faceUpCards.size() != Constants.FACE_UP_CARDS_COUNT & deckSize < 0 & discardsSize < 0);
+		Preconditions.checkArgument(faceUpCards.size() == Constants.FACE_UP_CARDS_COUNT & deckSize >= 0 & discardsSize >= 0);
 
 		this.faceUpCards = faceUpCards;
 		this.deckSize = deckSize;
