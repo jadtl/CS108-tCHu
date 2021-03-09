@@ -1,3 +1,5 @@
+package ch.epfl.tchu;
+
 import java.util.Random;
 
 public final class TestRandomizer {

@@ -1,7 +1,5 @@
-import ch.epfl.tchu.game.Station;
-import ch.epfl.tchu.game.StationConnectivity;
-import ch.epfl.tchu.game.Ticket;
-import ch.epfl.tchu.game.Trip;
+package ch.epfl.tchu.game;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
