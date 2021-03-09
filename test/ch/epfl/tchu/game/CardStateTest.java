@@ -19,4 +19,13 @@ class CardStateTest {
     assertEquals(deck.size() - 5, cardState.deckSize());
     assertEquals(0, cardState.discardsSize());
   }
+
+  @Test
+  void withoutTopDeckCardWorks() {
+    Deck<Card> deck = Deck.of(SortedBag.of(3, Card.BLACK, 5, Card.RED), new Random());
+    CardState cardState = CardState.of(deck);
+
+    assertEquals(deck.withoutTopCards(6).topCard(), cardState.withoutTopDeckCard().topDeckCard());
+    assertEquals(deck.size() - 6, cardState.withoutTopDeckCard().deckSize());
+  }
 }
