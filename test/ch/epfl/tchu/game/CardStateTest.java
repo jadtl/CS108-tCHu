@@ -6,7 +6,6 @@ import ch.epfl.tchu.SortedBag;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
 import java.util.Random;
 
 class CardStateTest {
