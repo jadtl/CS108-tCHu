@@ -5,6 +5,7 @@ import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Trail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,6 +15,7 @@ import java.util.List;
  * @author Jad Tala (310821)
  */
 public final class Info {
+  private final String playerName;
 
   /**
    * Constructs a log generator linked to the player name
@@ -21,7 +23,7 @@ public final class Info {
    * @param playerName the name of the player
    */
   public Info(String playerName) {
-    
+    this.playerName = playerName;
   }
 
   /**
@@ -33,8 +35,13 @@ public final class Info {
    * @return card name in singular iff. the absolute value of count is 1
    */
   public static String cardName(Card card, int count) {
-
-    return "";
+    List<String> cardsStrings = List.of(StringsFr.BLACK_CARD, StringsFr.BLUE_CARD,
+    StringsFr.GREEN_CARD, StringsFr.ORANGE_CARD, StringsFr.RED_CARD, StringsFr.VIOLET_CARD,
+    StringsFr.WHITE_CARD, StringsFr.YELLOW_CARD, StringsFr.LOCOMOTIVE_CARD);
+    
+    return new StringBuilder()
+    .append(cardsStrings.get(card.ordinal()))
+    .append(StringsFr.plural(count)).toString();
   }
 
   /**
@@ -43,10 +50,11 @@ public final class Info {
    * @param playerNames
    * @param count
    * 
-   * @return
+   * @return 
    */
   public static String draw(List<String> playerNames, int count) {
-    return "";
+    return String.format(StringsFr.DRAW, String.join
+    (StringsFr.AND_SEPARATOR, playerNames), String.valueOf(count));
   }
 
   /**
@@ -55,7 +63,7 @@ public final class Info {
    * @return
    */
   public String willPlayFirst() {
-    return "";
+    return String.format(StringsFr.WILL_PLAY_FIRST, playerName);
   }
 
   /**
@@ -66,7 +74,8 @@ public final class Info {
    * @return
    */
   public String keptTickets(int count) {
-    return "";
+    return String.format(StringsFr.DREW_TICKETS, playerName, 
+    String.valueOf(count), StringsFr.plural(count));
   }
 
   /**
@@ -75,7 +84,7 @@ public final class Info {
    * @return
    */
   public String canPlay() {
-    return "";
+    return String.format(StringsFr.CAN_PLAY, playerName);
   }
 
   /**
@@ -86,7 +95,8 @@ public final class Info {
    * @return
    */
   public String drewTickets(int count) {
-    return "";
+    return String.format(StringsFr.DREW_TICKETS, playerName, 
+    String.valueOf(count));
   }
 
   /**
@@ -95,7 +105,7 @@ public final class Info {
    * @return
    */
   public String drewBlindCard() {
-    return "";
+    return String.format(StringsFr.DREW_BLIND_CARD, playerName);
   }
 
   /**
@@ -106,7 +116,8 @@ public final class Info {
    * @return
    */
   public String drewVisibleCard(Card card) {
-    return "";
+    return String.format(StringsFr.DREW_VISIBLE_CARD, 
+    playerName, cardName(card, 1));
   }
 
   /**
@@ -118,7 +129,8 @@ public final class Info {
    * @return
    */
   public String claimedRoute(Route route, SortedBag<Card> cards) {
-    return "";
+    return String.format(StringsFr.CLAIMED_ROUTE, playerName, 
+    route.toString(), cardsEnumeration(cards));
   }
 
   /**
@@ -130,7 +142,8 @@ public final class Info {
    * @return
    */
   public String attemptsTunnelClaim(Route route, SortedBag<Card> initialCards) {
-    return "";
+    return String.format(StringsFr.ATTEMPTS_TUNNEL_CLAIM, playerName, 
+    route.toString(), cardsEnumeration(initialCards));
   }
 
   /**
@@ -142,7 +155,9 @@ public final class Info {
    * @return
    */
   public String drewAdditionalCards(SortedBag<Card> drawnCards, int additionnalCost) {
-    return "";
+    return new StringBuilder().append(String.format(StringsFr.ADDITIONAL_CARDS_ARE, 
+    cardsEnumeration(drawnCards))).append(additionnalCost == 0 ? 
+    StringsFr.NO_ADDITIONAL_COST : StringsFr.SOME_ADDITIONAL_COST).toString();
   }
 
   /**
@@ -153,7 +168,7 @@ public final class Info {
    * @return
    */
   public String didNotClaimRoute(Route route) {
-    return "";
+    return String.format(StringsFr.DID_NOT_CLAIM_ROUTE, playerName, route.toString());
   }
 
   /**
@@ -164,7 +179,8 @@ public final class Info {
    * @return
    */
   public String lastTurnBegins(int carCount) {
-    return "";
+    return String.format(StringsFr.LAST_TURN_BEGINS, playerName, 
+    String.valueOf(carCount), StringsFr.plural(carCount));
   }
 
   /**
@@ -175,7 +191,7 @@ public final class Info {
    * @return
    */
   public String getsLongestTrailBonus(Trail longestTrail) {
-    return "";
+    return String.format(StringsFr.GETS_BONUS, playerName, longestTrail.toString());
   }
 
   /**
@@ -187,6 +203,21 @@ public final class Info {
    * @return
    */
   public String won(int points, int loserPoints) {
-    return "";
+    return String.format(StringsFr.WINS, playerName, String.valueOf(points), 
+    StringsFr.plural(points), String.valueOf(loserPoints), StringsFr.plural(loserPoints));
+  }
+
+  private String cardsEnumeration(SortedBag<Card> cards) {
+      StringBuilder stringBuilder = new StringBuilder();
+      List<String> words = new ArrayList<String>();
+
+      for (Card card : cards) {
+        words.add(stringBuilder.append(cards.countOf(card))
+        .append(" ").append(cardName(card, cards.countOf(card))).toString());
+        stringBuilder = new StringBuilder();
+      }
+      
+      return stringBuilder.append(String.join(", ", words.subList(0, words.size() - 1)))
+      .append(StringsFr.AND_SEPARATOR).append(words.get(words.size() -1)).toString();
   }
 }
