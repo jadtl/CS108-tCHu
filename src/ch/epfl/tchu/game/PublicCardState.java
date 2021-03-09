@@ -6,8 +6,7 @@ import java.util.Objects;
 import ch.epfl.tchu.Preconditions;
 
 /**
- * A overground or underground route that links 2 neighbor cities
- * with a length and a color
+ * A Public Card State with face-up cards, a deck and discards
  *
  * @author Sofiya Malamud (313789)
  * @author Jad Tala (310821)
@@ -18,13 +17,16 @@ public class PublicCardState {
 	private final int discardsSize;
 	
 	/**
+	 * Constructs a Public Card State with its face-up cards, deck and discards
 	 * 
-	 * @param faceUpCards
-	 * @param deckSize
-	 * @param discardsSize
+	 * @param faceUpCards a list of face-up cards
+	 * @param deckSize the size of the deck
+	 * @param discardsSize the size of the discards
+	 * 
+	 * @throws IllegalArgumentException if the numbers of face-up cards, deck cards or discard cards are incorrect
 	 */
 	public PublicCardState(List<Card> faceUpCards, int deckSize, int discardsSize) {
-		Preconditions.checkArgument(faceUpCards.size() != Constants.FACE_UP_CARDS_COUNT & deckSize <0 & discardsSize<0);
+		Preconditions.checkArgument(faceUpCards.size() != Constants.FACE_UP_CARDS_COUNT & deckSize < 0 & discardsSize < 0);
 
 		this.faceUpCards = faceUpCards;
 		this.deckSize = deckSize;
@@ -32,25 +34,30 @@ public class PublicCardState {
 	}
 	
 	/**
+	 * Returns the sum of the sizes of the face-up cards, the deck and the discards
 	 * 
-	 * @return
+	 * @return the sum of the sizes of the face-up cards, the deck and the discards
 	 */
 	public int totalSize() { return faceUpCards.size() + deckSize + discardsSize; }
 	
 	/**
+	 * Returns the list of face-up cards
 	 * 
-	 * @return
+	 * @return the list of face-up cards
 	 */
 	public List<Card> faceUpCards() { return faceUpCards; }
 	
 	/**
+	 * Returns the face-up card of the given slot
 	 * 
-	 * @param slot
+	 * @param slot the index in the face-up cards list
 	 * 
-	 * @return
+	 * @return the face-up card of the given slot
+	 * 
+	 * @throws IndexOutOfBounds if slot is not within faceUpCards range
 	 */
 	public Card faceUpCard(int slot) {
-		Objects.checkIndex(slot,Constants.FACE_UP_CARDS_COUNT );
+		Objects.checkIndex(slot, Constants.FACE_UP_CARDS_COUNT);
 		
 		return faceUpCards.get(slot);
 	}		
