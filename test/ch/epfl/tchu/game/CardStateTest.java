@@ -29,6 +29,17 @@ class CardStateTest {
   }
 
   @Test
+  void withDrawnFaceUpCardWorks() {
+    Deck<Card> deck = Deck.of(SortedBag.of(3, Card.BLACK, 3, Card.RED), new Random());
+    CardState cardState = CardState.of(deck);
+    cardState = cardState.withDrawnFaceUpCard(0);
+
+    assertEquals(0, cardState.deckSize());
+    assertEquals(deck.withoutTopCards(5).topCard(), cardState.faceUpCard(0));
+    assertEquals(1, cardState.discardsSize());
+  }
+
+  @Test
   void withDeckRecreatedFromDiscardsWorks() {
     Deck<Card> deck = Deck.of(SortedBag.of(3, Card.BLACK, 3, Card.RED), new Random());
     CardState cardState = CardState.of(deck);
@@ -36,6 +47,16 @@ class CardStateTest {
     cardState = cardState.withDeckRecreatedFromDiscards(new Random());
 
     assertEquals(1, cardState.deckSize());
+    assertEquals(deck.withoutTopCards(5).topCard(), cardState.faceUpCard(0));
     assertEquals(deck.topCard(), cardState.topDeckCard());
+  }
+
+  @Test
+  void withMoreDiscardedCardsWorks() {
+    Deck<Card> deck = Deck.of(SortedBag.of(3, Card.BLACK, 3, Card.RED), new Random());
+    CardState cardState = CardState.of(deck);
+    cardState = cardState.withMoreDiscardedCards(SortedBag.of(3, Card.LOCOMOTIVE));
+
+    assertEquals(3, cardState.discardsSize());
   }
 }
