@@ -52,14 +52,14 @@ public final class Deck<C extends Comparable<C>> {
 		return cards.size();
 	}
 
-	boolean isEmpty() { return size() != 0;}
+	public boolean isEmpty() { return size() != 0;}
 
 	/**
 	 * Returns the top element of the deck
 	 *
 	 * @return the top element of the deck
 	 */
-	C topCard() {
+	public C topCard() {
 		return cards.get(0);
 	}
 

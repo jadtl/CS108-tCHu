@@ -81,9 +81,11 @@ public final class Info {
   /**
    * 
    * 
+   * @param count
+   * 
    * @return
    */
-  public String drewTickets() {
+  public String drewTickets(int count) {
     return "";
   }
 
@@ -92,7 +94,7 @@ public final class Info {
    * 
    * @return
    */
-  public String drewBlindCards() {
+  public String drewBlindCard() {
     return "";
   }
 
@@ -139,7 +141,7 @@ public final class Info {
    * 
    * @return
    */
-  public String drewAdditionnalCards(SortedBag<Card> drawnCards, int additionnalCost) {
+  public String drewAdditionalCards(SortedBag<Card> drawnCards, int additionnalCost) {
     return "";
   }
 

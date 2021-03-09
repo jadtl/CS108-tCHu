@@ -57,7 +57,7 @@ public final class CardState extends PublicCardState {
 	 * 
 	 * @throws IndexOutOfBounds if slot is not within faceUpCards range
 	 */
-	CardState withDrawnFaceUpCard(int slot) {
+	public CardState withDrawnFaceUpCard(int slot) {
 		Objects.checkIndex(slot, Constants.FACE_UP_CARDS_COUNT);
 
 		SortedBag<Card> updatedDiscardedCards = new SortedBag.Builder<Card>().add(discardedCards)
