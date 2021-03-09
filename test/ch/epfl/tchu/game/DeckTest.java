@@ -1,6 +1,6 @@
+package ch.epfl.tchu.game;
+
 import ch.epfl.tchu.SortedBag;
-import ch.epfl.tchu.game.Card;
-import ch.epfl.tchu.game.Deck;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
