@@ -1,5 +1,6 @@
 package ch.epfl.tchu.game;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -44,7 +45,12 @@ public final class CardState extends PublicCardState {
 	public static CardState of(Deck<Card> deck) {
 		Preconditions.checkArgument(deck.size() >= Constants.FACE_UP_CARDS_COUNT);
 
-		return new CardState(deck.topCards(Constants.FACE_UP_CARDS_COUNT).toList(),
+		List<Card> faceUpCards = new ArrayList<Card>();
+		for (int i = 0; i < Constants.FACE_UP_CARDS_COUNT; i++) {
+			faceUpCards.add(deck.withoutTopCards(i).topCard());
+		}
+
+		return new CardState(faceUpCards,
 				deck.withoutTopCards(Constants.FACE_UP_CARDS_COUNT), new SortedBag.Builder<Card>().build());
 	}
 
@@ -64,8 +70,7 @@ public final class CardState extends PublicCardState {
 				.add(faceUpCards().get(slot))	
 				.add(discardedCards)
 				.build();
-		List<Card> faceUpCards = faceUpCards();
-		//List<Card> faceUpCards = new ArrayList<Card>(faceUpCards());
+		List<Card> faceUpCards = new ArrayList<Card>(faceUpCards());
 		faceUpCards.set(slot, topDeckCard());
 
 		return new CardState(faceUpCards, deck.withoutTopCard(), updatedDiscardedCards);
