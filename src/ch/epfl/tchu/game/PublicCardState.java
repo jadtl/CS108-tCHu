@@ -19,11 +19,17 @@ public class PublicCardState {
 	/**
 	 * Constructs a Public Card State with its face-up cards, deck and discards
 	 * 
-	 * @param faceUpCards a list of face-up cards
-	 * @param deckSize the size of the deck
-	 * @param discardsSize the size of the discards
+	 * @param faceUpCards 
+	 *        A list of face-up cards
 	 * 
-	 * @throws IllegalArgumentException if the numbers of face-up cards, deck cards or discard cards are incorrect
+	 * @param deckSize 
+	 *        The size of the deck
+	 * 
+	 * @param discardsSize 
+	 *        The size of the discards
+	 * 
+	 * @throws IllegalArgumentException 
+	 *         If the numbers of face-up cards, deck cards or discard cards are incorrect
 	 */
 	public PublicCardState(List<Card> faceUpCards, int deckSize, int discardsSize) {
 		Preconditions.checkArgument(faceUpCards.size() == Constants.FACE_UP_CARDS_COUNT & deckSize >= 0 & discardsSize >= 0);
@@ -50,11 +56,13 @@ public class PublicCardState {
 	/**
 	 * Returns the face-up card of the given slot
 	 * 
-	 * @param slot the index in the face-up cards list
+	 * @param slot 
+	 *        The index in the face-up cards list
 	 * 
 	 * @return the face-up card of the given slot
 	 * 
-	 * @throws IndexOutOfBounds if slot is not within faceUpCards range
+	 * @throws IndexOutOfBounds 
+	 *         If slot is not within faceUpCards range
 	 */
 	public Card faceUpCard(int slot) {
 		Objects.checkIndex(slot, Constants.FACE_UP_CARDS_COUNT);

@@ -15,8 +15,11 @@ public final class Station {
     /**
      * Constructs a station with the given identifier number and name
      *
-     * @param id the station identifier
-     * @param name the station name
+     * @param id 
+     *        The station identifier
+     * 
+     * @param name 
+     *        The station name
      *
      * @throws IllegalArgumentException if the identifier is strictly negative
      */

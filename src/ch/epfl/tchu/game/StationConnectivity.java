@@ -11,8 +11,11 @@ public interface StationConnectivity {
      * Returns the connection status of the two
      * given stations in the player's network
      *
-     * @param s1 the departure station
-     * @param s2 the arrival station
+     * @param s1 
+     *        The departure station
+     * 
+     * @param s2 
+     *        The arrival station
      *
      * @return true if the two stations are connected
      */

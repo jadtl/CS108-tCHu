@@ -32,15 +32,29 @@ public final class Route {
     /**
      * Constructs a route with its identifier, stations, length, level and colors
      *
-     * @param id the identifier
-     * @param station1 the first station
-     * @param station2 the second station
-     * @param length the route length
-     * @param level the route level
-     * @param color the route color
+     * @param id 
+     *        The identifier
+     * 
+     * @param station1 
+     *        The first station
+     * 
+     * @param station2 
+     *        The second station
+     * 
+     * @param length 
+     *        The route length
+     * 
+     * @param level 
+     *        The route level
+     * 
+     * @param color 
+     *        The route color
      *
-     * @throws IllegalArgumentException if both stations are equal or if the length is incorrect
-     * @throws NullPointerException if the identifier, the stations or the level are null
+     * @throws IllegalArgumentException 
+     *         If both stations are equal or if the length is incorrect
+     * 
+     * @throws NullPointerException 
+     *         If the identifier, the stations or the level are null
      */
     public Route(String id, Station station1, Station station2, int length, Level level, Color color) {
         Preconditions.checkArgument(length <= Constants.MAX_ROUTE_LENGTH
@@ -108,11 +122,13 @@ public final class Route {
     /**
      * Returns the station opposite to a given one
      *
-     * @param station the given station
+     * @param station 
+     *        The given station
      *
      * @return the station opposite to the given one
      *
-     * @throws IllegalArgumentException if the given station doesn't belong to the route stations
+     * @throws IllegalArgumentException 
+     *         If the given station doesn't belong to the route stations
      */
     public Station stationOpposite(Station station) {
         Preconditions.checkArgument(stations().contains(station));
@@ -130,12 +146,16 @@ public final class Route {
     /**
      * Returns the additional number of cards the player must have to claim the route
      *
-     * @param claimCards the cards that the player attempts to claim the route with
-     * @param drawnCards the cards that were drawn to decide of the additional cards count
+     * @param claimCards 
+     *        The cards that the player attempts to claim the route with
+     * 
+     * @param drawnCards 
+     *        The cards that were drawn to decide of the additional cards count
      *
      * @return the additional number of cards the player must have to claim the route
      *
-     * @throws IllegalArgumentException if the route is not underground or if the drawn cards are not three
+     * @throws IllegalArgumentException 
+     *         If the route is not underground or if the drawn cards are not three
      */
     public int additionalClaimCardsCount(SortedBag<Card> claimCards, SortedBag<Card> drawnCards) {
         Preconditions.checkArgument(level() == Level.UNDERGROUND && drawnCards.size() == 3);

@@ -33,7 +33,8 @@ public enum Card {
      * Returns a wagon card type according to the given color
      * or a locomotive card if color is null
      *
-     * @param color the color of the wanted wagon
+     * @param color 
+     *        The color of the wanted wagon
      */
     public static Card of(Color color) {
         Card result = null;

@@ -23,8 +23,11 @@ public final class CardState extends PublicCardState {
 	 * Constructs a card state from face-up cards, a deck and discards
 	 * 
 	 * @param faceUpCards
+	 * 				The visible cards on the board
 	 * @param deck
+	 * 				A pile of shuffled cards 
 	 * @param discardedCards
+	 * 				A pile of discarded cards
 	 */
 	private CardState(List<Card> faceUpCards, Deck<Card> deck, SortedBag<Card> discardedCards) {
 		super(faceUpCards, deck.size(), discardedCards.size());
@@ -36,11 +39,13 @@ public final class CardState extends PublicCardState {
 	/**
 	 * Returns a new card state from a deck
 	 * 
-	 * @param deck a deck of cards
+	 * @param deck 
+	 * 				A deck of cards
 	 * 
 	 * @return a new card state from a deck
 	 * 
-	 * @throws IllegalArgumentException if the deck size is below the required face-up cards size
+	 * @throws IllegalArgumentException 
+	 * 				 If the deck size is below the required face-up cards size
 	 */
 	public static CardState of(Deck<Card> deck) {
 		Preconditions.checkArgument(deck.size() >= Constants.FACE_UP_CARDS_COUNT);
@@ -57,11 +62,13 @@ public final class CardState extends PublicCardState {
 	/**
 	 * Returns a card state for which the chosen face-up card is replaced by the top deck card and discarded
 	 * 
-	 * @param slot the index of the drawn face-up card
+	 * @param slot 
+	 *        The index of the drawn face-up card
 	 * 
 	 * @return a card state for which the chosen face-up card is replaced by the top deck card and discarded
 	 * 
-	 * @throws IndexOutOfBounds if slot is not within faceUpCards range
+	 * @throws IndexOutOfBounds 
+	 * 				 If slot is not within faceUpCards range
 	 */
 	public CardState withDrawnFaceUpCard(int slot) {
 		Objects.checkIndex(slot, Constants.FACE_UP_CARDS_COUNT);
@@ -93,11 +100,13 @@ public final class CardState extends PublicCardState {
 	/**
 	 * Returns a card state for which the empty deck has been replaced by the discards, shuffled
 	 * 
-	 * @param rng a random number generator
+	 * @param rng 
+	 * 			  A random number generator
 	 * 
 	 * @return a card state for which the empty deck has been replaced by the discards, shuffled
 	 * 
-	 * @throws IllegalArgumentException if the deck is not empty
+	 * @throws IllegalArgumentException 
+	 *         If the deck is not empty
 	 */
 	public CardState withDeckRecreatedFromDiscards(Random rng) {
 		Preconditions.checkArgument(isDeckEmpty());
@@ -108,7 +117,8 @@ public final class CardState extends PublicCardState {
 	/**
 	 * Returns the card state for which additionalDiscards has been added to its discards
 	 * 
-	 * @param additionalDiscards the cards to add to the discards
+	 * @param additionalDiscards 
+	 *        The cards to add to the discards
 	 * 
 	 * @return the card state for which additionalDiscards has been added to its discards
 	 */

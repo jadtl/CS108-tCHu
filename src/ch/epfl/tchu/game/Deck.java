@@ -10,7 +10,8 @@ import ch.epfl.tchu.SortedBag;
 /**
  * A deck of shuffled elements
  * 
- * @param <C> the type of the deck elements
+ * @param <C> 
+ *        The type of the deck elements
  *
  * @author Sofiya Malamud (313789)
  * @author Jad Tala (310821)
@@ -21,9 +22,14 @@ public final class Deck<C extends Comparable<C>> {
 	/**
 	 * Returns a deck composed of shuffled elements from cards
 	 * 
-	 * @param cards a list of elements
-	 * @param rng a random number generator
-	 * @param <C> the type of the elements of cards
+	 * @param cards 
+	 *        A list of elements
+	 * 
+	 * @param rng 
+	 *        A random number generator
+	 * 
+	 * @param <C> 
+	 *        The type of the elements of cards
 	 * 
 	 * @return a deck composed of shuffled elements from cards
 	 */
@@ -37,7 +43,8 @@ public final class Deck<C extends Comparable<C>> {
 	/**
 	 * Constructs a deck from a list of elements
 	 * 
-	 * @param cards a list of elements
+	 * @param cards 
+	 *        A list of elements
 	 */
 	private Deck(List<C> cards) {
 		this.cards = cards;
@@ -68,7 +75,8 @@ public final class Deck<C extends Comparable<C>> {
 	 * 
 	 * @return the same deck without the top card
 	 * 
-	 * @throws IllegalArgumentException if the deck is empty
+	 * @throws IllegalArgumentException 
+	 *         If the deck is empty
 	 */
 	public Deck<C> withoutTopCard() {
 		Preconditions.checkArgument(isEmpty());
@@ -79,11 +87,13 @@ public final class Deck<C extends Comparable<C>> {
 	/**
 	 * Returns a sorted bag with a given number of top cards
 	 * 
-	 * @param count the number of top cards
+	 * @param count 
+	 *        The number of top cards
 	 * 
 	 * @return a sorted bag with count top cards
 	 * 
-	 * @throws IllegalArgumentException if count is not between 0 and size of the deck
+	 * @throws IllegalArgumentException 
+	 *         If count is not between 0 and size of the deck
 	 */
 	public SortedBag<C> topCards(int count) {
 		Preconditions.checkArgument(count >= 0 && count <= size());
@@ -99,11 +109,13 @@ public final class Deck<C extends Comparable<C>> {
 	/**
 	 * Returns the same deck without a number of top cards
 	 * 
-	 * @param count the number of top cards to remove from the deck
+	 * @param count 
+	 *        The number of top cards to remove from the deck
 	 * 
 	 * @return the same deck without count top cards
 	 * 
-	 * @throws IllegalArgumentException if count is not between 0 and size of the deck
+	 * @throws IllegalArgumentException 
+	 *         If count is not between 0 and size of the deck
 	 */
 	public Deck<C> withoutTopCards(int count) {
 		Preconditions.checkArgument(count >= 0 && count <= size());

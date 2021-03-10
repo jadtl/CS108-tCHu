@@ -19,9 +19,14 @@ public class Trail {
     /**
      * Constructs a trail with its two extreme stations and its length
      *
-     * @param station1 the first station
-     * @param station2 the second station opposite to the first
-     * @param length the length of the trail
+     * @param station1 
+     *        The first station
+     * 
+     * @param station2 
+     *        The second station opposite to the first
+     * 
+     * @param length 
+     *        The length of the trail
      */
     private Trail(Station station1, Station station2, int length) {
         this.station1 = station1;
@@ -32,7 +37,9 @@ public class Trail {
     /**
      * The longest path in the network composed of the given routes
      *
-     * @param routes the list of routes that the player controls
+     * @param routes 
+     *        The list of routes that the player controls
+     * 
      * @return a trail with the maximum length for the given routes
      */
     public static Trail longest(List<Route> routes) {
@@ -101,24 +108,28 @@ public class Trail {
 
     /**
      * Returns the length of the trail
+     * 
      * @return the length of the trail
      */
     public int length() { return length; }
 
     /**
      * Returns the first station of the trail
+     * 
      * @return the first station of the trail
      */
     public Station station1() { return station1; }
 
     /**
      * Returns he second station of the trail
+     * 
      * @return the second station of the trail
      */
     public Station station2() { return station2; }
 
     /**
      * Returns he string representation of the trail
+     * 
      * @return the string representation of the trail
      */
     @Override
