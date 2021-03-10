@@ -39,9 +39,9 @@ public final class Info {
    * @return card name in singular iff. the absolute value of count is 1
    */
   public static String cardName(Card card, int count) {
-    List<String> cardsStrings = List.of(StringsFr.BLACK_CARD, StringsFr.BLUE_CARD,
-    StringsFr.GREEN_CARD, StringsFr.ORANGE_CARD, StringsFr.RED_CARD, StringsFr.VIOLET_CARD,
-    StringsFr.WHITE_CARD, StringsFr.YELLOW_CARD, StringsFr.LOCOMOTIVE_CARD);
+    List<String> cardsStrings = List.of(StringsFr.BLACK_CARD, StringsFr.VIOLET_CARD,
+    StringsFr.BLUE_CARD, StringsFr.GREEN_CARD, StringsFr.YELLOW_CARD, StringsFr.ORANGE_CARD,
+    StringsFr.RED_CARD, StringsFr.WHITE_CARD, StringsFr.LOCOMOTIVE_CARD);
     
     return new StringBuilder()
     .append(cardsStrings.get(card.ordinal()))
@@ -264,10 +264,11 @@ public final class Info {
       StringBuilder stringBuilder = new StringBuilder();
       List<String> words = new ArrayList<String>();
 
-      for (Card card : cards) {
-        words.add(stringBuilder.append(cards.countOf(card))
-        .append(" ").append(cardName(card, cards.countOf(card))).toString());
-        stringBuilder = new StringBuilder();
+      for (Card card : Card.values()) {
+        if (cards.contains(card))
+          words.add(stringBuilder.append(cards.countOf(card))
+          .append(" ").append(cardName(card, cards.countOf(card))).toString());
+          stringBuilder = new StringBuilder();
       }
       
       return stringBuilder.append(String.join(", ", words.subList(0, words.size() - 1)))

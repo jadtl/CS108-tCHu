@@ -2,9 +2,9 @@ package ch.epfl.tchu.game;
 
 import org.junit.jupiter.api.Test;
 
+import ch.epfl.tchu.SortedBag;
+import ch.epfl.tchu.game.Route.Level;
 import ch.epfl.tchu.gui.Info;
-import ch.epfl.tchu.gui.StringsFr;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
@@ -20,6 +20,15 @@ class InfoTest {
     String playerName = "Elon Musk";
     String opponentName = "Jeff Bezos";
 
-    assertEquals("\nElon Musk et Jeff Bezos sont ex æqo avec 10 points !\n", Info.draw(List.of(playerName, opponentName), 10));
+    assertEquals("\nElon Musk et Jeff Bezos sont ex æqo avec 10 points !\n", 
+    Info.draw(List.of(playerName, opponentName), 10));
+  }
+
+  @Test
+  void claimedRouteWorks() {
+    String playerName = "Elon Musk";
+    Info info = new Info(playerName);
+    Route route = new Route("1", new Station(0, "Lausanne"), new Station(1, "EPFL"), 3, Level.OVERGROUND, Color.BLACK);
+    assertEquals("Elon Musk a pris possession de la route Lausanne  –  EPFL au moyen de 2 violettes et 3 locomotives.\n", info.claimedRoute(route, SortedBag.of(3, Card.LOCOMOTIVE, 2, Card.VIOLET)));
   }
 }
