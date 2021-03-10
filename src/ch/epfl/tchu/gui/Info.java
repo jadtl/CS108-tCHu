@@ -189,8 +189,8 @@ public final class Info {
    */
   public String drewAdditionalCards(SortedBag<Card> drawnCards, int additionnalCost) {
     return new StringBuilder().append(String.format(StringsFr.ADDITIONAL_CARDS_ARE, 
-    cardsEnumeration(drawnCards))).append(additionnalCost == 0 ? 
-    StringsFr.NO_ADDITIONAL_COST : StringsFr.SOME_ADDITIONAL_COST).toString();
+    cardsEnumeration(drawnCards))).append(String.format(additionnalCost == 0 ? 
+    StringsFr.NO_ADDITIONAL_COST : StringsFr.SOME_ADDITIONAL_COST, additionnalCost, StringsFr.plural(additionnalCost))).toString();
   }
 
   /**
