@@ -50,4 +50,13 @@ class InfoTest {
     assertEquals("Les cartes supplémentaires sont 2 violettes et 3 locomotives. Elles impliquent un coût additionnel de 2 cartes.\n", info.drewAdditionalCards(SortedBag.of(3, Card.LOCOMOTIVE, 2, Card.VIOLET), 2));
     assertEquals("Les cartes supplémentaires sont 2 violettes et 3 locomotives. Elles n'impliquent aucun coût additionnel.\n", info.drewAdditionalCards(SortedBag.of(3, Card.LOCOMOTIVE, 2, Card.VIOLET), 0));
   }
+
+  @Test
+  void didNotClaimRouteWorks() {
+    String playerName = "Elon Musk";
+    Info info = new Info(playerName);
+    Route route = new Route("1", new Station(0, "Lausanne"), new Station(1, "EPFL"), 3, Level.UNDERGROUND, Color.BLACK);
+
+    assertEquals("Elon Musk n'a pas pu (ou voulu) s'emparer de la route Lausanne  –  EPFL.\n", info.didNotClaimRoute(route));
+  }
 }
