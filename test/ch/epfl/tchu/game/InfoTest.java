@@ -61,6 +61,16 @@ class InfoTest {
   }
 
   @Test
+  void getsLongestTrailBonusWorks() {
+    String playerName = "Elon Musk";
+    Info info = new Info(playerName);
+    Route route = new Route("1", new Station(0, "Lausanne"), new Station(1, "EPFL"), 3, Level.UNDERGROUND, Color.BLACK);
+    Trail longestTrail = Trail.longest(List.of(route));
+
+    assertEquals("\nElon Musk reçoit un bonus de 10 points pour le plus long trajet (Lausanne - EPFL (3)).\n", info.getsLongestTrailBonus(longestTrail));
+  }
+
+  @Test
   void wonWorks() {
     String playerName = "Elon Musk";
     Info info = new Info(playerName);
