@@ -75,6 +75,6 @@ class InfoTest {
     String playerName = "Elon Musk";
     Info info = new Info(playerName);
     int points = 10; int loserPoints = 9;
-    assertEquals("\nElon Musk remporte la victoire avec 10 points, contre 9 points !\n", info.won(10, 9));
+    assertEquals("\nElon Musk remporte la victoire avec 10 points, contre 9 points !\n", info.won(points, loserPoints));
   }
 }

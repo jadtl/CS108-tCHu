@@ -48,7 +48,7 @@ class CardStateTest {
 
     assertEquals(1, cardState.deckSize());
     assertEquals(deck.withoutTopCards(5).topCard(), cardState.faceUpCard(0));
-    assertEquals(deck.topCard(), cardState.topDeckCard()); // TODO Figure why this test fails
+    assertEquals(deck.topCard(), cardState.topDeckCard());
   }
 
   @Test
