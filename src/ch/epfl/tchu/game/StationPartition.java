@@ -33,10 +33,8 @@ public final class StationPartition implements StationConnectivity {
       Preconditions.checkArgument(stationCount >= 0);
       
       this.stationConnectivity = new int[stationCount];
-
-      for (int i = 0; i < stationConnectivity.length; i++) {
+      for (int i = 0; i < stationConnectivity.length; i++)
         stationConnectivity[i] = i;
-      }
     }
 
     /**
