@@ -1,6 +1,7 @@
 package ch.epfl.tchu.game;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import ch.epfl.tchu.Preconditions;
@@ -160,8 +161,18 @@ public final class PlayerState extends PublicPlayerState {
 	SortedBag<Card> initialCards, SortedBag<Card> drawnCards) {
 		Preconditions.checkArgument(additionalCardsCount >= 1 && additionalCardsCount <= Constants.ADDITIONAL_TUNNEL_CARDS);
 		Preconditions.checkArgument(!initialCards.isEmpty() && drawnCards.size() == 3);
-		// TODO Implement possibleAdditionalCards
-		return new ArrayList<>();
+
+		SortedBag<Card> availableCards = cards().difference(initialCards);
+		SortedBag.Builder<Card> eligibleCardsBuilder = new SortedBag.Builder<Card>();
+		for (Card card : availableCards) {
+			if (card.equals(Card.LOCOMOTIVE) || card.equals(initialCards.get(0)))
+				eligibleCardsBuilder.add(card);
+		}
+		List<SortedBag<Card>> possibleAdditionalCards = new ArrayList<>();
+		possibleAdditionalCards.addAll(eligibleCardsBuilder.build().subsetsOfSize(additionalCardsCount));
+		possibleAdditionalCards.sort(Comparator.comparingInt(additionalCards -> additionalCards.countOf(Card.LOCOMOTIVE)));
+
+		return possibleAdditionalCards;
 	}
 
 	/**
