@@ -2,11 +2,19 @@ package ch.epfl.tchu.game;
 
 import ch.epfl.tchu.Preconditions;
 
+/**
+ * 
+ * 
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
+ */
 public final class StationPartition implements StationConnectivity {
   private final int[] stationConnectivity;
 
   /**
    * 
+   * 
+   * @param stationConnectivity
    */
   private StationPartition(int[] stationConnectivity) { this.stationConnectivity = stationConnectivity; }
 
@@ -27,6 +35,7 @@ public final class StationPartition implements StationConnectivity {
 
     /**
      * 
+     * 
      * @param stationCount
      */
     public Builder(int stationCount) {
@@ -38,6 +47,7 @@ public final class StationPartition implements StationConnectivity {
     }
 
     /**
+     * 
      * 
      * @param s1
      * 
@@ -52,6 +62,7 @@ public final class StationPartition implements StationConnectivity {
     }
 
     /**
+     * 
      * 
      * @return
      */
@@ -68,6 +79,7 @@ public final class StationPartition implements StationConnectivity {
     }
 
     /**
+     * 
      * 
      * @param stationId
      * 

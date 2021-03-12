@@ -4,6 +4,12 @@ import java.util.List;
 
 import ch.epfl.tchu.Preconditions;
 
+/**
+ * 
+ * 
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
+ */
 public class PublicPlayerState {
   private final int ticketCount;
   private final int cardCount;
@@ -11,6 +17,15 @@ public class PublicPlayerState {
   private final int carCount;
   private final int claimPoints;
 
+  /**
+   * 
+   * 
+   * @param ticketCount
+   * 
+   * @param cardCount
+   * 
+   * @param routes
+   */
   public PublicPlayerState(int ticketCount, int cardCount, List<Route> routes) {
     Preconditions.checkArgument(ticketCount >= 0 && cardCount >= 0);
 
@@ -28,23 +43,38 @@ public class PublicPlayerState {
     this.claimPoints = claimPoints;
   }
 
-  public int ticketCount() {
-    return ticketCount;
-  }
+  /**
+   * 
+   * 
+   * @return
+   */
+  public int ticketCount() { return ticketCount; }
 
-  public int cardCount() {
-    return cardCount;
-  }
+  /**
+   * 
+   * 
+   * @return
+   */
+  public int cardCount() { return cardCount; }
 
-  public List<Route> routes() {
-    return routes;
-  }
+  /**
+   * 
+   * 
+   * @return
+   */
+  public List<Route> routes() { return routes; }
 
-  public int carCount() {
-    return carCount;
-  }
+  /**
+   * 
+   * 
+   * @return
+   */
+  public int carCount() { return carCount; }
 
-  public int claimPoints() {
-    return claimPoints;
-  }
+  /**
+   * 
+   * 
+   * @return
+   */
+  public int claimPoints() { return claimPoints; }
  }

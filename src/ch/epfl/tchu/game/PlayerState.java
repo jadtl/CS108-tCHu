@@ -6,9 +6,16 @@ import java.util.List;
 import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
 
+/**
+ * 
+ * 
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
+ */
 public final class PlayerState extends PublicPlayerState {
 	private final SortedBag<Ticket> tickets;
 	private final SortedBag<Card> cards;
+	private final int ticketPoints;
 
 	/**
 	 * 
@@ -24,6 +31,8 @@ public final class PlayerState extends PublicPlayerState {
 
 		this.tickets = tickets;
 		this.cards = cards;
+		// TODO Determine ticketPoints
+		this.ticketPoints = 0;
 	}
 
 	/**
@@ -41,10 +50,18 @@ public final class PlayerState extends PublicPlayerState {
 
 	/**
 	 * 
+	 * 
 	 * @return
 	 */
 	public SortedBag<Ticket> tickets() { return tickets; }
 
+	/**
+	 * 
+	 * 
+	 * @param newTickets
+	 * 
+	 * @return
+	 */
 	public PlayerState withAddedTickets(SortedBag<Ticket> newTickets) {
 		return new PlayerState(new SortedBag.Builder<Ticket>().add(tickets())
 		.add(newTickets).build(), cards(), routes());
@@ -52,50 +69,48 @@ public final class PlayerState extends PublicPlayerState {
 
 	/**
 	 * 
+	 * 
 	 * @return
 	 */
-	public SortedBag<Card> cards() {
-
-		return cards;
-	}
+	public SortedBag<Card> cards() { return cards; }
 
 	/**
+	 * 
 	 * 
 	 * @param card
 	 * 
 	 * @return
 	 */
 	public PlayerState withAddedCard(Card card) {
-
-		return new PlayerState(tickets(), new SortedBag.Builder<Card>().add(cards()).add(card).build(), routes());
+		return new PlayerState(tickets(), new SortedBag.Builder<Card>()
+		.add(cards()).add(card).build(), routes());
 	}
 
 	/**
+	 * 
 	 * 
 	 * @param additionalCards
 	 * 
 	 * @return
 	 */
-	public PlayerState withAddedCards(SortedBag<Card> additionalCards) {
-		
-		return new PlayerState(tickets(), new SortedBag.Builder<Card>().add(cards()).add(additionalCards).build(), routes());
+	public PlayerState withAddedCards(SortedBag<Card> additionalCards) { 
+		return new PlayerState(tickets(), new SortedBag.Builder<Card>()
+		.add(cards()).add(additionalCards).build(), routes());
 	}
 
 	/**
+	 * 
 	 * 
 	 * @param route
 	 * 
 	 * @return
 	 */
 	public boolean canClaimRoute(Route route) {
-
 		boolean hasClaimCards = false;
-		for(SortedBag<Card> claimCards : possibleClaimCards(route)) {
+		for(SortedBag<Card> claimCards : possibleClaimCards(route))
 			if(cards().contains(claimCards)) hasClaimCards = true;
-			
-		}
-		return (cardCount() >= route.length() && hasClaimCards);
 		
+		return (cardCount() >= route.length() && hasClaimCards);
 	}
 
 	/**
@@ -106,7 +121,14 @@ public final class PlayerState extends PublicPlayerState {
 	 * @return
 	 */
 	public List<SortedBag<Card>> possibleClaimCards(Route route) {
+		Preconditions.checkArgument(carCount() >= route.length());
 
+		List<SortedBag<Card>> possibleClaimCards = new ArrayList<>();
+		for (SortedBag<Card> claimCards : possibleClaimCards(route)) {
+			if (cards().contains(claimCards)) possibleClaimCards.add(claimCards);
+		}
+
+		return possibleClaimCards;
 	}
 
 	/**
@@ -120,9 +142,12 @@ public final class PlayerState extends PublicPlayerState {
 	 * 
 	 * @return
 	 */
-	public List<SortedBag<Card>> possibleAdditionalCards(int additionalCardsCount, SortedBag<Card> initialCards,
-			SortedBag<Card> drawnCards) {
-
+	public List<SortedBag<Card>> possibleAdditionalCards(int additionalCardsCount, 
+	SortedBag<Card> initialCards, SortedBag<Card> drawnCards) {
+		Preconditions.checkArgument(additionalCardsCount >= 1 && additionalCardsCount <= Constants.ADDITIONAL_TUNNEL_CARDS);
+		Preconditions.checkArgument(!initialCards.isEmpty() && drawnCards.size() == 3);
+		// TODO Implement possibleAdditionalCards
+		return new ArrayList<>();
 	}
 
 	/**
@@ -135,22 +160,23 @@ public final class PlayerState extends PublicPlayerState {
 	 * @return
 	 */
 	public PlayerState withClaimedRoute(Route route, SortedBag<Card> claimCards) {
+		List<Route> updatedRoutes = new ArrayList<>(routes());
+		updatedRoutes.add(route);
 
+		return new PlayerState(tickets(), new SortedBag.Builder<Card>().add(cards().difference(claimCards)).build(), updatedRoutes);
 	}
 
 	/**
 	 * 
-	 * @return
-	 */
-	public int ticketPoints() {
-
-	}
-
-	/**
 	 * 
 	 * @return
 	 */
-	public int finalPoints() {
+	public int ticketPoints() { return ticketPoints; }
 
-	}
+	/**
+	 * 
+	 * 
+	 * @return
+	 */
+	public int finalPoints() { return claimPoints() + ticketPoints(); }
 }
