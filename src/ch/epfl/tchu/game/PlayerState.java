@@ -29,10 +29,24 @@ public final class PlayerState extends PublicPlayerState {
 	public PlayerState(SortedBag<Ticket> tickets, SortedBag<Card> cards, List<Route> routes) {
 		super(tickets.size(), cards.size(), routes);
 
+		int highestId = 0;
+		for (Route route : routes) {
+			if (route.station1().id() > highestId) highestId = route.station1().id();
+			if (route.station2().id() > highestId) highestId = route.station2().id();
+		}	
+		StationPartition.Builder stationPartitionBuilder = new StationPartition.Builder(highestId);
+		for (Route route : routes) {
+			stationPartitionBuilder.connect(route.station1(), route.station2());
+		}
+		StationPartition stationPartition = stationPartitionBuilder.build();
+		int ticketPoints = 0;
+		for (Ticket ticket : tickets) {
+			ticketPoints = ticket.points(stationPartition);
+		}
+
 		this.tickets = tickets;
 		this.cards = cards;
-		// TODO Determine ticketPoints
-		this.ticketPoints = 0;
+		this.ticketPoints = ticketPoints;
 	}
 
 	/**
