@@ -3,7 +3,7 @@ package ch.epfl.tchu.game;
 import ch.epfl.tchu.Preconditions;
 
 /**
- * 
+ * The flat partition of stations
  * 
  * @author Sofiya Malamud (313789)
  * @author Jad Tala (310821)
@@ -12,9 +12,10 @@ public final class StationPartition implements StationConnectivity {
   private final int[] stationConnectivity;
 
   /**
-   * 
+   * Constructs a station partition with its connectivity
    * 
    * @param stationConnectivity
+   *        The connectivity of the stations for the player's network
    */
   private StationPartition(int[] stationConnectivity) { this.stationConnectivity = stationConnectivity; }
 
@@ -28,15 +29,19 @@ public final class StationPartition implements StationConnectivity {
   }
 
   /**
-   * 
+   * The builder of a station partition
    */
   public static final class Builder {
     private int[] stationConnectivity;
 
     /**
-     * 
+     * Constructs a station partition builder with a set of stations 
      * 
      * @param stationCount
+     *        The number of stations in the set
+     * 
+     * @throws IllegalArgumentException
+     *         If stationCount is strictly negative
      */
     public Builder(int stationCount) {
       Preconditions.checkArgument(stationCount >= 0);
@@ -47,13 +52,15 @@ public final class StationPartition implements StationConnectivity {
     }
 
     /**
-     * 
+     * Returns an identical builder except that its two given stations are connected
      * 
      * @param s1
+     *        The first station
      * 
      * @param s2
+     *        The second station
      * 
-     * @return
+     * @return an identical builder except that its two given stations are connected
      */
     public Builder connect(Station s1, Station s2) {
       stationConnectivity[s2.id()] = representative(s1.id());
@@ -62,9 +69,11 @@ public final class StationPartition implements StationConnectivity {
     }
 
     /**
+     * Returns the flat partition of the stations corresponding to the builder's
+     * in-progress deep station partition
      * 
-     * 
-     * @return
+     * @return the flat partition of the stations corresponding to the builder's
+     * in-progress deep station partition
      */
     public StationPartition build() {
       for (int i = 0; i < stationConnectivity.length; i++) {
@@ -79,11 +88,12 @@ public final class StationPartition implements StationConnectivity {
     }
 
     /**
-     * 
+     * Returns the representative of the given station
      * 
      * @param stationId
+     *        The station
      * 
-     * @return
+     * @return the representative of the given station
      */
     private int representative(int stationId) {
       return stationConnectivity[stationId];
