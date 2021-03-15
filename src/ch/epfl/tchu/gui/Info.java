@@ -3,6 +3,7 @@ package ch.epfl.tchu.gui;
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.Route;
+import ch.epfl.tchu.game.Station;
 import ch.epfl.tchu.game.Trail;
 
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public final class Info {
    * the given number of tickets
    */
   public String keptTickets(int count) {
-    return String.format(StringsFr.DREW_TICKETS, playerName, 
+    return String.format(StringsFr.KEPT_N_TICKETS, playerName, 
     String.valueOf(count), StringsFr.plural(count));
   }
 
@@ -109,7 +110,7 @@ public final class Info {
    */
   public String drewTickets(int count) {
     return String.format(StringsFr.DREW_TICKETS, playerName, 
-    String.valueOf(count));
+    String.valueOf(count), StringsFr.plural(count));
   }
 
   /**
@@ -153,7 +154,7 @@ public final class Info {
    */
   public String claimedRoute(Route route, SortedBag<Card> cards) {
     return String.format(StringsFr.CLAIMED_ROUTE, playerName, 
-    routeText(route), cardsEnumeration(cards));
+    routeText(route.station1(), route.station2()), cardsEnumeration(cards));
   }
 
   /**
@@ -171,7 +172,7 @@ public final class Info {
    */
   public String attemptsTunnelClaim(Route route, SortedBag<Card> initialCards) {
     return String.format(StringsFr.ATTEMPTS_TUNNEL_CLAIM, playerName, 
-    routeText(route), cardsEnumeration(initialCards));
+    routeText(route.station1(), route.station2()), cardsEnumeration(initialCards));
   }
 
   /**
@@ -204,7 +205,7 @@ public final class Info {
    * couldn't claim the route
    */
   public String didNotClaimRoute(Route route) {
-    return String.format(StringsFr.DID_NOT_CLAIM_ROUTE, playerName, routeText(route));
+    return String.format(StringsFr.DID_NOT_CLAIM_ROUTE, playerName, routeText(route.station1(), route.station2()));
   }
 
   /**
@@ -231,7 +232,7 @@ public final class Info {
    * from the player's longest trail
    */
   public String getsLongestTrailBonus(Trail longestTrail) {
-    return String.format(StringsFr.GETS_BONUS, playerName, longestTrail.toString());
+    return String.format(StringsFr.GETS_BONUS, playerName, routeText(longestTrail.station1(), longestTrail.station2()));
   }
 
   /**
@@ -271,8 +272,11 @@ public final class Info {
           stringBuilder = new StringBuilder();
       }
       
-      return stringBuilder.append(String.join(", ", words.subList(0, words.size() - 1)))
-      .append(StringsFr.AND_SEPARATOR).append(words.get(words.size() -1)).toString();
+      if (words.size() == 1)
+        return words.get(0);
+      else
+        return stringBuilder.append(String.join(", ", words.subList(0, words.size() - 1)))
+      .append(StringsFr.AND_SEPARATOR).append(words.get(words.size() - 1)).toString();
   }
 
   /**
@@ -283,8 +287,7 @@ public final class Info {
    * 
    * @return a message that describes the route
    */
-  private String routeText(Route route) {
-    return new StringBuilder().append(String.join(" ", List.of(route.station1().toString(), 
-    StringsFr.EN_DASH_SEPARATOR, route.station2().toString()))).toString();
+  private String routeText(Station station1, Station station2) {
+    return new StringBuilder().append(station1.toString()).append(StringsFr.EN_DASH_SEPARATOR).append(station2.toString()).toString();
   }
 }
