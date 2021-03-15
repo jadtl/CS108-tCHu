@@ -19,7 +19,7 @@ public class PublicPlayerState {
 
   /**
    * Constructs a public player state with its ticket and card counts as well
-   * as its owned routes
+   * as its claimed routes
    * 
    * @param ticketCount
    *        The number of tickets the player has
@@ -28,7 +28,7 @@ public class PublicPlayerState {
    *        The number of cards the player has
    * 
    * @param routes
-   *        The routes the player owns
+   *        The routes the player claimed
    * 
    * @throws IllegalArgumentException
    *         If if the number of tickets or cards are strictly negative
@@ -79,9 +79,9 @@ public class PublicPlayerState {
   public int carCount() { return carCount; }
 
   /**
-   * Returns the number of construction points earned by the player
+   * Returns the number of construction points claimed by the player
    * 
-   * @return the number of construction points earned by the player
+   * @return the number of construction points claimed by the player
    */
   public int claimPoints() { return claimPoints; }
  }
