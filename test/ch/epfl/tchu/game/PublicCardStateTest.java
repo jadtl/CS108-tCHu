@@ -86,7 +86,6 @@ class PublicCardStateTest {
 
     @Test
     void faceUpCardReturnsCorrectCard() {
-        var rng = TestRandomizer.newRandom();
         for (int i = 0; i < TestRandomizer.RANDOM_ITERATIONS; i++) {
             var cards = new ArrayList<>(Card.ALL);
             Collections.shuffle(cards, new Random(i * 2021L));

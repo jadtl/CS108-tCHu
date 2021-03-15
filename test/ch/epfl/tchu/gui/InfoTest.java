@@ -1,15 +1,17 @@
 package ch.epfl.tchu.gui;
 
-import ch.epfl.tchu.SortedBag;
-import ch.epfl.tchu.game.*;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+import ch.epfl.tchu.SortedBag;
+import ch.epfl.tchu.game.Card;
+import ch.epfl.tchu.game.Color;
+import ch.epfl.tchu.game.Route;
+import ch.epfl.tchu.game.Station;
+import ch.epfl.tchu.game.Trail;
 
 class InfoTest {
 
