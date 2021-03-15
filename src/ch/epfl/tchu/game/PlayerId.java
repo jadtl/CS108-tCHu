@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 
+ * The identity of the player
  * 
  * @author Sofiya Malamud (313789)
  * @author Jad Tala (310821)
@@ -17,9 +17,9 @@ public enum PlayerId {
   public static final int COUNT = ALL.size();
 
   /**
+   * Returns the identity of the player who follows the one applied to
    * 
-   * 
-   * @return
+   * @return the identity of the player who follows the one applied to
    */
   public PlayerId next() {
     return this == PLAYER_1 ? PLAYER_2 : PLAYER_1;
