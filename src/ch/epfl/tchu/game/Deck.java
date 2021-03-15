@@ -59,14 +59,24 @@ public final class Deck<C extends Comparable<C>> {
 		return cards.size();
 	}
 
-	public boolean isEmpty() { return size() != 0;}
+	/**
+	 * Returns the emptiness state of the deck
+	 * 
+	 * @return true iff. the deck is empty
+	 */
+	public boolean isEmpty() { return size() == 0;}
 
 	/**
 	 * Returns the top element of the deck
 	 *
 	 * @return the top element of the deck
+	 * 
+	 * @throws IllegalArgumentException
+	 * 				 If the deck is empty
 	 */
 	public C topCard() {
+		Preconditions.checkArgument(!isEmpty());
+
 		return cards.get(0);
 	}
 
@@ -79,7 +89,7 @@ public final class Deck<C extends Comparable<C>> {
 	 *         If the deck is empty
 	 */
 	public Deck<C> withoutTopCard() {
-		Preconditions.checkArgument(isEmpty());
+		Preconditions.checkArgument(!isEmpty());
 
 		return new Deck<C>(cards.subList(1, size()));
 	}
