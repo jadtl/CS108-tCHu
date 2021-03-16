@@ -17,7 +17,7 @@ public class PublicPlayerStateTest {
   }
 
   @Test
-  void publicPlayerStateCarCountIsCorrect() {
+  void publicPlayerStateCarCountWorksOnKnownExample() {
     var s1 = new Station(1, "Yverdon");
     var s2 = new Station(2, "Fribourg");
     var s3 = new Station(3, "Neuchâtel");
@@ -37,7 +37,7 @@ public class PublicPlayerStateTest {
   }
 
   @Test
-  void publicPlayerStateClaimPointsIsCorrect() {
+  void publicPlayerStateClaimPointsWorksOnKnownExample() {
     var s1 = new Station(1, "Yverdon");
     var s2 = new Station(2, "Fribourg");
     var s3 = new Station(3, "Neuchâtel");
