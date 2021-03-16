@@ -78,7 +78,7 @@ public final class StationPartition implements StationConnectivity {
     public StationPartition build() {
       for (int i = 0; i < stationConnectivity.length; i++)
         stationConnectivity[i] = representative(i);
-
+      
       return new StationPartition(stationConnectivity);
     }
 
@@ -94,7 +94,7 @@ public final class StationPartition implements StationConnectivity {
       int currentRepresentative = stationConnectivity[stationId];
       while (currentRepresentative != stationConnectivity[currentRepresentative])
         currentRepresentative = stationConnectivity[currentRepresentative];
-        
+
       return currentRepresentative;
     }
   }
