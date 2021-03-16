@@ -176,5 +176,33 @@ public class PlayerStateTest {
     PlayerState playerState = new PlayerState(new SortedBag.Builder<Ticket>().build(), cards, new ArrayList<Route>());
     assertEquals("[{3×RED}, {2×RED, LOCOMOTIVE}, {RED, 2×LOCOMOTIVE}, {3×LOCOMOTIVE}]", playerState.possibleAdditionalCards(3, SortedBag.of(3, Card.RED), SortedBag.of(2, Card.RED, 1, Card.BLACK)).toString());
   }
-  // TODO withClaimedRoute test
+
+  @Test
+  void withClaimedRoute() {
+    var s1 = new Station(1, "Yverdon");
+    var s2 = new Station(2, "Fribourg");
+    var s3 = new Station(3, "Neuchâtel");
+    var s4 = new Station(4, "Berne");
+    var s5 = new Station(5, "Lucerne");
+    var s6 = new Station(6, "Soleure");
+
+    var t1 = new Ticket(s1, s3, 13);
+    var t2 = new Ticket(s2, s4, 2);
+
+    var r1 = new Route("A", s3, s1, 2, Route.Level.OVERGROUND, Color.BLACK);
+
+    var routes = List.of(
+            new Route("B", s3, s6, 6, Route.Level.OVERGROUND, Color.GREEN),
+            new Route("C", s4, s3, 6, Route.Level.OVERGROUND, Color.RED),
+            new Route("D", s4, s6, 6, Route.Level.OVERGROUND, Color.BLACK),
+            new Route("E", s4, s5, 6, Route.Level.OVERGROUND, null),
+            new Route("F", s4, s1, 5, Route.Level.OVERGROUND, Color.ORANGE),
+            new Route("G", s4, s5, 3, Route.Level.OVERGROUND, null),
+            new Route("H", s4, s1, 5, Route.Level.OVERGROUND, Color.ORANGE));
+    var playerState1 = new PlayerState(SortedBag.of(2, t2, 3, t1), SortedBag.of(3, Card.BLACK), routes);
+
+    playerState1 = playerState1.withClaimedRoute(r1, SortedBag.of(2, Card.BLACK));
+    assertEquals(1, playerState1.cardCount());
+    assertEquals(1, playerState1.carCount());
+  }
 }
