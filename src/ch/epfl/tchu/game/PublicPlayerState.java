@@ -35,19 +35,12 @@ public class PublicPlayerState {
    */
   public PublicPlayerState(int ticketCount, int cardCount, List<Route> routes) {
     Preconditions.checkArgument(ticketCount >= 0 && cardCount >= 0);
-
-    int usedCarCount = 0;
-    int claimPoints = 0;
-    for (Route route : routes) {
-      usedCarCount += route.length();
-      claimPoints += route.claimPoints();
-    }
  
     this.ticketCount = ticketCount;
     this.cardCount = cardCount;
-    this.routes = routes;
-    this.carCount = Constants.INITIAL_CAR_COUNT - usedCarCount;
-    this.claimPoints = claimPoints;
+    this.routes = List.copyOf(routes);
+    this.carCount = Constants.INITIAL_CAR_COUNT - routes.stream().map(route -> route.length()).reduce(0, Integer::sum);
+    this.claimPoints = routes.stream().map(route -> route.claimPoints()).reduce(0, Integer::sum);
   }
 
   /**
