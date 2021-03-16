@@ -89,7 +89,7 @@ public class PlayerStateTest {
   }
 
   @Test
-  void playerStateCanClaimRouteWorksWithKnownExample() {
+  void playerStateCanClaimRouteWorksWithKnownExamples() {
     var s1 = new Station(1, "Yverdon");
     var s2 = new Station(2, "Fribourg");
     var s3 = new Station(3, "Neuchâtel");
@@ -114,15 +114,20 @@ public class PlayerStateTest {
     
     var playerState1 = new PlayerState(SortedBag.of(2, t2, 3, t1), SortedBag.of(3, Card.BLACK), routes);
     assertTrue(playerState1.canClaimRoute(r1));
+
     playerState1 = new PlayerState(SortedBag.of(2, t2, 3, t1), SortedBag.of(1, Card.BLACK), routes);
     assertFalse(playerState1.canClaimRoute(r1));
+
     playerState1 = new PlayerState(SortedBag.of(2, t2, 3, t1), SortedBag.of(2, Card.LOCOMOTIVE), routes);
     assertFalse(playerState1.canClaimRoute(r1));
     assertTrue(playerState1.canClaimRoute(r2));
+
     playerState1 = new PlayerState(SortedBag.of(2, t2, 3, t1), SortedBag.of(1, Card.LOCOMOTIVE, 1, Card.BLACK), routes);
     assertFalse(playerState1.canClaimRoute(r1));
     assertTrue(playerState1.canClaimRoute(r2));
-    playerState1 = new PlayerState(SortedBag.of(2, t2, 3, t1), SortedBag.of(1, Card.LOCOMOTIVE, 1, Card.BLACK), routes);
+
+    playerState1 = new PlayerState(SortedBag.of(2, t2, 3, t1), SortedBag.of(), routes);
+    assertFalse(playerState1.canClaimRoute(r1));
 
     routes = List.of(
             new Route("B", s3, s6, 6, Route.Level.OVERGROUND, Color.GREEN),
@@ -136,14 +141,17 @@ public class PlayerStateTest {
     assertThrows(IllegalArgumentException.class, () -> { playerState2.canClaimRoute(r2); });
   }
   // TODO possibleClaimCards test
-  // TODO possibleAdditionalCards test
   @Test
-  void playerStatePossibleAdditionalCardsWorksWithKnownExample() {
-    SortedBag<Card> cards = SortedBag.of(4, Card.RED, 5, Card.LOCOMOTIVE);
+  void playerStatePossibleClaimCardsWorksWithKnownExamples() {
+
+  }
+  
+  @Test
+  void playerStatePossibleAdditionalCardsWorksWithKnownExamples() {
+    SortedBag<Card> cards = new SortedBag.Builder<Card>().add(SortedBag.of(7, Card.RED, 5, Card.LOCOMOTIVE)).add(4, Card.GREEN).build();
 
     PlayerState playerState = new PlayerState(new SortedBag.Builder<Ticket>().build(), cards, new ArrayList<Route>());
-
-
+    assertEquals("[{3×RED}, {2×RED, LOCOMOTIVE}, {RED, 2×LOCOMOTIVE}, {3×LOCOMOTIVE}]", playerState.possibleAdditionalCards(3, SortedBag.of(3, Card.RED), SortedBag.of(2, Card.RED, 1, Card.BLACK)).toString());
   }
   // TODO withClaimedRoute test
 }
