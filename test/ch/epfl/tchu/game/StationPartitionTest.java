@@ -37,5 +37,38 @@ public class StationPartitionTest {
     .connect(new Station(0, ""), new Station(1, ""))
     .connect(new Station(1, ""), new Station(2, "")).build();
     assertTrue(stationPartition.connected(new Station(1, ""), new Station(2, "")));
+    stationPartition = new StationPartition.Builder(5)
+    .connect(new Station(0, ""), new Station(1, ""))
+    .connect(new Station(2, ""), new Station(1, ""))
+    .connect(new Station(4, ""), new Station(3, ""))
+    .connect(new Station(3, ""), new Station(2, ""))
+    .build();
+    assertTrue(stationPartition.connected(new Station(0, ""), new Station(4, "")));
+    stationPartition = new StationPartition.Builder(5)
+    .connect(new Station(1, ""), new Station(0, ""))
+    .connect(new Station(4, ""), new Station(3, ""))
+    .connect(new Station(2, ""), new Station(0, ""))
+    .connect(new Station(4, ""), new Station(2, ""))
+    .build();
+    assertTrue(stationPartition.connected(new Station(0, ""), new Station(4, "")));
+    stationPartition = new StationPartition.Builder(5)
+    .connect(new Station(1, ""), new Station(0, ""))
+    .connect(new Station(4, ""), new Station(3, ""))
+    .connect(new Station(2, ""), new Station(4, ""))
+    .build();
+    assertTrue(stationPartition.connected(new Station(2, ""), new Station(3, "")));
+    assertFalse(stationPartition.connected(new Station(0, ""), new Station(4, "")));
+    assertFalse(stationPartition.connected(new Station(0, ""), new Station(3, "")));
+    assertFalse(stationPartition.connected(new Station(0, ""), new Station(2, "")));
+    assertFalse(stationPartition.connected(new Station(1, ""), new Station(4, "")));
+    assertFalse(stationPartition.connected(new Station(1, ""), new Station(3, "")));
+    assertFalse(stationPartition.connected(new Station(1, ""), new Station(2, "")));
+    assertFalse(stationPartition.connected(new Station(2, ""), new Station(1, "")));
+    assertFalse(stationPartition.connected(new Station(2, ""), new Station(0, "")));
+    assertFalse(stationPartition.connected(new Station(3, ""), new Station(1, "")));
+    assertFalse(stationPartition.connected(new Station(3, ""), new Station(0, "")));
+    assertFalse(stationPartition.connected(new Station(4, ""), new Station(1, "")));
+    assertFalse(stationPartition.connected(new Station(4, ""), new Station(0, "")));
+
   }
 }
