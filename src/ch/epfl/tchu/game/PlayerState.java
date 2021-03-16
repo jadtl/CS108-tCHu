@@ -183,11 +183,18 @@ public final class PlayerState extends PublicPlayerState {
 	public List<SortedBag<Card>> possibleAdditionalCards(int additionalCardsCount, 
 	SortedBag<Card> initialCards, SortedBag<Card> drawnCards) {
 		Preconditions.checkArgument(additionalCardsCount >= 1 && additionalCardsCount <= Constants.ADDITIONAL_TUNNEL_CARDS);
-		Preconditions.checkArgument(!initialCards.isEmpty() && drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
+		Preconditions.checkArgument(!initialCards.isEmpty() && initialCards.toSet().size() <= 2);
+		Preconditions.checkArgument(drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
 
-		return SortedBag.of(cards().difference(initialCards).stream()
+		SortedBag<Card> remainingCards = cards().difference(initialCards);
+		if (remainingCards.isEmpty()) return new ArrayList<SortedBag<Card>>();
+
+		SortedBag<Card> filteredCards = SortedBag.of(remainingCards.stream()
 		.filter((Card card) -> card.equals(Card.LOCOMOTIVE) || card.equals(initialCards.get(0)))
-		.collect(Collectors.toList())).subsetsOfSize(additionalCardsCount).stream()
+		.collect(Collectors.toList()));
+		if (filteredCards.size() < additionalCardsCount) return new ArrayList<SortedBag<Card>>();
+
+		return filteredCards.subsetsOfSize(additionalCardsCount).stream()
 		.sorted(Comparator.comparingInt(additionalCards -> additionalCards.countOf(Card.LOCOMOTIVE))).collect(Collectors.toList());
 	}
 
