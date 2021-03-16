@@ -140,10 +140,33 @@ public class PlayerStateTest {
     var playerState2 = new PlayerState(SortedBag.of(2, t2, 3, t1), SortedBag.of(1, Card.LOCOMOTIVE, 1, Card.BLACK), routes);
     assertThrows(IllegalArgumentException.class, () -> { playerState2.canClaimRoute(r2); });
   }
-  // TODO possibleClaimCards test
   @Test
   void playerStatePossibleClaimCardsWorksWithKnownExamples() {
+    var s1 = new Station(1, "Yverdon");
+    var s2 = new Station(2, "Fribourg");
+    var s3 = new Station(3, "Neuchâtel");
+    var s4 = new Station(4, "Berne");
+    var s5 = new Station(5, "Lucerne");
+    var s6 = new Station(6, "Soleure");
 
+    var t1 = new Ticket(s1, s3, 13);
+    var t2 = new Ticket(s2, s4, 2);
+
+    var r1 = new Route("A", s3, s1, 2, Route.Level.OVERGROUND, Color.BLACK);
+    var r2 = new Route("A", s3, s1, 2, Route.Level.UNDERGROUND, Color.BLACK);
+
+    var routes = List.of(
+            new Route("B", s3, s6, 6, Route.Level.OVERGROUND, Color.GREEN),
+            new Route("C", s4, s3, 6, Route.Level.OVERGROUND, Color.RED),
+            new Route("D", s4, s6, 6, Route.Level.OVERGROUND, Color.BLACK),
+            new Route("E", s4, s5, 6, Route.Level.OVERGROUND, null),
+            new Route("F", s4, s1, 5, Route.Level.OVERGROUND, Color.ORANGE),
+            new Route("G", s4, s5, 3, Route.Level.OVERGROUND, null),
+            new Route("H", s4, s1, 5, Route.Level.OVERGROUND, Color.ORANGE));
+    var playerState1 = new PlayerState(SortedBag.of(2, t2, 3, t1), SortedBag.of(), routes);
+    assertTrue(playerState1.possibleClaimCards(r1).isEmpty());
+    playerState1 = new PlayerState(SortedBag.of(2, t2, 3, t1), SortedBag.of(1, Card.BLACK, 2, Card.LOCOMOTIVE), routes);
+    System.out.println(playerState1.possibleClaimCards(r2));
   }
   
   @Test
