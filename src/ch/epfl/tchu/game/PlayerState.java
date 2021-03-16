@@ -3,6 +3,7 @@ package ch.epfl.tchu.game;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
@@ -33,24 +34,16 @@ public final class PlayerState extends PublicPlayerState {
 	public PlayerState(SortedBag<Ticket> tickets, SortedBag<Card> cards, List<Route> routes) {
 		super(tickets.size(), cards.size(), routes);
 
-		int highestId = 0;
-		for (Route route : routes) {
-			if (route.station1().id() > highestId) highestId = route.station1().id();
-			if (route.station2().id() > highestId) highestId = route.station2().id();
-		}	
-		StationPartition.Builder stationPartitionBuilder = new StationPartition.Builder(highestId);
-		for (Route route : routes) {
-			stationPartitionBuilder.connect(route.station1(), route.station2());
-		}
+		int highestId = routes.isEmpty() ? 0 : routes.stream().flatMap((Route route) -> (List.of(route.station1().id(), route.station2().id()).stream()))
+		.collect(Collectors.toSet()).stream().max(Comparator.comparing(Integer::valueOf)).get();
+		StationPartition.Builder stationPartitionBuilder = new StationPartition
+		.Builder(highestId + 1);
+		routes.stream().forEach(route -> stationPartitionBuilder.connect(route.station1(), route.station2()));
 		StationPartition stationPartition = stationPartitionBuilder.build();
-		int ticketPoints = 0;
-		for (Ticket ticket : tickets) {
-			ticketPoints = ticket.points(stationPartition);
-		}
 
-		this.tickets = tickets;
-		this.cards = cards;
-		this.ticketPoints = ticketPoints;
+		this.tickets = SortedBag.of(tickets);
+		this.cards = SortedBag.of(cards);
+		this.ticketPoints = tickets.stream().map(ticket -> ticket.points(stationPartition)).reduce(0, Integer::sum);
 	}
 
 	/**
@@ -69,7 +62,7 @@ public final class PlayerState extends PublicPlayerState {
 	public static PlayerState initial(SortedBag<Card> initialCards) {
 		Preconditions.checkArgument(initialCards.size() == Constants.INITIAL_CARDS_COUNT);
 
-		return new PlayerState(new SortedBag.Builder<Ticket>().build(), initialCards, new ArrayList<Route>());
+		return new PlayerState(new SortedBag.Builder<Ticket>().build(), SortedBag.of(initialCards), new ArrayList<Route>());
 	}
 
 	/**
@@ -160,12 +153,8 @@ public final class PlayerState extends PublicPlayerState {
 	public List<SortedBag<Card>> possibleClaimCards(Route route) {
 		Preconditions.checkArgument(carCount() >= route.length());
 
-		List<SortedBag<Card>> possibleClaimCards = new ArrayList<>();
-		for (SortedBag<Card> claimCards : possibleClaimCards(route)) {
-			if (cards().contains(claimCards)) possibleClaimCards.add(claimCards);
-		}
-
-		return possibleClaimCards;
+		return possibleClaimCards(route).stream().filter((SortedBag<Card> cards) 
+		-> this.cards().contains(cards)).collect(Collectors.toList());
 	}
 
 	/**
@@ -196,17 +185,10 @@ public final class PlayerState extends PublicPlayerState {
 		Preconditions.checkArgument(additionalCardsCount >= 1 && additionalCardsCount <= Constants.ADDITIONAL_TUNNEL_CARDS);
 		Preconditions.checkArgument(!initialCards.isEmpty() && drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
 
-		SortedBag<Card> availableCards = cards().difference(initialCards);
-		SortedBag.Builder<Card> eligibleCardsBuilder = new SortedBag.Builder<Card>();
-		for (Card card : availableCards) {
-			if (card.equals(Card.LOCOMOTIVE) || card.equals(initialCards.get(0)))
-				eligibleCardsBuilder.add(card);
-		}
-		List<SortedBag<Card>> possibleAdditionalCards = new ArrayList<>();
-		possibleAdditionalCards.addAll(eligibleCardsBuilder.build().subsetsOfSize(additionalCardsCount));
-		possibleAdditionalCards.sort(Comparator.comparingInt(additionalCards -> additionalCards.countOf(Card.LOCOMOTIVE)));
-
-		return possibleAdditionalCards;
+		return SortedBag.of(cards().difference(initialCards).stream()
+		.filter((Card card) -> card.equals(Card.LOCOMOTIVE) || card.equals(initialCards.get(0)))
+		.collect(Collectors.toList())).subsetsOfSize(additionalCardsCount).stream()
+		.sorted(Comparator.comparingInt(additionalCards -> additionalCards.countOf(Card.LOCOMOTIVE))).collect(Collectors.toList());
 	}
 
 	/**
