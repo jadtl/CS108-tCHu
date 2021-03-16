@@ -88,7 +88,6 @@ public class PlayerStateTest {
     assertTrue(playerState.tickets().isEmpty());
   }
 
-  // TODO canClaimRoute test
   @Test
   void playerStateCanClaimRouteWorksWithKnownExample() {
     var s1 = new Station(1, "Yverdon");
@@ -131,7 +130,7 @@ public class PlayerStateTest {
             new Route("D", s4, s6, 6, Route.Level.OVERGROUND, Color.BLACK),
             new Route("E", s4, s5, 6, Route.Level.OVERGROUND, null),
             new Route("F", s4, s1, 5, Route.Level.OVERGROUND, Color.ORANGE),
-            new Route("G", s4, s5, 3, Route.Level.OVERGROUND, null),
+            new Route("G", s4, s5, 5, Route.Level.OVERGROUND, null),
             new Route("H", s4, s1, 5, Route.Level.OVERGROUND, Color.ORANGE));
     var playerState2 = new PlayerState(SortedBag.of(2, t2, 3, t1), SortedBag.of(1, Card.LOCOMOTIVE, 1, Card.BLACK), routes);
     assertThrows(IllegalArgumentException.class, () -> { playerState2.canClaimRoute(r2); });
