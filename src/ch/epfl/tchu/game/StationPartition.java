@@ -63,7 +63,7 @@ public final class StationPartition implements StationConnectivity {
      * @return an identical builder except that its two given stations are connected
      */
     public Builder connect(Station s1, Station s2) {
-      stationConnectivity[s2.id()] = representative(s1.id());
+      stationConnectivity[representative(s2.id())] = representative(s1.id());
       
       return this;
     }
@@ -76,13 +76,8 @@ public final class StationPartition implements StationConnectivity {
      * in-progress deep station partition
      */
     public StationPartition build() {
-      for (int i = 0; i < stationConnectivity.length; i++) {
-        int currentRepresentative = representative(i);
-        while (currentRepresentative != representative(currentRepresentative)) {
-          currentRepresentative = representative(currentRepresentative);
-        }
-        stationConnectivity[i] = currentRepresentative;
-      }
+      for (int i = 0; i < stationConnectivity.length; i++)
+        stationConnectivity[i] = representative(i);
 
       return new StationPartition(stationConnectivity);
     }
@@ -96,7 +91,11 @@ public final class StationPartition implements StationConnectivity {
      * @return the representative of the given station
      */
     private int representative(int stationId) {
-      return stationConnectivity[stationId];
+      int currentRepresentative = stationConnectivity[stationId];
+      while (currentRepresentative != stationConnectivity[currentRepresentative])
+        currentRepresentative = stationConnectivity[currentRepresentative];
+        
+      return currentRepresentative;
     }
   }
 }
