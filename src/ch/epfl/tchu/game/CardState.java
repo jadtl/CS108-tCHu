@@ -73,14 +73,10 @@ public final class CardState extends PublicCardState {
 	public CardState withDrawnFaceUpCard(int slot) {
 		Objects.checkIndex(slot, Constants.FACE_UP_CARDS_COUNT);
 
-		SortedBag<Card> updatedDiscardedCards = new SortedBag.Builder<Card>()
-				.add(faceUpCards().get(slot))	
-				.add(discardedCards)
-				.build();
 		List<Card> faceUpCards = new ArrayList<Card>(faceUpCards());
 		faceUpCards.set(slot, topDeckCard());
 
-		return new CardState(faceUpCards, deck.withoutTopCard(), updatedDiscardedCards);
+		return new CardState(faceUpCards, deck.withoutTopCard(), discardedCards);
 	}
 
 	/**

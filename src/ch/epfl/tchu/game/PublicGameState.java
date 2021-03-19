@@ -40,7 +40,7 @@ public class PublicGameState {
     return currentPlayerId;
   }
 
-  public PublicPlayerState PlayerState(PlayerId playerId) {
+  public PublicPlayerState playerState(PlayerId playerId) {
     return playerState.get(playerId);
   }
 
