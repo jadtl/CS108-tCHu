@@ -9,7 +9,7 @@ import ch.epfl.tchu.Preconditions;
 /**
  * 
  */
-public final class PublicGameState {
+public class PublicGameState {
   private final int ticketsCount;
   private final PublicCardState cardState;
   private final PlayerId currentPlayerId;
