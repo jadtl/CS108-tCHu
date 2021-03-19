@@ -71,7 +71,7 @@ public class PlayerStateTest {
 
     playerState = playerState.withAddedCard(Card.GREEN);
     assertEquals(Constants.INITIAL_CARDS_COUNT + 1, playerState.cardCount());
-    assertEquals(SortedBag.of(Constants.INITIAL_CARDS_COUNTa, Card.BLACK, 1, Card.GREEN), playerState.cards());
+    assertEquals(SortedBag.of(Constants.INITIAL_CARDS_COUNT, Card.BLACK, 1, Card.GREEN), playerState.cards());
 
     playerState = playerState.withAddedCards(SortedBag.of(2, Card.BLACK, 3, Card.LOCOMOTIVE));
     assertEquals(Constants.INITIAL_CARDS_COUNT + 6, playerState.cardCount());
