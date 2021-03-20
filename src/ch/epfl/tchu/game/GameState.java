@@ -1,7 +1,7 @@
 package ch.epfl.tchu.game;
 
+import java.util.Arrays;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -27,11 +27,10 @@ public final class GameState extends PublicGameState {
   public static GameState initial(SortedBag<Ticket> tickets, Random rng) {
     Map<PlayerId, PlayerState> playerState = new EnumMap<>(PlayerId.class);
     Deck<Card> deck = Deck.of(Constants.ALL_CARDS, rng);
-    // TODO forEach with stream
-    playerState.put(PlayerId.PLAYER_1, PlayerState.initial(deck.topCards(4)));
-    deck = deck.withoutTopCards(4);
-    playerState.put(PlayerId.PLAYER_2, PlayerState.initial(deck.topCards(4)));
-    deck = deck.withoutTopCards(4);
+    for (PlayerId playerId : PlayerId.ALL) {
+      playerState.put(playerId, PlayerState.initial(deck.topCards(Constants.INITIAL_CARDS_COUNT)));
+      deck = deck.withoutTopCards(Constants.INITIAL_CARDS_COUNT);
+    }
     PlayerId firstPlayer = PlayerId.values()[rng.nextInt(PlayerId.COUNT)];
     return new GameState(Deck.of(tickets, rng), CardState.of(deck), firstPlayer, playerState, null);
   }
