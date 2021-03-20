@@ -73,7 +73,7 @@ public final class GameState extends PublicGameState {
   public GameState withCardsDeckRecreatedIfNeeded(Random rng) {
     return cardState.isDeckEmpty() ? new GameState(tickets, cardState.withDeckRecreatedFromDiscards(rng), currentPlayerId(), playerState, lastPlayer()) : this;
   }
-  //
+  
   public GameState withInitiallyChosenTickets(PlayerId playerId, SortedBag<Ticket> chosenTickets) {
     Preconditions.checkArgument(playerState(playerId).ticketCount() == 0);
 
@@ -82,7 +82,7 @@ public final class GameState extends PublicGameState {
 
     return new GameState(tickets, cardState, currentPlayerId(), updatedPlayerState, lastPlayer());
   }
-  //
+  
   public GameState withChosenAdditionalTickets(SortedBag<Ticket> drawnTickets, SortedBag<Ticket> chosenTickets) {
     Preconditions.checkArgument(drawnTickets.contains(chosenTickets));
 
@@ -124,7 +124,7 @@ public final class GameState extends PublicGameState {
 
     return new GameState(tickets, updatedCardState, currentPlayerId(), updatedPlayerState, lastPlayer());
   }
-  //
+  
   public boolean lastTurnBegins() {
     return Objects.isNull(lastPlayer()) && playerState(currentPlayerId()).carCount() <= 2;
   }
@@ -133,7 +133,11 @@ public final class GameState extends PublicGameState {
     return new GameState(tickets, cardState, currentPlayerId().next(), playerState, lastTurnBegins() ? currentPlayerId() : lastPlayer());
   }
 
-  private static Map<PlayerId, PublicPlayerState> makePublic(Map<PlayerId, PlayerState> playerState) {
-    //TODO Implement makePublic
+  private static Map<PlayerId, PublicPlayerState> makePublic(Map<PlayerId, PlayerState> globalPlayerState) {
+    Map<PlayerId, PublicPlayerState> publicPlayerState = new EnumMap<>(PlayerId.class);
+    globalPlayerState.forEach((PlayerId playerId, PlayerState playerState) -> {
+      publicPlayerState.put(playerId, new PublicPlayerState(playerState.ticketCount(), playerState.cardCount(), playerState.routes()));
+    });
+    return publicPlayerState;
   }
 }
