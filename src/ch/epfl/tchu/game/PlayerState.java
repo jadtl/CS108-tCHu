@@ -152,8 +152,8 @@ public final class PlayerState extends PublicPlayerState {
 	 * @return thes sets of cards that the player could use to
 	 * claim the given route
 	 * 
-	 * @throws IllegalArgumentException if the player doesn't have
-	 * 				 enough cars
+	 * @throws IllegalArgumentException 
+	 * 				 If the player doesn't have enough cars
 	 */
 	public List<SortedBag<Card>> possibleClaimCards(Route route) {
 		Preconditions.checkArgument(carCount() >= route.length());
