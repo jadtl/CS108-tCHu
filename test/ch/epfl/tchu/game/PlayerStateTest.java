@@ -615,12 +615,6 @@ class PlayerStateTest {
         final List<Station> IT = List.of(IT1, IT2, IT3, IT4, IT5);
         final List<Station> FR = List.of(FR1, FR2, FR3, FR4);
 
-        final List<Station> ALL_STATIONS = List.of(
-                BAD, BAL, BEL, BER, BRI, BRU, COI, DAV, DEL, FRI, GEN, INT, KRE, LAU, LCF, LOC, LUC,
-                LUG, MAR, NEU, OLT, PFA, SAR, SCE, SCZ, SIO, SOL, STG, VAD, WAS, WIN, YVE, ZOU, ZUR,
-                DE1, DE2, DE3, DE4, DE5, AT1, AT2, AT3, IT1, IT2, IT3, IT4, IT5, FR1, FR2, FR3, FR4);
-        //endregion
-
         //region Routes
         final Route AT1_STG_1 = new Route("AT1_STG_1", AT1, STG, 4, Level.UNDERGROUND, null);
         final Route AT2_VAD_1 = new Route("AT2_VAD_1", AT2, VAD, 1, Level.UNDERGROUND, Color.RED);
