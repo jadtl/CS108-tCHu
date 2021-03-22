@@ -1,4 +1,4 @@
-package ch.epfl.tchu.gui;
+package ch.epfl.tchu.game;
 
 import org.junit.jupiter.api.Test;
 
