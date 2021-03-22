@@ -40,7 +40,7 @@ public class PublicGameState {
    * @throws IllegalArgumentException
    *         If ticketsCount is negative or the numbers of players is incorrect
    */
-  PublicGameState(int ticketsCount, PublicCardState cardState, PlayerId currentPlayerId, Map<PlayerId, PublicPlayerState> playerState, PlayerId lastPlayer) {
+  public PublicGameState(int ticketsCount, PublicCardState cardState, PlayerId currentPlayerId, Map<PlayerId, PublicPlayerState> playerState, PlayerId lastPlayer) {
     Preconditions.checkArgument(ticketsCount >= 0 && playerState.size() == 2);
 
     this.ticketsCount = ticketsCount;
