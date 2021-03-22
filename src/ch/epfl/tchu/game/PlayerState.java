@@ -133,11 +133,13 @@ public final class PlayerState extends PublicPlayerState {
 	 * @return true iff. the player has the needed cars and cards
 	 */
 	public boolean canClaimRoute(Route route) {
+		if (carCount() < route.length()) return false;
+
 		boolean hasClaimCards = false;
 		for(SortedBag<Card> claimCards : possibleClaimCards(route))
 			if(cards().contains(claimCards)) hasClaimCards = true;
 		
-		return (cardCount() >= route.length() && hasClaimCards);
+		return hasClaimCards;
 	}
 
 	/**
