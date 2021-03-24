@@ -1,6 +1,7 @@
 package ch.epfl.tchu.game;
 
 import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
@@ -31,11 +32,23 @@ public class GameStateTest {
 		gameState = gameState.withInitiallyChosenTickets(PlayerId.PLAYER_1, SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10)))));
 		gameState = gameState.withInitiallyChosenTickets(PlayerId.PLAYER_2, SortedBag.of(4, new Ticket(List.of(new Trip(LAU, EPF, 10)))));
 		GameState gameStateCopy = gameState;
-		
+
 		assertEquals(SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10)))), gameState.playerState(PlayerId.PLAYER_1).tickets());
 		assertEquals(SortedBag.of(4, new Ticket(List.of(new Trip(LAU, EPF, 10)))), gameState.playerState(PlayerId.PLAYER_2).tickets());
 		assertThrows(IllegalArgumentException.class, () -> { gameStateCopy.withInitiallyChosenTickets(PlayerId.PLAYER_2, SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10))))); });
 	}
 
+	@Test
+	public void gameStateWithChosenAdditionalTicketsWorks() {
+		Station LAU = new Station(0, "Lausanne");
+		Station EPF = new Station(1, "EPFL");
+		GameState gameState = GameState.initial(SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10)))), new Random());
+		gameState = gameState.withInitiallyChosenTickets(gameState.currentPlayerId(), SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10)))));
+		gameState = gameState.withChosenAdditionalTickets(SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10)))), SortedBag.of(4, new Ticket(List.of(new Trip(LAU, EPF, 10)))));
+		GameState gameStateCopy = gameState;
 
+		assertThrows(IllegalArgumentException.class, () -> { gameStateCopy.withChosenAdditionalTickets(SortedBag.of(4, new Ticket(List.of(new Trip(LAU, EPF, 10)))), SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10))))); });
+		assertThrows(IllegalArgumentException.class, () -> { gameStateCopy.withChosenAdditionalTickets(SortedBag.of(4, new Ticket(List.of(new Trip(LAU, EPF, 10)))), SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10))))); });
+		assertThrows(IllegalArgumentException.class, () -> { gameStateCopy.withChosenAdditionalTickets(SortedBag.of(6, new Ticket(List.of(new Trip(LAU, EPF, 10)))), SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10))))); });
+	} 
 }
