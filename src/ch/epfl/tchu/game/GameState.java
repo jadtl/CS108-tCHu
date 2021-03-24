@@ -142,6 +142,8 @@ public final class GameState extends PublicGameState {
    *        The tickets picked by the player
    * 
    * @return an identical state except that the given tickets were added to the given player's hand
+   * 
+   * @throws IllegalArgumentException if the given player already has tickets
    */
   public GameState withInitiallyChosenTickets(PlayerId playerId, SortedBag<Ticket> chosenTickets) {
     Preconditions.checkArgument(playerState(playerId).ticketCount() == 0);
