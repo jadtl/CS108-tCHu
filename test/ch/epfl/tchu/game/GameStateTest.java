@@ -10,6 +10,8 @@ import java.util.List;
 import org.junit.Test;
 
 import ch.epfl.tchu.SortedBag;
+import ch.epfl.tchu.game.Route.Level;
+
 import java.util.Random;
 
 public class GameStateTest {
@@ -86,5 +88,20 @@ public class GameStateTest {
 
 		assertTrue(gameState.currentPlayerState().cards().contains(card));
 		assertThrows(IllegalArgumentException.class, () -> { gameStateCopy.withBlindlyDrawnCard(); });
+	}
+
+	@Test
+	public void gameStateWithClaimedRoute() {
+		Station LAU = new Station(0, "Lausanne");
+		Station EPF = new Station(1, "EPFL");
+		GameState gameState = GameState.initial(SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10)))), new Random());
+		Route LAU_EPF = new Route("0", LAU, EPF, 3, Level.UNDERGROUND, Color.RED);
+		SortedBag<Card> playerCards = gameState.currentPlayerState().cards();
+		SortedBag<Card> claimCards = SortedBag.of(2, Card.RED, 1, Card.LOCOMOTIVE);
+		gameState = gameState.withClaimedRoute(LAU_EPF, claimCards);
+
+		assertEquals(LAU_EPF.length(), gameState.cardState().discardsSize());
+		assertEquals(playerCards.difference(claimCards), gameState.currentPlayerState().cards());
+		assertTrue(gameState.currentPlayerState().routes().contains(LAU_EPF));
 	}
 }
