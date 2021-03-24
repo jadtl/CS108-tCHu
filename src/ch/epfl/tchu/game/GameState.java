@@ -123,12 +123,12 @@ public final class GameState extends PublicGameState {
   public GameState withMoreDiscardedCards(SortedBag<Card> discardedCards) { return new GameState(tickets, cardState.withMoreDiscardedCards(discardedCards), currentPlayerId(), playerState, lastPlayer()); }
 
   /**
-   * Returns the same game state except that the empty deck was recreated from the discards
+   * Returns the same game state except that if the deck is empty, it's recreated from the discards
    * 
    * @param rng
    *        The random number generator
    * 
-   * @return the same game state except that the empty deck was recreated from the discards
+   * @return the same game state except that if the deck is empty, it's recreated from the discards
    */
   public GameState withCardsDeckRecreatedIfNeeded(Random rng) { return cardState.isDeckEmpty() ? new GameState(tickets, cardState.withDeckRecreatedFromDiscards(rng), currentPlayerId(), playerState, lastPlayer()) : this; }
   

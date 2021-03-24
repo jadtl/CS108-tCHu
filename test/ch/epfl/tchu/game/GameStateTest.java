@@ -10,9 +10,8 @@ import ch.epfl.tchu.SortedBag;
 import java.util.Random;
 
 public class GameStateTest {
-	
 	@Test
-	public void GameStateInitialTest() {
+	public void gameStateInitialWorks() {
 		Station LAU = new Station(0, "Lausanne");
 		Station EPF = new Station(1, "EPFL");
 		GameState gameState = GameState.initial(SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10)))), new Random());
@@ -21,5 +20,10 @@ public class GameStateTest {
 		assertEquals(Constants.ALL_CARDS.size() - 2 * Constants.INITIAL_CARDS_COUNT, gameState.cardState().totalSize());
 		assertEquals(Constants.INITIAL_CARDS_COUNT, gameState.playerState(PlayerId.PLAYER_1).cardCount());
 		assertEquals(Constants.INITIAL_CARDS_COUNT, gameState.playerState(PlayerId.PLAYER_2).cardCount());
+	}
+
+	@Test
+	public void gameStateInitiallyChosenTicketsWorks() {
+
 	}
 }
