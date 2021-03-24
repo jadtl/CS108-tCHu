@@ -24,6 +24,13 @@ public class GameStateTest {
 
 	@Test
 	public void gameStateInitiallyChosenTicketsWorks() {
+		Station LAU = new Station(0, "Lausanne");
+		Station EPF = new Station(1, "EPFL");
+		GameState gameState = GameState.initial(SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10)))), new Random());
+		gameState = gameState.withInitiallyChosenTickets(PlayerId.PLAYER_1, SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10)))));
+		gameState = gameState.withInitiallyChosenTickets(PlayerId.PLAYER_2, SortedBag.of(4, new Ticket(List.of(new Trip(LAU, EPF, 10)))));
 
+		assertEquals(SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10)))), gameState.playerState(PlayerId.PLAYER_1).tickets());
+		assertEquals(SortedBag.of(4, new Ticket(List.of(new Trip(LAU, EPF, 10)))), gameState.playerState(PlayerId.PLAYER_2).tickets());
 	}
 }
