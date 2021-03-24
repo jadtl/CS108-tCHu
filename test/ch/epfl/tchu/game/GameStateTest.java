@@ -3,6 +3,7 @@ package ch.epfl.tchu.game;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -68,5 +69,22 @@ public class GameStateTest {
 		assertEquals(card, gameState.cardState().faceUpCard(0));
 		assertEquals(Constants.INITIAL_CARDS_COUNT + 1, gameState.currentPlayerState().cardCount());
 		assertThrows(IllegalArgumentException.class, () -> { gameStateCopy.withDrawnFaceUpCard(0); });
+	}
+
+	@Test
+	public void gameStateWithBlindlyDrawnCardWorks() {
+		Station LAU = new Station(0, "Lausanne");
+		Station EPF = new Station(1, "EPFL");
+		GameState gameState = GameState.initial(SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10)))), new Random());
+		Card card = gameState.topCard();
+		gameState = gameState.withBlindlyDrawnCard();
+		GameState gameStateLessCards = gameState;
+		for (int i = 0; i < gameState.cardState().deckSize() - 3; i++) {
+			gameStateLessCards = gameStateLessCards.withoutTopCard();
+		}
+		GameState gameStateCopy = gameStateLessCards;
+
+		assertTrue(gameState.currentPlayerState().cards().contains(card));
+		assertThrows(IllegalArgumentException.class, () -> { gameStateCopy.withBlindlyDrawnCard(); });
 	}
 }
