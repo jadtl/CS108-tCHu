@@ -107,6 +107,16 @@ public class GameStateTest {
 
 	@Test
 	public void gameStateLastTurnBeginsWorks() {
+		Station LAU = new Station(0, "Lausanne");
+		Station EPF = new Station(1, "EPFL");
+		GameState gameState = GameState.initial(SortedBag.of(5, new Ticket(List.of(new Trip(LAU, EPF, 10)))), new Random());
+		Route LAU_EPF = new Route("0", LAU, EPF, 3, Level.UNDERGROUND, Color.RED);
+		SortedBag<Card> claimCards = SortedBag.of(2, Card.RED, 1, Card.LOCOMOTIVE);
+		for (int i = 0; i < 13; i++) {
+			gameState = gameState.withClaimedRoute(LAU_EPF, claimCards);
+		}
 
+		assertTrue(gameState.lastTurnBegins());
+		assertEquals(gameState.currentPlayerId(), gameState.forNextTurn().lastPlayer());
 	}
 }
