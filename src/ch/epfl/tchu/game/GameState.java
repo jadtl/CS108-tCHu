@@ -82,7 +82,7 @@ public final class GameState extends PublicGameState {
    *         If count is incorrect
    */
   public GameState withoutTopTickets(int count) {
-    Preconditions.checkArgument(0 < count && count <= tickets.size());
+    Preconditions.checkArgument(0 <= count && count <= tickets.size());
 
     return new GameState(tickets.withoutTopCards(count), cardState, currentPlayerId(), playerState, lastPlayer());
   }
@@ -91,6 +91,9 @@ public final class GameState extends PublicGameState {
    * Returns the top card of the game deck
    * 
    * @return the top card of the game deck
+   * 
+   * @throws IllegalArgumentException
+   *         If the deck is empty
    */
   public Card topCard() {
     Preconditions.checkArgument(!cardState.isDeckEmpty());
@@ -176,7 +179,7 @@ public final class GameState extends PublicGameState {
     Map<PlayerId, PlayerState> updatedPlayerState = new EnumMap<PlayerId, PlayerState>(playerState);
     updatedPlayerState.put(currentPlayerId(), updatedPlayerState.get(currentPlayerId()).withAddedTickets(chosenTickets));
 
-    return new GameState(tickets.withoutTopCards(Constants.IN_GAME_TICKETS_COUNT), cardState, currentPlayerId(), playerState, lastPlayer());
+    return new GameState(tickets.withoutTopCards(Constants.IN_GAME_TICKETS_COUNT), cardState, currentPlayerId(), updatedPlayerState, lastPlayer());
   }
   
   /**
@@ -254,7 +257,7 @@ public final class GameState extends PublicGameState {
    * @return true iff. the last player's identifier is unknown and the current player has two or less cars
    */
   public boolean lastTurnBegins() {
-    return Objects.isNull(lastPlayer()) && playerState(currentPlayerId()).carCount() <= 2;
+    return Objects.isNull(lastPlayer()) && currentPlayerState().carCount() <= 2;
   }
 
   /**
