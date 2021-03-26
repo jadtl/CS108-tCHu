@@ -12,7 +12,6 @@ import ch.epfl.tchu.SortedBag;
  * @author Sofiya Malamud (313789)
  * @author Jad Tala (310821)
  */
-
 public interface Player {
 
 	/**
@@ -27,20 +26,19 @@ public interface Player {
 	/**
 	 * Tells the player his id and the identity of the other players
 	 * 
-	 * @param ownId       Id of the player
+	 * @param ownId      
+	 *        Id of the player
 	 * 
-	 * @param playerNames Names of the different players
-	 * 
-	 * 
+	 * @param playerNames 
+	 *        Names of the different players
 	 */
 	public void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames);
 
 	/**
 	 * Communicates information to the player
 	 * 
-	 * @param info Information given to the player
-	 * 
-	 * 
+	 * @param info 
+	 *        Information given to the player
 	 */
 
 	void receiveInfo(String info);
@@ -48,10 +46,11 @@ public interface Player {
 	/**
 	 * Informs the player when the Game State has changed
 	 * 
-	 * @param newState New PublicGameState
+	 * @param newState 
+	 *        New PublicGameState
 	 * 
-	 * @param info     PlayerState of the player
-	 * 
+	 * @param info     
+	 *        PlayerState of the player
 	 */
 
 	void updateState(PublicGameState newState, PlayerState ownState);
@@ -59,16 +58,14 @@ public interface Player {
 	/**
 	 * The tickets a player gets at the beginning of the game
 	 * 
-	 * @param tickets SortedBag of initial tickets
-	 * 
-	 * 
+	 * @param tickets 
+	 *        SortedBag of initial tickets
 	 */
 
 	void setInitialTicketChoice(SortedBag<Ticket> tickets);
 
 	/**
 	 * Asks the player to choose what tickets he/she wants to keep
-	 * 
 	 * 
 	 */
 
@@ -78,7 +75,6 @@ public interface Player {
 	 * Asks the player at the beginning of his/her turn what action out of the Enum
 	 * TurnKind he wants to perform
 	 * 
-	 * 
 	 */
 
 	TurnKind nextTurn();
@@ -87,9 +83,8 @@ public interface Player {
 	 * Informs the player of the drawn tickets Asks him to choose which ones he
 	 * wants to keep
 	 * 
-	 * @param options Additional tickets the player has drawn
-	 * 
-	 * 
+	 * @param options 
+	 *        Additional tickets the player has drawn
 	 */
 
 	SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options);
@@ -99,26 +94,19 @@ public interface Player {
 	 * he/she wants to draw the card from
 	 * 
 	 * @return a value between 0 and 4 if f from a place containing a face up Card
-	 * 
-	 * @return Constants.DECK_SLOT if the cards are drawn from the deck
-	 * 
-	 * 
+	 * or Constants.DECK_SLOT if the cards are drawn from the deck
 	 */
 
 	int drawSlot();
 
 	/**
-	 * 
 	 * States Route the player has tried to Claim
-	 * 
 	 */
 	Route claimedRoute();
 
 	/**
 	 * States Cards a player has used to try to claim a route
-	 * 
 	 */
-
 	SortedBag<Card> initialClaimCards();
 
 	/**
@@ -126,11 +114,7 @@ public interface Player {
 	 * has tried to claim a tunnel and additional cards are necessary If options is
 	 * empty the cannot or doesn't want to use additional cards
 	 * 
-	 * * @param options Additional tickets the player could use to claim a tunnel
-	 * 
-	 * 
+	 * @param options Additional tickets the player could use to claim a tunnel
 	 */
-
 	SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options);
-
 }
