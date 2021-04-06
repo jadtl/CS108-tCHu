@@ -65,28 +65,23 @@ public interface Player {
 	void setInitialTicketChoice(SortedBag<Ticket> tickets);
 
 	/**
-	 * Asks the player to choose what tickets he/she wants to keep
-	 * 
+	 * Asks the player to choose what tickets their wants to keep
 	 */
-
 	SortedBag<Ticket> chooseInitialTickets();
 
 	/**
-	 * Asks the player at the beginning of his/her turn what action out of the Enum
+	 * Asks the player at the beginning of their turn what action out of the Enum
 	 * TurnKind he wants to perform
-	 * 
 	 */
-
 	TurnKind nextTurn();
 
 	/**
-	 * Informs the player of the drawn tickets Asks him to choose which ones he
+	 * Informs the player of the drawn tickets Asks them to choose which ones he
 	 * wants to keep
 	 * 
 	 * @param options 
 	 *        Additional tickets the player has drawn
 	 */
-
 	SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options);
 
 	/**
@@ -96,7 +91,6 @@ public interface Player {
 	 * @return a value between 0 and 4 if f from a place containing a face up Card
 	 * or Constants.DECK_SLOT if the cards are drawn from the deck
 	 */
-
 	int drawSlot();
 
 	/**
