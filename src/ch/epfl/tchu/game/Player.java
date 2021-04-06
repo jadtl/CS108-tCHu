@@ -17,7 +17,7 @@ public interface Player {
 	/**
 	 * The 3 possible actions a player can perform when his/her turn starts
 	 */
-	enum TurnKind {
+	public enum TurnKind {
 		DRAW_TICKETS, DRAW_CARDS, CLAIM_ROUTE;
 
 		public static final List<TurnKind> ALL = Arrays.asList(TurnKind.values());
@@ -76,8 +76,8 @@ public interface Player {
 	TurnKind nextTurn();
 
 	/**
-	 * Informs the player of the drawn tickets Asks them to choose which ones he
-	 * wants to keep
+	 * Informs the player of the drawn tickets and asks them to choose which ones they
+	 * want to keep
 	 * 
 	 * @param options 
 	 *        Additional tickets the player has drawn
