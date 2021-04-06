@@ -100,12 +100,12 @@ public interface Player {
 	int drawSlot();
 
 	/**
-	 * States Route the player has tried to Claim
+	 * States route the player has tried to claim
 	 */
 	Route claimedRoute();
 
 	/**
-	 * States Cards a player has used to try to claim a route
+	 * States cards a player has used to try to claim a route
 	 */
 	SortedBag<Card> initialClaimCards();
 
@@ -114,7 +114,8 @@ public interface Player {
 	 * has tried to claim a tunnel and additional cards are necessary If options is
 	 * empty the cannot or doesn't want to use additional cards
 	 * 
-	 * @param options Additional tickets the player could use to claim a tunnel
+	 * @param options 
+	 *        Additional tickets the player could use to claim a tunnel
 	 */
 	SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options);
 }
