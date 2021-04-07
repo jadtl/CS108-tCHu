@@ -1,12 +1,15 @@
 package ch.epfl.tchu.game;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
-
+import ch.epfl.tchu.game.Player.TurnKind;
+import ch.epfl.tchu.game.Route.Level;
 import ch.epfl.tchu.gui.Info;
 
 /**
@@ -37,6 +40,9 @@ public final class Game {
 	public static void play(Map<PlayerId, Player> players, Map<PlayerId, String> playerNames, SortedBag<Ticket> tickets, Random rng) {
 		Preconditions.checkArgument(players.size() == 2 && playerNames.size() == 2);
 
+		/*
+		 * Start of the game
+		 */
 		// Initialiazing every player
 		PlayerId.ALL.stream().forEach((PlayerId playerId) -> { 
 			players.get(playerId).initPlayers(playerId, playerNames); 
@@ -46,21 +52,108 @@ public final class Game {
 		GameState gameState = GameState.initial(tickets, rng);
 		// A map that links a player's identifier to their info class instance
 		Map<PlayerId, Info> playerInfos = new HashMap<>();
-		PlayerId.ALL.stream().forEach((PlayerId playerId) -> {
+		for (PlayerId playerId : PlayerId.ALL) {
 			playerInfos.put(playerId, new Info(playerNames.get(playerId)));
-			players.get(playerId).receiveInfo(playerInfos.get(gameState.currentPlayerId()).willPlayFirst());
-		});
+		}
+		sendInfo(players,playerInfos.get(gameState.currentPlayerId()).willPlayFirst());
 
 		// Drawing initial tickets and asking the player which they want to keep
 		for (int i = 0; i < PlayerId.COUNT; i++) {
 			SortedBag<Ticket> initialTickets = gameState.withoutTopTickets(Constants.INITIAL_TICKETS_COUNT * i).topTickets(Constants.INITIAL_TICKETS_COUNT);
 			players.get(PlayerId.ALL.get(i)).setInitialTicketChoice(initialTickets);
-			SortedBag<Ticket> keptTickets = players.get(PlayerId.ALL.get(i)).chooseInitialTickets();
-			for (PlayerId playerId : PlayerId.ALL) {
-				players.get(playerId).receiveInfo(playerInfos.get(PlayerId.ALL.get(i)).keptTickets(keptTickets.size()));
-			}
+			players.get(PlayerId.ALL.get(i)).updateState(gameState, gameState.playerState(PlayerId.ALL.get(i)));
+			gameState.withInitiallyChosenTickets(PlayerId.ALL.get(i), players.get(PlayerId.ALL.get(i)).chooseInitialTickets());
+		}
+		// Informing every player of the number of initially drawn tickets only once everyone has drawn
+		for (PlayerId playerId : PlayerId.ALL) {
+			sendInfo(players, playerInfos.get(playerId).keptTickets(gameState.currentPlayerState().ticketCount()));
 		}
 		// Updating the game state after having drawn the initial tickets
 		gameState = gameState.withoutTopTickets(Constants.INITIAL_TICKETS_COUNT * PlayerId.COUNT);
+		
+		/*
+		 * Middle of the game
+		 */
+		Player currentPlayer = players.get(gameState.currentPlayerId());
+		currentPlayer.updateState(gameState, gameState.currentPlayerState());
+		sendInfo(players, playerInfos.get(gameState.currentPlayerId()).canPlay());
+		TurnKind playerMove = currentPlayer.nextTurn();
+
+		switch (playerMove) {
+			case DRAW_TICKETS:
+				sendInfo(players, playerInfos.get(gameState.currentPlayerId()).drewTickets(Constants.IN_GAME_TICKETS_COUNT);
+				SortedBag<Ticket> chosenTickets = currentPlayer.chooseTickets(gameState.topTickets(Constants.IN_GAME_TICKETS_COUNT));
+				gameState = gameState.withChosenAdditionalTickets(gameState.topTickets(Constants.IN_GAME_TICKETS_COUNT), chosenTickets);
+				sendInfo(players, playerInfos.get(gameState.currentPlayerId()).keptTickets(chosenTickets.size()));
+				break;
+
+			case DRAW_CARDS:
+				for (int i = 0; i < 2; i++) {
+					currentPlayer.updateState(gameState, gameState.currentPlayerState());
+					int drawSlot = currentPlayer.drawSlot();
+					if (drawSlot == Constants.DECK_SLOT) {
+						gameState = gameState.withCardsDeckRecreatedIfNeeded(rng);
+						gameState = gameState.withBlindlyDrawnCard();
+						sendInfo(players, playerInfos.get(gameState.currentPlayerId()).drewBlindCard());
+					}
+					else {
+						Card drawnCard = gameState.cardState().faceUpCard(drawSlot);
+						gameState = gameState.withDrawnFaceUpCard(drawSlot);
+						sendInfo(players, playerInfos.get(gameState.currentPlayerId()).drewVisibleCard(drawnCard));
+					}
+				}
+				break;
+
+			case CLAIM_ROUTE:
+				Route claimedRoute = currentPlayer.claimedRoute();
+				SortedBag<Card> initialClaimCards = currentPlayer.initialClaimCards();
+
+				if (claimedRoute.level().equals(Level.UNDERGROUND)) {
+					sendInfo(players, playerInfos.get(gameState.currentPlayerId()).attemptsTunnelClaim(claimedRoute, initialClaimCards));
+			    SortedBag.Builder<Card> additionalCards = new SortedBag.Builder<Card>();
+					for (int i = 0; i < Constants.ADDITIONAL_TUNNEL_CARDS; i++) {
+						gameState = gameState.withCardsDeckRecreatedIfNeeded(rng);
+						additionalCards.add(gameState.topCard());
+						gameState = gameState.withoutTopCard();
+					}
+					int additionalClaimCardsCount = claimedRoute.additionalClaimCardsCount(initialClaimCards, additionalCards.build());
+					sendInfo(players, playerInfos.get(gameState.currentPlayerId()).drewAdditionalCards(additionalCards.build(), additionalClaimCardsCount));
+					List<SortedBag<Card>> possibleAdditionalClaimCards = gameState.currentPlayerState().possibleAdditionalCards
+					(additionalClaimCardsCount, initialClaimCards, additionalCards.build());
+					if (additionalClaimCardsCount > 0 && possibleAdditionalClaimCards.size() > 0) {
+						SortedBag<Card> chosenAdditionalClaimCards = currentPlayer.chooseAdditionalCards(possibleAdditionalClaimCards);
+						if (chosenAdditionalClaimCards.isEmpty()) {
+							sendInfo(players, playerInfos.get(gameState.currentPlayerId()).didNotClaimRoute(claimedRoute));
+						}
+						else {
+							SortedBag<Card> finalClaimCards = new SortedBag.Builder<Card>().add(initialClaimCards).add(chosenAdditionalClaimCards).build();
+							gameState = gameState.withClaimedRoute(claimedRoute, finalClaimCards);
+							sendInfo(players, playerInfos.get(gameState.currentPlayerId()).claimedRoute(claimedRoute, finalClaimCards));
+						}
+					}
+					else {
+						sendInfo(players, playerInfos.get(gameState.currentPlayerId()).didNotClaimRoute(claimedRoute));
+					}
+				}
+
+				else if (claimedRoute.level().equals(Level.OVERGROUND)) {
+					gameState = gameState.withClaimedRoute(claimedRoute, initialClaimCards);
+					// Informing every player that the current player claimed the route
+					sendInfo(players, playerInfos.get(gameState.currentPlayerId()).claimedRoute(claimedRoute, initialClaimCards));
+				}
+				break;
+		}
+
+	  
+
+		 /*
+			* End of the game
+		  */
+
+	}
+
+	private static void sendInfo(Map<PlayerId, Player> players, String info) {
+		for (PlayerId playerId : PlayerId.ALL)
+			players.get(playerId).receiveInfo(info);
 	}
 }
