@@ -1,7 +1,6 @@
 package ch.epfl.tchu.game;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +63,7 @@ public final class Game {
 			SortedBag<Ticket> initialTickets = gameState.withoutTopTickets(Constants.INITIAL_TICKETS_COUNT * i).topTickets(Constants.INITIAL_TICKETS_COUNT);
 			players.get(PlayerId.ALL.get(i)).setInitialTicketChoice(initialTickets);
 			updatePlayerStates(players, gameState);
-			gameState.withInitiallyChosenTickets(PlayerId.ALL.get(i), players.get(PlayerId.ALL.get(i)).chooseInitialTickets());
+			gameState = gameState.withInitiallyChosenTickets(PlayerId.ALL.get(i), players.get(PlayerId.ALL.get(i)).chooseInitialTickets());
 		}
 		// Informing every player of the number of initially drawn tickets only once everyone has drawn
 		for (PlayerId playerId : PlayerId.ALL) {
@@ -95,13 +94,16 @@ public final class Game {
 						updatePlayerStates(players, gameState);
 						int drawSlot = currentPlayer.drawSlot();
 						if (drawSlot == Constants.DECK_SLOT) {
-							gameState = gameState.withCardsDeckRecreatedIfNeeded(rng);
-							gameState = gameState.withBlindlyDrawnCard();
+							gameState = gameState
+							.withCardsDeckRecreatedIfNeeded(rng)
+							.withBlindlyDrawnCard();
 							sendInfo(players, playerInfos.get(gameState.currentPlayerId()).drewBlindCard());
 						}
 						else {
 							Card drawnCard = gameState.cardState().faceUpCard(drawSlot);
-							gameState = gameState.withDrawnFaceUpCard(drawSlot);
+							gameState = gameState
+							.withCardsDeckRecreatedIfNeeded(rng)
+							.withDrawnFaceUpCard(drawSlot);
 							sendInfo(players, playerInfos.get(gameState.currentPlayerId()).drewVisibleCard(drawnCard));
 						}
 					}
@@ -119,10 +121,12 @@ public final class Game {
 							additionalCards.add(gameState.topCard());
 							gameState = gameState.withoutTopCard();
 						}
+						gameState = gameState.withMoreDiscardedCards(additionalCards.build());
 						int additionalClaimCardsCount = claimedRoute.additionalClaimCardsCount(initialClaimCards, additionalCards.build());
 						sendInfo(players, playerInfos.get(gameState.currentPlayerId()).drewAdditionalCards(additionalCards.build(), additionalClaimCardsCount));
 						if (additionalClaimCardsCount == 0) {
-							gameState = gameState.withClaimedRoute(claimedRoute, initialClaimCards);
+							gameState = gameState
+							.withClaimedRoute(claimedRoute, initialClaimCards);
 							sendInfo(players, playerInfos.get(gameState.currentPlayerId()).claimedRoute(claimedRoute, initialClaimCards));
 						}
 						else {
@@ -135,7 +139,8 @@ public final class Game {
 								}
 								else {
 									SortedBag<Card> finalClaimCards = new SortedBag.Builder<Card>().add(initialClaimCards).add(chosenAdditionalClaimCards).build();
-									gameState = gameState.withClaimedRoute(claimedRoute, finalClaimCards);
+									gameState = gameState
+									.withClaimedRoute(claimedRoute, finalClaimCards);
 									sendInfo(players, playerInfos.get(gameState.currentPlayerId()).claimedRoute(claimedRoute, finalClaimCards));
 								}
 							}
@@ -152,14 +157,18 @@ public final class Game {
 					}
 					break;
 			}
-
+			/*
+			System.out.println("Discards size: " + gameState.cardState().discardsSize());
+			System.out.println(playerNames.get(gameState.currentPlayerId()) + " car count: " + gameState.currentPlayerState().carCount());
+			System.out.println(playerNames.get(gameState.currentPlayerId()) + " cards: " + gameState.currentPlayerState().cards());
+			*/
 			gameState = gameState.forNextTurn();
 			if (gameState.lastTurnBegins()) sendInfo(players, playerInfos.get(gameState.currentPlayerId()).lastTurnBegins(gameState.currentPlayerState().carCount()));
 		}
 	  
-		 /*
-			* End of the game
-		  */
+		/*
+		 * End of the game
+		 */
 		updatePlayerStates(players, gameState);
 		Map<PlayerId, Integer> playersScores = new HashMap<PlayerId, Integer>();
 		Map<PlayerId, Trail> playersLongestTrail = new HashMap<PlayerId, Trail>();
