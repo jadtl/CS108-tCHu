@@ -76,6 +76,9 @@ public final class Game {
 		 * Middle of the game
 		 */
 		while (Objects.isNull(gameState.lastPlayer()) || gameState.currentPlayerId() != gameState.lastPlayer()) {
+			if (gameState.lastTurnBegins()) sendInfo(players, playerInfos.get(gameState.currentPlayerId()).lastTurnBegins(gameState.currentPlayerState().carCount()));
+			gameState = gameState.forNextTurn();
+
 			Player currentPlayer = players.get(gameState.currentPlayerId());
 			updatePlayerStates(players, gameState);
 			sendInfo(players, playerInfos.get(gameState.currentPlayerId()).canPlay());
@@ -157,13 +160,10 @@ public final class Game {
 					}
 					break;
 			}
-			/*
+			
 			System.out.println("Discards size: " + gameState.cardState().discardsSize());
 			System.out.println(playerNames.get(gameState.currentPlayerId()) + " car count: " + gameState.currentPlayerState().carCount());
 			System.out.println(playerNames.get(gameState.currentPlayerId()) + " cards: " + gameState.currentPlayerState().cards());
-			*/
-			gameState = gameState.forNextTurn();
-			if (gameState.lastTurnBegins()) sendInfo(players, playerInfos.get(gameState.currentPlayerId()).lastTurnBegins(gameState.currentPlayerState().carCount()));
 		}
 	  
 		/*

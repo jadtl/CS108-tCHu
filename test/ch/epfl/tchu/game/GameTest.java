@@ -334,6 +334,7 @@ class GameTest {
         public void receiveInfo(String info) {
             registerCall(RECEIVE_INFO);
             allInfos.addLast(info);
+            if (ownId.equals(PlayerId.PLAYER_1)) System.out.println(info);
         }
 
         @Override
