@@ -204,7 +204,7 @@ public final class Game {
 
 		// Note: This code only works for 2 players
 		if (winners.size() == 1)	sendInfo(players, playerInfos.get(winners.get(0)).won(playersScores.get(winners.get(0)), playersScores.get(winners.get(0).next())));	
-		else sendInfo(players, Info.draw(new ArrayList<String>(playerNames.values()), playersScores.get(winners.get(0))));
+		else sendInfo(players, Info.draw(new ArrayList<String>(playerNames.values()), highestScore));
 	}
 
 	private static void sendInfo(Map<PlayerId, Player> players, String info) {
