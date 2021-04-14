@@ -158,16 +158,10 @@ public final class Route {
      *         If the route is not underground or if the drawn cards are not three
      */
     public int additionalClaimCardsCount(SortedBag<Card> claimCards, SortedBag<Card> drawnCards) {
-        Preconditions.checkArgument(level() == Level.UNDERGROUND && drawnCards.size() == 3);
+        Preconditions.checkArgument(level() == Level.UNDERGROUND && drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
 
-        int claimCardsCount = 0;
-        for (Card card : drawnCards) {
-            if (Objects.isNull(card.color()) || card.color().equals(claimCards.get(0).color()))
-                ++claimCardsCount;
-
-        }
-
-        return claimCardsCount;
+        return (int)drawnCards.stream().filter((Card card) -> Objects.isNull(card.color()) || 
+        card.color().equals(claimCards.get(0).color())).count();
     }
 
     /**
