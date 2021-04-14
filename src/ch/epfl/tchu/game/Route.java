@@ -5,8 +5,13 @@ import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * A overground or underground route that links 2 neighbor cities
@@ -66,8 +71,7 @@ public final class Route {
         this.length = length;
         this.level = Objects.requireNonNull(level);
         this.color = color;
-
-        computePossibleClaimCards();
+        this.possibleClaimCards = computePossibleClaimCards();
     }
 
     /**
@@ -174,33 +178,18 @@ public final class Route {
     /**
      * Computes the possible claim cards for the route
      */
-    private void computePossibleClaimCards() {
-        possibleClaimCards = new ArrayList<>();
-        SortedBag.Builder<Card> builder = new SortedBag.Builder<>();
-        int claimCardsWithLocomotive = level().equals(Level.UNDERGROUND) ? length() : 0;
+    private List<SortedBag<Card>> computePossibleClaimCards() {
+        // Using a linked hash set to keep the order intact as elements are added and to remove duplicates
+        Set<SortedBag<Card>> computedPossibleClaimCards = new LinkedHashSet<SortedBag<Card>>();
 
-        for (int i = 0; i < claimCardsWithLocomotive + 1; i++) {
-            if (Objects.isNull(color())) {
-                if (i < length()) {
-                    for (Color color : Color.values()) {
-                        builder.add(length() - i, Card.of(color));
-                        builder.add(i, Card.of(null));
-                        possibleClaimCards.add(builder.build());
-                        builder = new SortedBag.Builder<>();
-                    }
-                }
-                else {
-                    builder.add(length(), Card.of(null));
-                    possibleClaimCards.add(builder.build());
-                    builder = new SortedBag.Builder<>();
-                }
-            }
-            else {
-                builder.add(length() - i, Card.of(color));
-                builder.add(i, Card.of(null));
-                possibleClaimCards.add(builder.build());
-                builder = new SortedBag.Builder<>();
+        for (int i = 0; i <= (level().equals(Level.UNDERGROUND) ? length() : 0); i++) {
+            List<Color> usableColors = (Objects.isNull(color())) ? Color.ALL : List.of(color);
+            for (Color color : usableColors) {
+                SortedBag<Card> claimCards = SortedBag.of(length() - i, Card.of(color), i, Card.of(null));
+                computedPossibleClaimCards.add(claimCards);
             }
         }
+
+        return List.copyOf(computedPossibleClaimCards);
     }
 }
