@@ -93,7 +93,7 @@ public final class Game {
 					break;
 
 				case DRAW_CARDS:
-					for (int i = 0; i < 2; i++) {
+					for (int i = 0; i < 2; i++) { //TODO Add constant
 						updatePlayerStates(players, gameState);
 						int drawSlot = currentPlayer.drawSlot();
 						if (drawSlot == Constants.DECK_SLOT) {
@@ -160,10 +160,6 @@ public final class Game {
 					}
 					break;
 			}
-			
-			System.out.println("Discards size: " + gameState.cardState().discardsSize());
-			System.out.println(playerNames.get(gameState.currentPlayerId()) + " car count: " + gameState.currentPlayerState().carCount());
-			System.out.println(playerNames.get(gameState.currentPlayerId()) + " cards: " + gameState.currentPlayerState().cards());
 		}
 	  
 		/*
