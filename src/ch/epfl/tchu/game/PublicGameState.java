@@ -3,8 +3,6 @@ package ch.epfl.tchu.game;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import ch.epfl.tchu.Preconditions;
 
@@ -43,7 +41,7 @@ public class PublicGameState {
    *         If ticketsCount is negative or the numbers of players is incorrect
    */
   public PublicGameState(int ticketsCount, PublicCardState cardState, PlayerId currentPlayerId, Map<PlayerId, PublicPlayerState> playerState, PlayerId lastPlayer) {
-    Preconditions.checkArgument(ticketsCount >= 0 && playerState.size() == 2);
+    Preconditions.checkArgument(ticketsCount >= 0 && playerState.size() == 2); //TODO create 2 as a constant
 
     this.ticketsCount = ticketsCount;
     this.cardState = Objects.requireNonNull(cardState);
@@ -78,7 +76,7 @@ public class PublicGameState {
    * 
    * @return true iff. the deck of cards and the discards have 5 or more cards
    */
-  public boolean canDrawCards() { return cardState.deckSize() + cardState.discardsSize() >= 5; }
+  public boolean canDrawCards() { return cardState.deckSize() + cardState.discardsSize() >= 5; } //TODO create 5 as a constant
 
   /**
    * Returns the identifier of the current player
@@ -109,8 +107,7 @@ public class PublicGameState {
    * 
    * @return the claimed routes of the current player
    */
-  public List<Route> claimedRoutes() { return Stream.concat(playerState(PlayerId.PLAYER_1).routes().stream(), 
-    playerState(PlayerId.PLAYER_2).routes().stream()).collect(Collectors.toList()); }
+  public List<Route> claimedRoutes() { return currentPlayerState().routes(); }
 
   /**
    * Returns the last player identifier
