@@ -20,20 +20,12 @@ public final class Trip {
     /**
      * Constructs a trip from a station to another with a given value
      *
-     * @param from 
-     *        The departure station
-     * 
-     * @param to 
-     *        The arrival station
-     * 
-     * @param points 
-     *        The value of the trip
+     * @param from the departure station
+     * @param to the arrival station
+     * @param points the value of the trip
      *
-     * @throws IllegalArgumentException 
-     *         If points isn't strictly positive
-     * 
-     * @throws NullPointerException 
-     *         If from or to are null
+     * @throws IllegalArgumentException if points isn't strictly positive
+     * @throws NullPointerException if from or to are null
      */
     public Trip(Station from, Station to, int points) {
         Preconditions.checkArgument(points > 0);
@@ -47,20 +39,17 @@ public final class Trip {
      * Returns a list of all possible trips from two lists
      * of departure and arrival stations and their points value
      *
-     * @param from 
-     *        The departure stations
-     * 
-     * @param to 
-     *        The arrival stations
-     * 
-     * @param points 
-     *        The trips value
+     * @param from the departure stations
+     * @param to the arrival stations
+     * @param points the trips value
      *
      * @return a list of all possible trips
      */
     public static List<Trip> all(List<Station> from, List<Station> to, int points) {
         List<Trip> tripPossibilities = new ArrayList<>();
 
+        //TODO rewrite using streams 
+        
         for (Station departure : from) {
             for (Station arrival : to) {
                 tripPossibilities.add(new Trip(departure, arrival, points));
@@ -95,8 +84,7 @@ public final class Trip {
      * Returns the number of points won or lost by the player depending
      * on whether or not the two trip stations are connected in their network
      *
-     * @param connectivity 
-     *        The station connectivity of the player network
+     * @param connectivity the station connectivity of the player network
      *
      * @return positive points if both stations are connected, negative otherwise
      */
