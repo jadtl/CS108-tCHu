@@ -1,17 +1,13 @@
 
 package ch.epfl.tchu.game;
 
-import ch.epfl.tchu.Preconditions;
-import ch.epfl.tchu.SortedBag;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+
+import ch.epfl.tchu.Preconditions;
+import ch.epfl.tchu.SortedBag;
 
 /**
  * A overground or underground route that links 2 neighbor cities
@@ -185,7 +181,7 @@ public final class Route {
         for (int i = 0; i <= (level().equals(Level.UNDERGROUND) ? length() : 0); i++) {
             List<Color> usableColors = (Objects.isNull(color())) ? Color.ALL : List.of(color);
             for (Color color : usableColors) {
-                SortedBag<Card> claimCards = SortedBag.of(length() - i, Card.of(color), i, Card.of(null));
+                SortedBag<Card> claimCards = SortedBag.of(length() - i, Card.of(color), i, Card.LOCOMOTIVE);
                 computedPossibleClaimCards.add(claimCards);
             }
         }
