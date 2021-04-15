@@ -123,7 +123,8 @@ public final class GameState extends PublicGameState {
    * 
    * @return the same game state except the given cards were added to the discards
    */
-  public GameState withMoreDiscardedCards(SortedBag<Card> discardedCards) { return new GameState(tickets, cardState.withMoreDiscardedCards(discardedCards), currentPlayerId(), playerState, lastPlayer()); }
+  public GameState withMoreDiscardedCards(SortedBag<Card> discardedCards) { return new GameState(tickets, 
+    cardState.withMoreDiscardedCards(discardedCards), currentPlayerId(), playerState, lastPlayer()); }
 
   /**
    * Returns the same game state except that if the deck is empty, it's recreated from the discards
@@ -133,7 +134,8 @@ public final class GameState extends PublicGameState {
    * 
    * @return the same game state except that if the deck is empty, it's recreated from the discards
    */
-  public GameState withCardsDeckRecreatedIfNeeded(Random rng) { return cardState.isDeckEmpty() ? new GameState(tickets, cardState.withDeckRecreatedFromDiscards(rng), currentPlayerId(), playerState, lastPlayer()) : this; }
+  public GameState withCardsDeckRecreatedIfNeeded(Random rng) { return cardState.isDeckEmpty() ? new GameState
+    (tickets, cardState.withDeckRecreatedFromDiscards(rng), currentPlayerId(), playerState, lastPlayer()) : this; }
   
   /**
    * Returns an identical state except that the given tickets were added to the given player's hand
@@ -179,7 +181,8 @@ public final class GameState extends PublicGameState {
     Map<PlayerId, PlayerState> updatedPlayerState = new EnumMap<PlayerId, PlayerState>(playerState);
     updatedPlayerState.put(currentPlayerId(), updatedPlayerState.get(currentPlayerId()).withAddedTickets(chosenTickets));
 
-    return new GameState(tickets.withoutTopCards(Constants.IN_GAME_TICKETS_COUNT), cardState, currentPlayerId(), updatedPlayerState, lastPlayer());
+    return new GameState(tickets.withoutTopCards(Constants.IN_GAME_TICKETS_COUNT), cardState, currentPlayerId(), 
+                  updatedPlayerState, lastPlayer());
   }
   
   /**
