@@ -106,12 +106,10 @@ public final class Deck<C extends Comparable<C>> {
 	 *         If count is not between 0 and size of the deck
 	 */
 	public SortedBag<C> topCards(int count) {
-		Preconditions.checkArgument(count >= 0 && count <= size());
+		Preconditions.checkArgument(0 <= count && count <= size());
 
 		SortedBag.Builder<C> builder = new SortedBag.Builder<C>();
-		for (C element : cards.subList(0, count)) {
-			builder.add(element);
-		}
+		cards.subList(0, count).stream().forEach((C element) -> builder.add(element));
 
 		return builder.build();
 	}
@@ -128,7 +126,7 @@ public final class Deck<C extends Comparable<C>> {
 	 *         If count is not between 0 and size of the deck
 	 */
 	public Deck<C> withoutTopCards(int count) {
-		Preconditions.checkArgument(count >= 0 && count <= size());
+		Preconditions.checkArgument(0 <= count && count <= size());
 
 		return new Deck<C>(cards.subList(count, size()));
 	}
