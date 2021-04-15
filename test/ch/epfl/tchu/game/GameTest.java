@@ -1,16 +1,37 @@
 package ch.epfl.tchu.game;
 
-import ch.epfl.tchu.SortedBag;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import static ch.epfl.tchu.game.GameTest.PlayerMethod.CHOOSE_ADDITIONAL_CARDS;
+import static ch.epfl.tchu.game.GameTest.PlayerMethod.CHOOSE_INITIAL_TICKETS;
+import static ch.epfl.tchu.game.GameTest.PlayerMethod.CHOOSE_TICKETS;
+import static ch.epfl.tchu.game.GameTest.PlayerMethod.CLAIMED_ROUTE;
+import static ch.epfl.tchu.game.GameTest.PlayerMethod.DRAW_SLOT;
+import static ch.epfl.tchu.game.GameTest.PlayerMethod.INITIAL_CLAIM_CARDS;
+import static ch.epfl.tchu.game.GameTest.PlayerMethod.INIT_PLAYERS;
+import static ch.epfl.tchu.game.GameTest.PlayerMethod.NEXT_TURN;
+import static ch.epfl.tchu.game.GameTest.PlayerMethod.RECEIVE_INFO;
+import static ch.epfl.tchu.game.GameTest.PlayerMethod.SET_INITIAL_TICKET_CHOICE;
+import static ch.epfl.tchu.game.GameTest.PlayerMethod.UPDATE_STATE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ch.epfl.tchu.game.GameTest.PlayerMethod.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import ch.epfl.tchu.SortedBag;
 
 class GameTest {
     enum PlayerMethod {
@@ -265,6 +286,11 @@ class GameTest {
     }
 
     private static final class TooManyCallsError extends Error {
+
+        /**
+         *
+         */
+        private static final long serialVersionUID = 1L;
     }
 
     private static final class TestPlayer implements Player {
@@ -334,7 +360,6 @@ class GameTest {
         public void receiveInfo(String info) {
             registerCall(RECEIVE_INFO);
             allInfos.addLast(info);
-            if (ownId.equals(PlayerId.PLAYER_1)) System.out.println(info);
         }
 
         @Override
