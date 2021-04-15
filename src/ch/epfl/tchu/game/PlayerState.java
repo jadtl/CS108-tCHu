@@ -187,8 +187,8 @@ public final class PlayerState extends PublicPlayerState {
 	 */
 	public List<SortedBag<Card>> possibleAdditionalCards(int additionalCardsCount, 
 	SortedBag<Card> initialCards, SortedBag<Card> drawnCards) {
-		Preconditions.checkArgument(additionalCardsCount >= 1 && additionalCardsCount <= Constants.ADDITIONAL_TUNNEL_CARDS);
-		Preconditions.checkArgument(!initialCards.isEmpty() && initialCards.toSet().size() <= 2); //TODO create 2 as a constant
+		Preconditions.checkArgument(1 <= additionalCardsCount && additionalCardsCount <= Constants.ADDITIONAL_TUNNEL_CARDS);
+		Preconditions.checkArgument(!initialCards.isEmpty() && initialCards.toSet().size() <= 2);
 		Preconditions.checkArgument(drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
 
 		SortedBag<Card> remainingCards = cards().difference(initialCards);
