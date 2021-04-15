@@ -3,6 +3,7 @@ package ch.epfl.tchu.game;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import ch.epfl.tchu.Preconditions;
 
@@ -103,11 +104,16 @@ public class PublicGameState {
   public PublicPlayerState currentPlayerState() { return playerState.get(currentPlayerId); }
 
   /**
-   * Returns the claimed routes of the current player
+   * Returns the claimed routes of all the players
    * 
-   * @return the claimed routes of the current player
+   * @return the claimed routes of all the players
    */
-  public List<Route> claimedRoutes() { return currentPlayerState().routes(); }
+  public List<Route> claimedRoutes() { 
+    return playerState.values()
+    .stream()
+    .flatMap(pgs -> pgs.routes().stream())
+    .collect(Collectors.toList()); 
+  }
 
   /**
    * Returns the last player identifier
