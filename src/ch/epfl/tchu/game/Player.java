@@ -7,7 +7,7 @@ import java.util.Map;
 import ch.epfl.tchu.SortedBag;
 
 /**
- * The public part of a tCHu game state
+ * The player of a tCHu game
  *
  * @author Sofiya Malamud (313789)
  * @author Jad Tala (310821)
@@ -15,63 +15,63 @@ import ch.epfl.tchu.SortedBag;
 public interface Player {
 
 	/**
-	 * The 3 possible actions a player can perform when his/her turn starts
+	 * The different kind of actions the player can do each turn
 	 */
-	public enum TurnKind {
+	enum TurnKind {
 		DRAW_TICKETS, DRAW_CARDS, CLAIM_ROUTE;
 
 		public static final List<TurnKind> ALL = Arrays.asList(TurnKind.values());
 	}
 
 	/**
-	 * Tells the player his id and the identity of the other players
+	 * Tells the player their identifier and the names of the other players
 	 * 
 	 * @param ownId      
-	 *        Id of the player
+	 *        The identifier of the player
 	 * 
 	 * @param playerNames 
-	 *        Names of the different players
+	 *        The names of the different players
 	 */
-	public void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames);
+	void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames);
 
 	/**
 	 * Communicates information to the player
 	 * 
 	 * @param info 
-	 *        Information given to the player
+	 *        The information
 	 */
-
 	void receiveInfo(String info);
 
 	/**
 	 * Informs the player when the Game State has changed
 	 * 
 	 * @param newState 
-	 *        New PublicGameState
+	 *        The public game's state
 	 * 
-	 * @param info     
-	 *        PlayerState of the player
+	 * @param ownState    
+	 *        The player's state
 	 */
-
 	void updateState(PublicGameState newState, PlayerState ownState);
 
 	/**
-	 * The tickets a player gets at the beginning of the game
+	 * Informs the player of the initial tickets drawn
 	 * 
 	 * @param tickets 
-	 *        SortedBag of initial tickets
+	 *        The initial tickets
 	 */
-
 	void setInitialTicketChoice(SortedBag<Ticket> tickets);
 
 	/**
-	 * Asks the player to choose what tickets their wants to keep
+	 * Asks the player what initial tickets they want to keep
+	 * 
+	 * @return the initial tickets the player chose to keep
 	 */
 	SortedBag<Ticket> chooseInitialTickets();
 
 	/**
-	 * Asks the player at the beginning of their turn what action out of the Enum
-	 * TurnKind he wants to perform
+	 * Asks the player what action they choose to do for their next turn
+	 * 
+	 * @return the turn kind the player chose
 	 */
 	TurnKind nextTurn();
 
@@ -79,37 +79,42 @@ public interface Player {
 	 * Informs the player of the drawn tickets and asks them to choose which ones they
 	 * want to keep
 	 * 
-	 * @param options 
-	 *        Additional tickets the player has drawn
+	 * @param options
+	 *        The additional tickets the player has drawn
+	 * 
+	 * @return the tickets the player chose to keep
 	 */
 	SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options);
 
 	/**
-	 * When a player has decided to draw wagon/locomotive cards Asks player where
-	 * he/she wants to draw the card from
+	 * States the card slot the player chose to draw a card from
 	 * 
-	 * @return a value between 0 and 4 if f from a place containing a face up Card
-	 * or Constants.DECK_SLOT if the cards are drawn from the deck
+	 * @return a value between 0 and 4 if they draw a face-up card
+	 * or -1 if the card is drawn from the deck
 	 */
 	int drawSlot();
 
 	/**
-	 * States route the player has tried to claim
+	 * States the route the player has claimed
+	 * 
+	 * @return the claimed route
 	 */
 	Route claimedRoute();
 
 	/**
 	 * States cards a player has used to try to claim a route
+	 * 
+	 * @return the cards initially used to claim a route
 	 */
 	SortedBag<Card> initialClaimCards();
 
 	/**
-	 * States the additional cards a player can use to claim a Tunnel When a player
-	 * has tried to claim a tunnel and additional cards are necessary If options is
-	 * empty the cannot or doesn't want to use additional cards
+	 * States the additional claim cards choice of the player to claim the tunnel
 	 * 
 	 * @param options 
-	 *        Additional tickets the player could use to claim a tunnel
+	 *        The additional tickets the player could use to claim a tunnel
+	 * 
+	 * @return the additional claim cards the player chooses to claim the tunnel
 	 */
 	SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options);
 }
