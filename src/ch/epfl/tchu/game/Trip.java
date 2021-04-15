@@ -48,13 +48,9 @@ public final class Trip {
     public static List<Trip> all(List<Station> from, List<Station> to, int points) {
         List<Trip> tripPossibilities = new ArrayList<>();
 
-        //TODO rewrite using streams 
-        
-        for (Station departure : from) {
-            for (Station arrival : to) {
+        for (Station departure : from)
+            for (Station arrival : to)
                 tripPossibilities.add(new Trip(departure, arrival, points));
-            }
-        }
 
         return tripPossibilities;
     }
