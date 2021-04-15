@@ -70,9 +70,8 @@ public final class Game {
 		}
 
 		// Informing every player of the number of initially drawn tickets only once everyone has drawn
-		for (PlayerId playerId : PlayerId.ALL) {
+		for (PlayerId playerId : PlayerId.ALL)
 			sendInfo(players, playerInfos.get(playerId).keptTickets(gameState.currentPlayerState().ticketCount()));
-		}
 
 		// Updating the game state after having drawn the initial tickets
 		gameState = gameState.withoutTopTickets(Constants.INITIAL_TICKETS_COUNT * PlayerId.COUNT);
@@ -155,6 +154,7 @@ public final class Game {
 								}
 							}
 							else {
+								// Informing that the current player didn't claim the route
 								sendInfo(players, playerInfos.get(gameState.currentPlayerId()).didNotClaimRoute(claimedRoute));
 							}
 						}
@@ -162,7 +162,7 @@ public final class Game {
 
 					else if (claimedRoute.level().equals(Level.OVERGROUND)) {
 						gameState = gameState.withClaimedRoute(claimedRoute, initialClaimCards);
-						// Informing every player that the current player claimed the route
+						// Informing that the current player claimed the route
 						sendInfo(players, playerInfos.get(gameState.currentPlayerId()).claimedRoute(claimedRoute, initialClaimCards));
 					}
 					break;
