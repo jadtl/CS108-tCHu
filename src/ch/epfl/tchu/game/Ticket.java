@@ -3,6 +3,7 @@ package ch.epfl.tchu.game;
 import ch.epfl.tchu.Preconditions;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A ticket that holds a number of trips of the same departure station
@@ -51,24 +52,20 @@ public final class Ticket implements Comparable<Ticket> {
      */
     private static String computeText(List<Trip> trips) {
         Map<String, Integer> map = new HashMap<>();
-        Collection<String> arrivalNoDuplicates = new TreeSet<>();
 
         // Print the beginning of the text
         StringBuilder text = new StringBuilder(trips.get(0).from().name() + " - ");
 
         // Removing duplicate arrival stations
-        
-        //TODO rewrite this using streams
-        
-        for (Trip trip : trips)
-            arrivalNoDuplicates.add(trip.to().name());
+        Collection<String> arrivalNoDuplicates = trips.stream()
+        .map(t -> t.to().name())
+        .collect(Collectors.toCollection(TreeSet::new));
 
         // Storing the points for each unique arrival station in a map
         for (String arrivalStation : arrivalNoDuplicates) {
-            for (Trip trip : trips) {
-                if (trip.to().name().equals(arrivalStation))
-                    map.put(arrivalStation, trip.points());
-            }
+            trips.stream()
+            .filter(t -> t.to().name().equals(arrivalStation))
+            .forEach(t -> map.put(arrivalStation, t.points()));
         }
 
         // Print the remaining of the text depending on whether the ticket holds a unique trip or more
@@ -102,14 +99,9 @@ public final class Ticket implements Comparable<Ticket> {
      */
     public int points(StationConnectivity connectivity) {
         int points = 0;
-        boolean noConnectivity = true;
-        
-        //TODO rewrite this using streams
-
-        for (Trip trip : trips) {
-            if (connectivity.connected(trip.from(), trip.to()))
-                noConnectivity = false;
-        }
+        boolean noConnectivity = trips.stream()
+        .filter(t -> connectivity.connected(t.from(), t.to()))
+        .count() == 0;
 
         if (noConnectivity) {
             for (Trip trip : trips) {
