@@ -88,68 +88,97 @@ public final class Game {
 			Player currentPlayer = players.get(gameState.currentPlayerId());
 			updatePlayerStates(players, gameState);
 			sendInfo(players, playerInfos.get(gameState.currentPlayerId()).canPlay());
+			// Asks what the player's next move will be
 			TurnKind playerMove = currentPlayer.nextTurn();
-
+			
+			// Choice of players next move
 			switch (playerMove) {
+				//PLayer decides to draw tickets
 				case DRAW_TICKETS:
 					sendInfo(players, playerInfos.get(gameState.currentPlayerId()).drewTickets(Constants.IN_GAME_TICKETS_COUNT));
+					// Determines which tickets the player decides to keep
 					SortedBag<Ticket> chosenTickets = currentPlayer.chooseTickets(gameState.topTickets(Constants.IN_GAME_TICKETS_COUNT));
+					//Updating game state to a state where the player has the additional drawn tickets
 					gameState = gameState.withChosenAdditionalTickets(gameState.topTickets(Constants.IN_GAME_TICKETS_COUNT), chosenTickets);
+					// Informs players of the tickets drawn by the player
 					sendInfo(players, playerInfos.get(gameState.currentPlayerId()).keptTickets(chosenTickets.size()));
 					break;
-
+				//Player decides to draw cards
 				case DRAW_CARDS:
+					// Case where the player draws cards from the deck
 					for (int i = 0; i < DRAW_CARDS_TIMES; i++) {
 						updatePlayerStates(players, gameState);
+						// determines which card the player wants to draw first and second
 						int drawSlot = currentPlayer.drawSlot();
 						if (drawSlot == Constants.DECK_SLOT) {
+							//Updates the game state to a state with the additional cards
 							gameState = gameState
 							.withCardsDeckRecreatedIfNeeded(rng)
 							.withBlindlyDrawnCard();
+							// Informs players of the cards drawn by the current player and where from
 							sendInfo(players, playerInfos.get(gameState.currentPlayerId()).drewBlindCard());
 						}
+						// Case where the player draws face up cards
 						else {
+							// determines which cards the player drew
 							Card drawnCard = gameState.cardState().faceUpCard(drawSlot);
+							//Updates the game state to a state with the additional cards
 							gameState = gameState
 							.withCardsDeckRecreatedIfNeeded(rng)
 							.withDrawnFaceUpCard(drawSlot);
+							// Informs players of the cards drawn by the current player and where from
 							sendInfo(players, playerInfos.get(gameState.currentPlayerId()).drewVisibleCard(drawnCard));
 						}
 					}
 					break;
-
+				//Case where the player decides to try to claim a route 
 				case CLAIM_ROUTE:
 					Route claimedRoute = currentPlayer.claimedRoute();
 					SortedBag<Card> initialClaimCards = currentPlayer.initialClaimCards();
-
+					//Case where the player tries to claim a tunnel
 					if (claimedRoute.level().equals(Level.UNDERGROUND)) {
+						//Informs players that the current player is trying to claim a Tunnel
 						sendInfo(players, playerInfos.get(gameState.currentPlayerId()).attemptsTunnelClaim(claimedRoute, initialClaimCards));
 						SortedBag.Builder<Card> additionalCards = new SortedBag.Builder<Card>();
+						// Determines which additional cards the player decides to choose to try and claim the tunnel
 						for (int i = 0; i < Constants.ADDITIONAL_TUNNEL_CARDS; i++) {
+							// updates game state to a state where the player has these cards
 							gameState = gameState.withCardsDeckRecreatedIfNeeded(rng);
 							additionalCards.add(gameState.topCard());
 							gameState = gameState.withoutTopCard();
 						}
+						// These additional cards are added to the pile of discards
 						gameState = gameState.withMoreDiscardedCards(additionalCards.build());
+						
 						int additionalClaimCardsCount = claimedRoute.additionalClaimCardsCount(initialClaimCards, additionalCards.build());
+						//informs players that the current player drew additional cards to try and claim the tunnel
 						sendInfo(players, playerInfos.get(gameState.currentPlayerId()).drewAdditionalCards(additionalCards.build(), additionalClaimCardsCount));
+						// Player does not use and does not need to use any additional cards to claim the tunnel
 						if (additionalClaimCardsCount == 0) {
 							gameState = gameState
 							.withClaimedRoute(claimedRoute, initialClaimCards);
+							//informs the players the current player claimed the tunnel using the cards he initially possessed
 							sendInfo(players, playerInfos.get(gameState.currentPlayerId()).claimedRoute(claimedRoute, initialClaimCards));
 						}
 						else {
+							// Creating pile of possible additional cards the player can chose to try and claim the tunnel
 							List<SortedBag<Card>> possibleAdditionalClaimCards = gameState.currentPlayerState().possibleAdditionalCards
 							(additionalClaimCardsCount, initialClaimCards, additionalCards.build());
+							// Verifying the amount of additional cards the player can chose is not null 
 							if (possibleAdditionalClaimCards.size() > 0) {
 								SortedBag<Card> chosenAdditionalClaimCards = currentPlayer.chooseAdditionalCards(possibleAdditionalClaimCards);
+								// The number of additional cards chosen by the player is null
+								// Player Can not claim the tunnel
 								if (chosenAdditionalClaimCards.isEmpty()) {
+									//Informs the players that the current player did not claim the tunnel
 									sendInfo(players, playerInfos.get(gameState.currentPlayerId()).didNotClaimRoute(claimedRoute));
 								}
 								else {
+									// adding additional cards the player chose to try and claim the tunnel to the initial cards
 									SortedBag<Card> finalClaimCards = new SortedBag.Builder<Card>().add(initialClaimCards).add(chosenAdditionalClaimCards).build();
 									gameState = gameState
 									.withClaimedRoute(claimedRoute, finalClaimCards);
+									//informs players that the current player claimed the tunnel using additional cards
 									sendInfo(players, playerInfos.get(gameState.currentPlayerId()).claimedRoute(claimedRoute, finalClaimCards));
 								}
 							}
@@ -159,7 +188,7 @@ public final class Game {
 							}
 						}
 					}
-
+					// case where the route is not a tunnel
 					else if (claimedRoute.level().equals(Level.OVERGROUND)) {
 						gameState = gameState.withClaimedRoute(claimedRoute, initialClaimCards);
 						// Informing that the current player claimed the route
