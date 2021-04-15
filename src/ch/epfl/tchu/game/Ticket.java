@@ -24,11 +24,11 @@ public final class Ticket implements Comparable<Ticket> {
      *                      if there are more than one departure station
      */
     public Ticket(List<Trip> trips) {
-        Collection<String> fromStations = new TreeSet<>();
-        for (Trip trip : trips) {
-            fromStations.add(trip.from().name());
-        }
-        Preconditions.checkArgument((trips.size() != 0) && (fromStations.size() == 1)); //create constant
+        Collection<String> fromStations = trips.stream()
+        .map(t -> t.from().name())
+        .collect(Collectors.toCollection(TreeSet::new));
+
+        Preconditions.checkArgument((trips.size() != 0) && (fromStations.size() == 1));
 
         this.trips = trips;
         this.text = computeText(this.trips);
@@ -41,7 +41,7 @@ public final class Ticket implements Comparable<Ticket> {
      * @param to the arrival station
      * @param points the trip value
      */
-    public Ticket(Station from, Station to, int points) { this(new ArrayList<>(List.of(new Trip(from, to, points)))); }
+    public Ticket(Station from, Station to, int points) { this(List.of(new Trip(from, to, points))); }
 
     /**
      * Returns the textual representation of the trips
@@ -98,24 +98,20 @@ public final class Ticket implements Comparable<Ticket> {
      * @return the points value of the ticket according the the player connectivity
      */
     public int points(StationConnectivity connectivity) {
-        int points = 0;
         boolean noConnectivity = trips.stream()
         .filter(t -> connectivity.connected(t.from(), t.to()))
         .count() == 0;
 
-        if (noConnectivity) {
+        int points = 0;
+        if (noConnectivity)
             for (Trip trip : trips) {
                 if (points == 0) points = trip.points();
                 points = Math.min(points, trip.points());
             }
-        }
-
-        else {
-            for (Trip trip : trips) {
+        else
+            for (Trip trip : trips)
                 if (connectivity.connected(trip.from(), trip.to()))
                     points = Math.max(points, trip.points());
-            }
-        }
 
         return (noConnectivity) ? -points : points;
     }
