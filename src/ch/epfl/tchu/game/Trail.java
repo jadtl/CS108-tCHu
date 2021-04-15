@@ -88,8 +88,9 @@ public final class Trail {
         }
 
         // Figuring the longest trail among the found dead ends
-        return deadEndTrails.stream().max((Trail t1, Trail t2) -> 
-        Integer.compare(t1.length(), t2.length())).orElse(new Trail(null, null, 0));
+        return deadEndTrails.stream()
+        .max((t1, t2) -> Integer.compare(t1.length(), t2.length()))
+        .orElse(new Trail(null, null, 0));
     }
 
     /**
