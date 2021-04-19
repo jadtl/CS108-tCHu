@@ -19,14 +19,14 @@ import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Ticket;
 
 /**
- * 
+ * A collection of useful serdes
  * 
  * @author Sofiya Malamud (313789)
  * @author Jad Tala (310821)
  */
 public class Serdes {
 	/**
-	 * Class is not instanciable
+	 * The class is not instanciable
 	 */
 	private Serdes() {
 	}
@@ -128,4 +128,4 @@ public class Serdes {
 						Map.of(PlayerId.PLAYER_1, PPS1, PlayerId.PLAYER_2, PPS2), lastPlayer);
 			}
   );
-}
+}x
