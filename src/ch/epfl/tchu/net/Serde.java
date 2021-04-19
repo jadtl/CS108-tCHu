@@ -64,15 +64,10 @@ public interface Serde<T> {
    * @return
    */
   static <T> Serde<T> oneOf(List<T> all) {
-    return Serde.of
-    (new Function<T,String>(){
-      @Override
-      public String apply(T t) { return String.valueOf(all.indexOf(t)); }
-    }, 
-    new Function<String,T>(){
-      @Override
-      public T apply(String t) { return all.get(Integer.parseInt(t)); }
-    });
+    return Serde.of(
+      i -> String.valueOf(all.indexOf(i)), 
+      i -> all.get(Integer.parseInt(i))
+    );
   }
 
   /**
@@ -86,22 +81,18 @@ public interface Serde<T> {
    * @return
    */
   static <T> Serde<List<T>> listOf(Serde<T> serde, String delimiter) {
-    return Serde.of(new Function<List<T>,String>(){
-      @Override
-      public String apply(List<T> t) {
+    return Serde.of(
+      t -> {
         StringJoiner stringJoiner = new StringJoiner(delimiter);
         t.forEach(e -> stringJoiner.add(serde.serialize(e)));
         return stringJoiner.toString();
+      },
+      t -> {
+          return Arrays.asList(t.split(Pattern.quote(delimiter), -1)).stream()
+          .map(ds -> serde.deserialize(ds))
+          .collect(Collectors.toList());
       }
-    }, 
-    new Function<String, List<T>>(){
-      @Override
-      public List<T> apply(String t) {
-        return Arrays.asList(t.split(Pattern.quote(delimiter), -1)).stream()
-        .map(ds -> serde.deserialize(ds))
-        .collect(Collectors.toList());
-      }
-    });
+    );
   }
 
   /**
@@ -115,21 +106,17 @@ public interface Serde<T> {
    * @return
    */
   static <T extends Comparable<T>> Serde<SortedBag<T>> bagOf(Serde<T> serde, String delimiter) {
-    return Serde.of(new Function<SortedBag<T>,String>(){
-      @Override
-      public String apply(SortedBag<T> t) {
+    return Serde.of(
+      t -> {
         StringJoiner stringJoiner = new StringJoiner(delimiter);
         t.forEach(e -> stringJoiner.add(serde.serialize(e)));
         return stringJoiner.toString();
-      }
-    }, 
-    new Function<String, SortedBag<T>>(){
-      @Override
-      public SortedBag<T> apply(String t) {
+      }, 
+      t -> {
         return SortedBag.of(Arrays.asList(t.split(Pattern.quote(delimiter), -1)).stream()
         .map(ds -> serde.deserialize(ds))
         .collect(Collectors.toList()));
       }
-    });
+    );
   }
 }
