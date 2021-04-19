@@ -1,5 +1,11 @@
 package ch.epfl.tchu.net;
 
+/**
+ * The identifier of the message sent between the client and the server
+ * 
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
+ */
 public enum MessageId {
   INIT_PLAYERS,
   RECEIVE_INFO,
