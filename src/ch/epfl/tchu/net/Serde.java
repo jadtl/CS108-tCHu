@@ -105,7 +105,7 @@ public interface Serde<T> {
         return stringJoiner.toString();
       },
       t -> {
-          return Arrays.asList(t.split(Pattern.quote(delimiter), -1)).stream()
+          return t.isEmpty() ? List.of() : Arrays.asList(t.split(Pattern.quote(delimiter), -1)).stream()
           .map(ds -> serde.deserialize(ds))
           .collect(Collectors.toList());
       }
@@ -136,7 +136,7 @@ public interface Serde<T> {
         return stringJoiner.toString();
       }, 
       t -> {
-        return SortedBag.of(Arrays.asList(t.split(Pattern.quote(delimiter), -1)).stream()
+        return t.isEmpty() ? SortedBag.of() : SortedBag.of(Arrays.asList(t.split(Pattern.quote(delimiter), -1)).stream()
         .map(ds -> serde.deserialize(ds))
         .collect(Collectors.toList()));
       }
