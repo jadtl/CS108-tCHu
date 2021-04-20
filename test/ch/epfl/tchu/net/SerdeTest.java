@@ -7,6 +7,7 @@ import ch.epfl.tchu.game.ChMap;
 import ch.epfl.tchu.game.Player;
 import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.game.Route;
+import ch.epfl.tchu.game.Ticket;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,5 +53,12 @@ public class SerdeTest {
     Route toSerialize = ChMap.routes().get(7);
     assertEquals("7", Serdes.ROUTE.serialize(toSerialize));
     assertEquals(toSerialize, Serdes.ROUTE.deserialize(Serdes.ROUTE.serialize(toSerialize)));
+  }
+
+  @Test
+  void ticketSerdeWorks() {
+    Ticket toSerialize = ChMap.tickets().get(9);
+    assertEquals("9", Serdes.TICKET.serialize(toSerialize));
+    assertEquals(toSerialize, Serdes.TICKET.deserialize(Serdes.TICKET.serialize(toSerialize)));
   }
 }
