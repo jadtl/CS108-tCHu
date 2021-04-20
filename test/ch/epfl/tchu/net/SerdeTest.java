@@ -3,8 +3,10 @@ package ch.epfl.tchu.net;
 import org.junit.jupiter.api.Test;
 
 import ch.epfl.tchu.game.Card;
+import ch.epfl.tchu.game.ChMap;
 import ch.epfl.tchu.game.Player;
 import ch.epfl.tchu.game.PlayerId;
+import ch.epfl.tchu.game.Route;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,6 +49,8 @@ public class SerdeTest {
 
   @Test
   void routeSerdeWorks() {
-
+    Route toSerialize = ChMap.routes().get(7);
+    assertEquals("7", Serdes.ROUTE.serialize(toSerialize));
+    assertEquals(toSerialize, Serdes.ROUTE.deserialize(Serdes.ROUTE.serialize(toSerialize)));
   }
 }
