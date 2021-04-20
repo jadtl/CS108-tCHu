@@ -56,14 +56,10 @@ public interface Serde<T> {
   static <T> Serde<T> of(Function<T, String> serializeFunction, Function<String, T> deserializeFunction) {
     return new Serde<T>() {
       @Override
-      public String serialize(T toSerialize) {
-        return serializeFunction.apply(toSerialize);
-      }
+      public String serialize(T toSerialize) { return serializeFunction.apply(toSerialize); }
 
       @Override
-      public T deserialize(String toDeserialize) {
-        return deserializeFunction.apply(toDeserialize);
-      }
+      public T deserialize(String toDeserialize) { return deserializeFunction.apply(toDeserialize); }
     };
   }
 
