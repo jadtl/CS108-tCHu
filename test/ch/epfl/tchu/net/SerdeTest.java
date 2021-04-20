@@ -7,6 +7,7 @@ import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.ChMap;
 import ch.epfl.tchu.game.Player;
 import ch.epfl.tchu.game.PlayerId;
+import ch.epfl.tchu.game.PublicCardState;
 import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Ticket;
 
@@ -80,30 +81,38 @@ public class SerdeTest {
   }
 
   @Test
-  void routeListWorks() {
+  void routeListSerdeWorks() {
     List<Route> toSerialize = List.of(ChMap.routes().get(14), ChMap.routes().get(7), ChMap.routes().get(17));
     assertEquals("14,7,17", Serdes.ROUTE_LIST.serialize(toSerialize));
     assertEquals(toSerialize, Serdes.ROUTE_LIST.deserialize(Serdes.ROUTE_LIST.serialize(toSerialize)));
   }
 
   @Test
-  void cardSortedBagWorks() {
+  void cardSortedBagSerdeWorks() {
     SortedBag<Card> toSerialize = SortedBag.of(2, Card.RED, 3, Card.LOCOMOTIVE);
     assertEquals("6,6,8,8,8", Serdes.CARD_SORTED_BAG.serialize(toSerialize));
     assertEquals(toSerialize, Serdes.CARD_SORTED_BAG.deserialize(Serdes.CARD_SORTED_BAG.serialize(toSerialize)));
   }
 
   @Test
-  void ticketSortedBagWorks() {
+  void ticketSortedBagSerdeWorks() {
     SortedBag<Ticket> toSerialize = SortedBag.of(4, ChMap.tickets().get(7), 7, ChMap.tickets().get(2));
     assertEquals("2,2,2,2,2,2,2,7,7,7,7", Serdes.TICKET_SORTED_BAG.serialize(toSerialize));
     assertEquals(toSerialize, Serdes.TICKET_SORTED_BAG.deserialize(Serdes.TICKET_SORTED_BAG.serialize(toSerialize)));
   }
 
   @Test
-  void cardSortedBagListWorks() {
+  void cardSortedBagListSerdeWorks() {
     List<SortedBag<Card>> toSerialize = List.of(SortedBag.of(2, Card.LOCOMOTIVE, 1, Card.BLACK), SortedBag.of(3, Card.GREEN), SortedBag.of());
     assertEquals("0,8,8;3,3,3;", Serdes.CARD_SORTED_BAG_LIST.serialize(toSerialize));
     assertEquals(toSerialize, Serdes.CARD_SORTED_BAG_LIST.deserialize(Serdes.CARD_SORTED_BAG_LIST.serialize(toSerialize)));
+  }
+
+  @Test
+  void publicCardStateSerdeWorks() {
+    List<Card> faceUpCards = List.of(Card.RED, Card.WHITE, Card.BLUE, Card.BLACK, Card.RED);
+    PublicCardState publicCardState = new PublicCardState(faceUpCards, 30, 31);
+    assertEquals("6,7,2,0,6;30;31", Serdes.PUBLIC_CARD_STATE.serialize(publicCardState));
+    assertEquals(publicCardState, Serdes.PUBLIC_CARD_STATE.deserialize(Serdes.PUBLIC_CARD_STATE.serialize(publicCardState)));
   }
 }
