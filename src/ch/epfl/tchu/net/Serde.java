@@ -2,6 +2,7 @@ package ch.epfl.tchu.net;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -76,7 +77,7 @@ public interface Serde<T> {
    */
   static <T> Serde<T> oneOf(List<T> all) {
     return Serde.of(
-      i -> String.valueOf(all.indexOf(i)), 
+      i -> Objects.isNull(i) ? "" : String.valueOf(all.indexOf(i)), 
       i -> all.get(Integer.parseInt(i))
     );
   }
@@ -104,11 +105,9 @@ public interface Serde<T> {
         t.forEach(e -> stringJoiner.add(serde.serialize(e)));
         return stringJoiner.toString();
       },
-      t -> {
-          return t.isEmpty() ? List.of() : Arrays.asList(t.split(Pattern.quote(delimiter), -1)).stream()
+      t -> t.isEmpty() ? List.of() : Arrays.asList(t.split(Pattern.quote(delimiter), -1)).stream()
           .map(ds -> serde.deserialize(ds))
-          .collect(Collectors.toList());
-      }
+          .collect(Collectors.toList())
     );
   }
 

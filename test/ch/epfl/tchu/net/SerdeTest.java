@@ -9,6 +9,7 @@ import ch.epfl.tchu.game.Player;
 import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.game.PlayerState;
 import ch.epfl.tchu.game.PublicCardState;
+import ch.epfl.tchu.game.PublicGameState;
 import ch.epfl.tchu.game.PublicPlayerState;
 import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Ticket;
@@ -16,6 +17,7 @@ import ch.epfl.tchu.game.Ticket;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 public class SerdeTest {
@@ -140,5 +142,18 @@ public class SerdeTest {
     assertEquals(tickets, deserialized.tickets());
     assertEquals(cards, deserialized.cards());
     assertEquals(List.of(), deserialized.routes());
+  }
+
+  @Test
+  void publicGameStateSerdeWorks() {
+    List<Card> fu = List.of(Card.RED, Card.WHITE, Card.BLUE, Card.BLACK, Card.RED);
+    PublicCardState cs = new PublicCardState(fu, 30, 31);
+    List<Route> rs1 = ChMap.routes().subList(0, 2);
+    Map<PlayerId, PublicPlayerState> ps = Map.of(
+      PlayerId.PLAYER_1, new PublicPlayerState(10, 11, rs1),
+      PlayerId.PLAYER_2, new PublicPlayerState(20, 21, List.of())
+    );
+    PublicGameState gs = new PublicGameState(40, cs, PlayerId.PLAYER_2, ps, null);
+    assertEquals("40:6,7,2,0,6;30;31:1:10;11;0,1:20;21;:", Serdes.PUBLIC_GAME_STATE.serialize(gs));
   }
 }
