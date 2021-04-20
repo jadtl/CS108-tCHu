@@ -113,6 +113,8 @@ public class SerdeTest {
     List<Card> faceUpCards = List.of(Card.RED, Card.WHITE, Card.BLUE, Card.BLACK, Card.RED);
     PublicCardState publicCardState = new PublicCardState(faceUpCards, 30, 31);
     assertEquals("6,7,2,0,6;30;31", Serdes.PUBLIC_CARD_STATE.serialize(publicCardState));
-    assertEquals(publicCardState, Serdes.PUBLIC_CARD_STATE.deserialize(Serdes.PUBLIC_CARD_STATE.serialize(publicCardState)));
+    assertEquals(publicCardState.faceUpCards(), Serdes.PUBLIC_CARD_STATE.deserialize(Serdes.PUBLIC_CARD_STATE.serialize(publicCardState)).faceUpCards());
+    assertEquals(publicCardState.deckSize(), Serdes.PUBLIC_CARD_STATE.deserialize(Serdes.PUBLIC_CARD_STATE.serialize(publicCardState)).deckSize());
+    assertEquals(publicCardState.discardsSize(), Serdes.PUBLIC_CARD_STATE.deserialize(Serdes.PUBLIC_CARD_STATE.serialize(publicCardState)).discardsSize());
   }
 }
