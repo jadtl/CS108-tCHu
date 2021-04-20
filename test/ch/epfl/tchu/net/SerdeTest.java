@@ -2,6 +2,7 @@ package ch.epfl.tchu.net;
 
 import org.junit.jupiter.api.Test;
 
+import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.ChMap;
 import ch.epfl.tchu.game.Player;
@@ -83,5 +84,12 @@ public class SerdeTest {
     List<Route> toSerialize = List.of(ChMap.routes().get(14), ChMap.routes().get(7), ChMap.routes().get(17));
     assertEquals("14,7,17", Serdes.ROUTE_LIST.serialize(toSerialize));
     assertEquals(toSerialize, Serdes.ROUTE_LIST.deserialize(Serdes.ROUTE_LIST.serialize(toSerialize)));
+  }
+
+  @Test
+  void cardSortedBagWorks() {
+    SortedBag<Card> toSerialize = SortedBag.of(2, Card.RED, 3, Card.LOCOMOTIVE);
+    assertEquals("6,6,8,8,8", Serdes.CARD_SORTED_BAG.serialize(toSerialize));
+    assertEquals(toSerialize, Serdes.CARD_SORTED_BAG.deserialize(Serdes.CARD_SORTED_BAG.serialize(toSerialize)));
   }
 }
