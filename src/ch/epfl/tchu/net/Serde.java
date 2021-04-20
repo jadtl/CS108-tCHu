@@ -78,7 +78,7 @@ public interface Serde<T> {
   static <T> Serde<T> oneOf(List<T> all) {
     return Serde.of(
       i -> Objects.isNull(i) ? "" : String.valueOf(all.indexOf(i)), 
-      i -> all.get(Integer.parseInt(i))
+      i -> i.isEmpty() ? null : all.get(Integer.parseInt(i))
     );
   }
 
