@@ -67,8 +67,8 @@ public class SerdeTest {
 
   @Test
   void stringListSerdeWorks() {
-    List<String> toSerialize = List.of("Imagine", "je", "fonctionne");
-    assertEquals("SW1hZ2luZQ==,amU=,Zm9uY3Rpb25uZQ==", Serdes.STRING_LIST.serialize(toSerialize));
+    List<String> toSerialize = List.of("Imagine", "je", "fonctionne", "");
+    assertEquals("SW1hZ2luZQ==,amU=,Zm9uY3Rpb25uZQ==,", Serdes.STRING_LIST.serialize(toSerialize));
     assertEquals(toSerialize, Serdes.STRING_LIST.deserialize(Serdes.STRING_LIST.serialize(toSerialize)));
   }
 
