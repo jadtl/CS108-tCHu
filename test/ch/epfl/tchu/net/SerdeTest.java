@@ -92,4 +92,11 @@ public class SerdeTest {
     assertEquals("6,6,8,8,8", Serdes.CARD_SORTED_BAG.serialize(toSerialize));
     assertEquals(toSerialize, Serdes.CARD_SORTED_BAG.deserialize(Serdes.CARD_SORTED_BAG.serialize(toSerialize)));
   }
+
+  @Test
+  void ticketSortedBagWorks() {
+    SortedBag<Ticket> toSerialize = SortedBag.of(4, ChMap.tickets().get(7), 7, ChMap.tickets().get(2));
+    assertEquals("2,2,2,2,2,2,2,7,7,7,7", Serdes.TICKET_SORTED_BAG.serialize(toSerialize));
+    assertEquals(toSerialize, Serdes.TICKET_SORTED_BAG.deserialize(Serdes.TICKET_SORTED_BAG.serialize(toSerialize)));
+  }
 }
