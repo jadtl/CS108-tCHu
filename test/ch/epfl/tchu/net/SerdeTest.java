@@ -8,6 +8,7 @@ import ch.epfl.tchu.game.ChMap;
 import ch.epfl.tchu.game.Player;
 import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.game.PublicCardState;
+import ch.epfl.tchu.game.PublicPlayerState;
 import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Ticket;
 
@@ -116,5 +117,15 @@ public class SerdeTest {
     assertEquals(publicCardState.faceUpCards(), Serdes.PUBLIC_CARD_STATE.deserialize(Serdes.PUBLIC_CARD_STATE.serialize(publicCardState)).faceUpCards());
     assertEquals(publicCardState.deckSize(), Serdes.PUBLIC_CARD_STATE.deserialize(Serdes.PUBLIC_CARD_STATE.serialize(publicCardState)).deckSize());
     assertEquals(publicCardState.discardsSize(), Serdes.PUBLIC_CARD_STATE.deserialize(Serdes.PUBLIC_CARD_STATE.serialize(publicCardState)).discardsSize());
+  }
+
+  @Test
+  void publicPlayerStateSerdeWorks() {
+    PublicPlayerState toSerialize = new PublicPlayerState(20, 21, List.of()); 
+    assertEquals("20;21;", Serdes.PUBLIC_PLAYER_STATE.serialize(toSerialize));
+    PublicPlayerState deserialized = Serdes.PUBLIC_PLAYER_STATE.deserialize(Serdes.PUBLIC_PLAYER_STATE.serialize(toSerialize));
+    assertEquals(20, deserialized.ticketCount());
+    assertEquals(21, deserialized.cardCount());
+    assertEquals(List.of(), deserialized.routes());
   }
 }
