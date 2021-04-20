@@ -14,6 +14,7 @@ import ch.epfl.tchu.game.PublicPlayerState;
 import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Ticket;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
@@ -155,5 +156,12 @@ public class SerdeTest {
     );
     PublicGameState gs = new PublicGameState(40, cs, PlayerId.PLAYER_2, ps, null);
     assertEquals("40:6,7,2,0,6;30;31:1:10;11;0,1:20;21;:", Serdes.PUBLIC_GAME_STATE.serialize(gs));
+    PublicGameState deserialized = Serdes.PUBLIC_GAME_STATE.deserialize(Serdes.PUBLIC_GAME_STATE.serialize(gs));
+    assertEquals(gs.ticketsCount(), deserialized.ticketsCount());
+    assertEquals(gs.cardState().faceUpCards(), deserialized.cardState().faceUpCards());
+    assertEquals(gs.cardState().deckSize(), deserialized.cardState().deckSize());
+    assertEquals(gs.cardState().discardsSize(), deserialized.cardState().discardsSize());
+    assertEquals(gs.currentPlayerId(), deserialized.currentPlayerId());
+    assertEquals(gs.lastPlayer(), deserialized.lastPlayer());
   }
 }
