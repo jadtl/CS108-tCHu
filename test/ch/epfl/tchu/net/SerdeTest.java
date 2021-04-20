@@ -7,6 +7,7 @@ import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.ChMap;
 import ch.epfl.tchu.game.Player;
 import ch.epfl.tchu.game.PlayerId;
+import ch.epfl.tchu.game.PlayerState;
 import ch.epfl.tchu.game.PublicCardState;
 import ch.epfl.tchu.game.PublicPlayerState;
 import ch.epfl.tchu.game.Route;
@@ -126,6 +127,18 @@ public class SerdeTest {
     PublicPlayerState deserialized = Serdes.PUBLIC_PLAYER_STATE.deserialize(Serdes.PUBLIC_PLAYER_STATE.serialize(toSerialize));
     assertEquals(20, deserialized.ticketCount());
     assertEquals(21, deserialized.cardCount());
+    assertEquals(List.of(), deserialized.routes());
+  }
+
+  @Test
+  void playerStateSerdeWorks() {
+    SortedBag<Ticket> tickets = SortedBag.of(4, ChMap.tickets().get(7), 7, ChMap.tickets().get(2));
+    SortedBag<Card> cards = SortedBag.of(2, Card.RED, 3, Card.LOCOMOTIVE);
+    PlayerState toSerialize = new PlayerState(tickets, cards, List.of());
+    assertEquals("2,2,2,2,2,2,2,7,7,7,7;6,6,8,8,8;", Serdes.PLAYER_STATE.serialize(toSerialize));
+    PlayerState deserialized = Serdes.PLAYER_STATE.deserialize(Serdes.PLAYER_STATE.serialize(toSerialize));
+    assertEquals(tickets, deserialized.tickets());
+    assertEquals(cards, deserialized.cards());
     assertEquals(List.of(), deserialized.routes());
   }
 }
