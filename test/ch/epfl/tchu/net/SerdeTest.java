@@ -70,4 +70,18 @@ public class SerdeTest {
     assertEquals("SW1hZ2luZQ==,amU=,Zm9uY3Rpb25uZQ==", Serdes.STRING_LIST.serialize(toSerialize));
     assertEquals(toSerialize, Serdes.STRING_LIST.deserialize(Serdes.STRING_LIST.serialize(toSerialize)));
   }
+
+  @Test
+  void cardListSerdeWorks() {
+    List<Card> toSerialize = List.of(Card.RED, Card.BLUE, Card.BLACK);
+    assertEquals("6,2,0", Serdes.CARD_LIST.serialize(toSerialize));
+    assertEquals(toSerialize, Serdes.CARD_LIST.deserialize(Serdes.CARD_LIST.serialize(toSerialize)));
+  }
+
+  @Test
+  void routeListWorks() {
+    List<Route> toSerialize = List.of(ChMap.routes().get(14), ChMap.routes().get(7), ChMap.routes().get(17));
+    assertEquals("14,7,17", Serdes.ROUTE_LIST.serialize(toSerialize));
+    assertEquals(toSerialize, Serdes.ROUTE_LIST.deserialize(Serdes.ROUTE_LIST.serialize(toSerialize)));
+  }
 }
