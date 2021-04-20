@@ -11,6 +11,8 @@ import ch.epfl.tchu.game.Ticket;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 
 public class SerdeTest {
   @Test
@@ -60,5 +62,12 @@ public class SerdeTest {
     Ticket toSerialize = ChMap.tickets().get(9);
     assertEquals("9", Serdes.TICKET.serialize(toSerialize));
     assertEquals(toSerialize, Serdes.TICKET.deserialize(Serdes.TICKET.serialize(toSerialize)));
+  }
+
+  @Test
+  void stringListSerdeWorks() {
+    List<String> toSerialize = List.of("Imagine", "je", "fonctionne");
+    assertEquals("SW1hZ2luZQ==,amU=,Zm9uY3Rpb25uZQ==", Serdes.STRING_LIST.serialize(toSerialize));
+    assertEquals(toSerialize, Serdes.STRING_LIST.deserialize(Serdes.STRING_LIST.serialize(toSerialize)));
   }
 }
