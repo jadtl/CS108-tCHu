@@ -1,3 +1,4 @@
+
 package ch.epfl.tchu.net;
 
 import java.io.BufferedReader;
@@ -41,25 +42,29 @@ public class RemotePlayerProxy implements Player {
 
   @Override
   public void receiveInfo(String info) {
-    // TODO Auto-generated method stub
+    
+	  send(MessageId.RECEIVE_INFO, List.of(Serdes.STRING.serialize(info)));
     
   }
 
   @Override
   public void updateState(PublicGameState newState, PlayerState ownState) {
     
+	  send(MessageId.UPDATE_STATE, List.of(Serdes.PUBLIC_GAME_STATE.serialize(newState), Serdes.PLAYER_STATE.serialize(ownState)));
   }
 
   @Override
   public void setInitialTicketChoice(SortedBag<Ticket> tickets) {
-    // TODO Auto-generated method stub
+    
+	  send(MessageId.SET_INITIAL_TICKETS, List.of(Serdes.TICKET_SORTED_BAG.serialize(tickets)));
   }
 
   @Override
   public SortedBag<Ticket> chooseInitialTickets() {
-    // TODO Auto-generated method stub
-
-    return null;
+     
+   send(MessageId.CHOOSE_INITIAL_TICKETS, List.of());
+   
+   return Serdes.TICKET_SORTED_BAG.deserialize(receive());
   }
 
   @Override
@@ -71,8 +76,10 @@ public class RemotePlayerProxy implements Player {
 
   @Override
   public SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options) {
-    // TODO Auto-generated method stub
-    return null;
+    
+	  send(MessageId.CHOOSE_TICKETS, List.of(Serdes.TICKET_SORTED_BAG.serialize(options)));
+	  
+    return Serdes.TICKET_SORTED_BAG.deserialize(receive());
   }
 
   @Override
@@ -84,20 +91,24 @@ public class RemotePlayerProxy implements Player {
 
   @Override
   public Route claimedRoute() {
-    // TODO Auto-generated method stub
-    return null;
+    send(MessageId.ROUTE, List.of());
+    
+    return Serdes.ROUTE.deserialize(receive());
   }
 
   @Override
   public SortedBag<Card> initialClaimCards() {
-    // TODO Auto-generated method stub
-    return null;
+    send(MessageId.CARDS, List.of());
+    
+    return Serdes.CARD_SORTED_BAG.deserialize(receive());
   }
 
   @Override
   public SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options) {
-    // TODO Auto-generated method stub
-    return null;
+   
+	  send(MessageId.CHOOSE_ADDITIONAL_CARDS, List.of(Serdes.CARD_SORTED_BAG_LIST.serialize(options)));
+	  
+    return Serdes.CARD_SORTED_BAG.deserialize(receive());
   }
 
   private void send(MessageId messageId, List<String> serializedArgs) {
