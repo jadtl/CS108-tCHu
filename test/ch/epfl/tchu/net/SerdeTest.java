@@ -1,5 +1,10 @@
 package ch.epfl.tchu.net;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 
 import ch.epfl.tchu.SortedBag;
@@ -13,12 +18,6 @@ import ch.epfl.tchu.game.PublicGameState;
 import ch.epfl.tchu.game.PublicPlayerState;
 import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Ticket;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
-import java.util.Map;
 
 
 public class SerdeTest {

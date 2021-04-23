@@ -1,5 +1,7 @@
 package ch.epfl.tchu.net;
 
+import static java.nio.charset.StandardCharsets.US_ASCII;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -11,15 +13,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static java.nio.charset.StandardCharsets.US_ASCII;
-
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.Card;
-import ch.epfl.tchu.game.ChMap;
 import ch.epfl.tchu.game.Player;
 import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.game.PlayerState;
@@ -31,7 +29,6 @@ public class RemotePlayerClient {
   private String host;
   private int port;
   private String lastMessage;
-  private SortedBag<Ticket> initialTickets;
 
 
   public RemotePlayerClient(Player player, String host, int port) {
@@ -107,16 +104,15 @@ public class RemotePlayerClient {
           writer.flush();
           break;
         case SET_INITIAL_TICKETS:      	
-        	initialTickets = Serdes.TICKET_SORTED_BAG.deserialize(arguments.get(0)); 
+        	player.setInitialTicketChoice(Serdes.TICKET_SORTED_BAG.deserialize(arguments.get(0))); 
           break;
         case UPDATE_STATE:
-         PublicGameState newState =Serdes.PUBLIC_GAME_STATE.deserialize(arguments.get(0));
+         PublicGameState newState = Serdes.PUBLIC_GAME_STATE.deserialize(arguments.get(0));
          PlayerState ownState = Serdes.PLAYER_STATE.deserialize(arguments.get(0));
          player.updateState(newState, ownState);
           break;
         default:
-          break;
-          
+          break; 
         }
       }
       socket.close();

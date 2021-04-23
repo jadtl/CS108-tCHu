@@ -1,6 +1,8 @@
 
 package ch.epfl.tchu.net;
 
+import static java.nio.charset.StandardCharsets.US_ASCII;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -9,11 +11,8 @@ import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.Card;
@@ -23,8 +22,6 @@ import ch.epfl.tchu.game.PlayerState;
 import ch.epfl.tchu.game.PublicGameState;
 import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Ticket;
-
-import static java.nio.charset.StandardCharsets.US_ASCII;
 
 public class RemotePlayerProxy implements Player {
   private Socket socket;
