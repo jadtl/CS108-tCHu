@@ -11,20 +11,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
+import ch.epfl.tchu.SortedBag;
+import ch.epfl.tchu.game.Card;
+import ch.epfl.tchu.game.ChMap;
 import ch.epfl.tchu.game.Player;
 import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.game.PlayerState;
+import ch.epfl.tchu.game.PublicGameState;
+import ch.epfl.tchu.game.Ticket;
 
 public class RemotePlayerClient {
   private Player player;
   private String host;
   private int port;
   private String lastMessage;
+  private SortedBag<Ticket> initialTickets;
+
 
   public RemotePlayerClient(Player player, String host, int port) {
     this.player = player;
@@ -53,12 +61,26 @@ public class RemotePlayerClient {
 
         switch(messageId) {
         case CARDS:
+        	writer.write(Serdes.CARD_SORTED_BAG.serialize(player.initialClaimCards()));
+        	writer.write('\n');
+            writer.flush();
           break;
         case CHOOSE_ADDITIONAL_CARDS:
+        	List<SortedBag<Card>> optionCards = Serdes.CARD_SORTED_BAG_LIST.deserialize(arguments.get(0));
+        	writer.write(Serdes.CARD_SORTED_BAG.serialize(player.chooseAdditionalCards(optionCards)));
+        	writer.write('\n');
+            writer.flush();
           break;
         case CHOOSE_INITIAL_TICKETS:
+        writer.write(Serdes.TICKET_SORTED_BAG.serialize(player.chooseInitialTickets()));
+        writer.write('\n');
+        writer.flush();
           break;
         case CHOOSE_TICKETS:
+        SortedBag<Ticket> optionTickets = Serdes.TICKET_SORTED_BAG.deserialize(arguments.get(0));
+         writer.write(Serdes.TICKET_SORTED_BAG.serialize(player.chooseTickets(optionTickets)));
+         writer.write('\n');
+         writer.flush();
           break;
         case DRAW_SLOT:
           writer.write(Serdes.INTEGER.serialize(player.drawSlot()));
@@ -77,12 +99,20 @@ public class RemotePlayerClient {
           writer.flush();
           break;
         case RECEIVE_INFO:
+        	player.receiveInfo(Serdes.STRING.deserialize(arguments.get(0)));
           break;
         case ROUTE:
+          writer.write(Serdes.ROUTE.serialize(player.claimedRoute()));
+          writer.write('\n');
+          writer.flush();
           break;
-        case SET_INITIAL_TICKETS:
+        case SET_INITIAL_TICKETS:      	
+        	initialTickets = Serdes.TICKET_SORTED_BAG.deserialize(arguments.get(0)); 
           break;
         case UPDATE_STATE:
+         PublicGameState newState =Serdes.PUBLIC_GAME_STATE.deserialize(arguments.get(0));
+         PlayerState ownState = Serdes.PLAYER_STATE.deserialize(arguments.get(0));
+         player.updateState(newState, ownState);
           break;
         default:
           break;
