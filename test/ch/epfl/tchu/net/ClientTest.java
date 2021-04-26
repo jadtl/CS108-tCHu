@@ -25,6 +25,8 @@ public final class ClientTest {
   }
 
   private final static class TestPlayer implements Player {
+    private SortedBag<Ticket> initialTickets;
+
     @Override
     public void initPlayers(PlayerId ownId,
 			    Map<PlayerId, String> names) {
@@ -34,26 +36,24 @@ public final class ClientTest {
 
     @Override
     public void receiveInfo(String info) {
-      // TODO Auto-generated method stub
-      
+      System.out.println(info);
     }
 
     @Override
     public void updateState(PublicGameState newState, PlayerState ownState) {
-      // TODO Auto-generated method stub
-      
+      System.out.println("New state: " + Serdes.PUBLIC_GAME_STATE.serialize(newState));
+      System.out.println("Own state: " + Serdes.PLAYER_STATE.serialize(ownState));
     }
 
     @Override
     public void setInitialTicketChoice(SortedBag<Ticket> tickets) {
-      // TODO Auto-generated method stub
-      
+      this.initialTickets = tickets;
+      System.out.println(tickets);
     }
 
     @Override
     public SortedBag<Ticket> chooseInitialTickets() {
-      // TODO Auto-generated method stub
-      return null;
+      return initialTickets.subsetsOfSize(new Random().nextInt(initialTickets.size())).iterator().next();
     }
 
     @Override
@@ -63,8 +63,7 @@ public final class ClientTest {
 
     @Override
     public SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options) {
-      // TODO Auto-generated method stub
-      return null;
+      return options.subsetsOfSize(new Random().nextInt(options.size())).iterator().next();
     }
 
     @Override
@@ -74,19 +73,16 @@ public final class ClientTest {
 
     @Override
     public Route claimedRoute() {
-      // TODO Auto-generated method stub
       return null;
     }
 
     @Override
     public SortedBag<Card> initialClaimCards() {
-      // TODO Auto-generated method stub
       return null;
     }
 
     @Override
     public SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options) {
-      // TODO Auto-generated method stub
       return null;
     }
     
