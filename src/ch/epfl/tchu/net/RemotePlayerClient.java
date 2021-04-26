@@ -58,31 +58,19 @@ public class RemotePlayerClient {
 
         switch(messageId) {
         case CARDS:
-        	writer.write(Serdes.CARD_SORTED_BAG.serialize(player.initialClaimCards()));
-        	writer.write('\n');
-            writer.flush();
+          write(writer, messageId, arguments);
           break;
         case CHOOSE_ADDITIONAL_CARDS:
-        	List<SortedBag<Card>> optionCards = Serdes.CARD_SORTED_BAG_LIST.deserialize(arguments.get(0));
-        	writer.write(Serdes.CARD_SORTED_BAG.serialize(player.chooseAdditionalCards(optionCards)));
-        	writer.write('\n');
-            writer.flush();
+          write(writer, messageId, arguments);
           break;
         case CHOOSE_INITIAL_TICKETS:
-        writer.write(Serdes.TICKET_SORTED_BAG.serialize(player.chooseInitialTickets()));
-        writer.write('\n');
-        writer.flush();
+          write(writer, messageId, arguments);
           break;
         case CHOOSE_TICKETS:
-        SortedBag<Ticket> optionTickets = Serdes.TICKET_SORTED_BAG.deserialize(arguments.get(0));
-         writer.write(Serdes.TICKET_SORTED_BAG.serialize(player.chooseTickets(optionTickets)));
-         writer.write('\n');
-         writer.flush();
+          write(writer, messageId, arguments);
           break;
         case DRAW_SLOT:
-          writer.write(Serdes.INTEGER.serialize(player.drawSlot()));
-          writer.write('\n');
-          writer.flush();
+          write(writer, messageId, arguments);
           break;
         case INIT_PLAYERS:
           PlayerId ownId = Serdes.PLAYER_ID.deserialize(arguments.get(0));
@@ -91,31 +79,61 @@ public class RemotePlayerClient {
           player.initPlayers(ownId, playerNames);
           break;
         case NEXT_TURN:
-          writer.write(Serdes.TURN_KIND.serialize(player.nextTurn()));
-          writer.write('\n');
-          writer.flush();
+          write(writer, messageId, arguments);
           break;
         case RECEIVE_INFO:
         	player.receiveInfo(Serdes.STRING.deserialize(arguments.get(0)));
           break;
         case ROUTE:
-          writer.write(Serdes.ROUTE.serialize(player.claimedRoute()));
-          writer.write('\n');
-          writer.flush();
+          write(writer, messageId, arguments);
           break;
         case SET_INITIAL_TICKETS:      	
         	player.setInitialTicketChoice(Serdes.TICKET_SORTED_BAG.deserialize(arguments.get(0))); 
           break;
         case UPDATE_STATE:
-         PublicGameState newState = Serdes.PUBLIC_GAME_STATE.deserialize(arguments.get(0));
-         PlayerState ownState = Serdes.PLAYER_STATE.deserialize(arguments.get(0));
-         player.updateState(newState, ownState);
+          PublicGameState newState = Serdes.PUBLIC_GAME_STATE.deserialize(arguments.get(0));
+          PlayerState ownState = Serdes.PLAYER_STATE.deserialize(arguments.get(0));
+          player.updateState(newState, ownState);
           break;
         default:
           break; 
         }
       }
       socket.close();
+    } catch (IOException exception) {
+      throw new UncheckedIOException(exception);
+    }
+  }
+
+  private void write(BufferedWriter writer, MessageId messageId, List<String> arguments) {
+    try {
+      switch (messageId) {
+      case CARDS:
+        writer.write(Serdes.CARD_SORTED_BAG.serialize(player.initialClaimCards()));
+        break;
+      case CHOOSE_ADDITIONAL_CARDS:
+        List<SortedBag<Card>> optionCards = Serdes.CARD_SORTED_BAG_LIST.deserialize(arguments.get(0));
+        writer.write(Serdes.CARD_SORTED_BAG.serialize(player.chooseAdditionalCards(optionCards)));
+        break;
+      case CHOOSE_INITIAL_TICKETS:
+        writer.write(Serdes.TICKET_SORTED_BAG.serialize(player.chooseInitialTickets()));
+        break;
+      case CHOOSE_TICKETS:
+        SortedBag<Ticket> optionTickets = Serdes.TICKET_SORTED_BAG.deserialize(arguments.get(0));
+        writer.write(Serdes.TICKET_SORTED_BAG.serialize(player.chooseTickets(optionTickets)));
+      case DRAW_SLOT:
+        writer.write(Serdes.INTEGER.serialize(player.drawSlot()));
+      case NEXT_TURN:
+        writer.write(Serdes.TURN_KIND.serialize(player.nextTurn()));
+        break;
+      case ROUTE:
+        writer.write(Serdes.ROUTE.serialize(player.claimedRoute()));
+        break;
+      default:
+        break;   
+      }
+      writer.write('\n');
+      writer.flush();
     } catch (IOException exception) {
       throw new UncheckedIOException(exception);
     }
