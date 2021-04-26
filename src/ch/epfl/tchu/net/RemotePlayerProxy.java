@@ -32,33 +32,27 @@ public class RemotePlayerProxy implements Player {
 
   @Override
   public void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
-
     send(MessageId.INIT_PLAYERS, List.of(Serdes.PLAYER_ID.serialize(ownId), 
       Serdes.STRING_LIST.serialize(new ArrayList<String>(playerNames.values()))));
   }
 
   @Override
   public void receiveInfo(String info) {
-    
 	  send(MessageId.RECEIVE_INFO, List.of(Serdes.STRING.serialize(info)));
-    
   }
 
   @Override
   public void updateState(PublicGameState newState, PlayerState ownState) {
-    
 	  send(MessageId.UPDATE_STATE, List.of(Serdes.PUBLIC_GAME_STATE.serialize(newState), Serdes.PLAYER_STATE.serialize(ownState)));
   }
 
   @Override
   public void setInitialTicketChoice(SortedBag<Ticket> tickets) {
-    
 	  send(MessageId.SET_INITIAL_TICKETS, List.of(Serdes.TICKET_SORTED_BAG.serialize(tickets)));
   }
 
   @Override
   public SortedBag<Ticket> chooseInitialTickets() {
-     
    send(MessageId.CHOOSE_INITIAL_TICKETS, List.of());
    
    return Serdes.TICKET_SORTED_BAG.deserialize(receive());
@@ -73,16 +67,15 @@ public class RemotePlayerProxy implements Player {
 
   @Override
   public SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options) {
-    
 	  send(MessageId.CHOOSE_TICKETS, List.of(Serdes.TICKET_SORTED_BAG.serialize(options)));
-	  
+
     return Serdes.TICKET_SORTED_BAG.deserialize(receive());
   }
 
   @Override
   public int drawSlot() {
     send(MessageId.DRAW_SLOT, List.of());
-    
+
     return Serdes.INTEGER.deserialize(receive());
   }
 
@@ -102,7 +95,6 @@ public class RemotePlayerProxy implements Player {
 
   @Override
   public SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options) {
-   
 	  send(MessageId.CHOOSE_ADDITIONAL_CARDS, List.of(Serdes.CARD_SORTED_BAG_LIST.serialize(options)));
 	  
     return Serdes.CARD_SORTED_BAG.deserialize(receive());
@@ -114,8 +106,9 @@ public class RemotePlayerProxy implements Player {
     arguments.addAll(serializedArgs);
     try {
       BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), US_ASCII));
-      
-      writer.write(String.join(" ", arguments));
+      String message = String.join(" ", arguments);
+      System.out.println(message);
+      writer.write(message);
       writer.write('\n');
       writer.flush();
 

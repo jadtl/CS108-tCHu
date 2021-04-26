@@ -1,5 +1,6 @@
 package ch.epfl.tchu.net;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -63,7 +64,8 @@ public final class ClientTest {
 
     @Override
     public SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options) {
-      return options.subsetsOfSize(new Random().nextInt(options.size())).iterator().next();
+      List<SortedBag<Ticket>> choices = new ArrayList<SortedBag<Ticket>>(options.subsetsOfSize(new Random().nextInt(options.size())));
+      return choices.get(new Random().nextInt(choices.size()));
     }
 
     @Override
