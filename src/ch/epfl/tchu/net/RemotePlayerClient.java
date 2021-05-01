@@ -24,13 +24,21 @@ import ch.epfl.tchu.game.PlayerState;
 import ch.epfl.tchu.game.PublicGameState;
 import ch.epfl.tchu.game.Ticket;
 
+/**
+ * 
+ */
 public class RemotePlayerClient {
   private Player player;
   private String host;
   private int port;
   private String lastMessage;
 
-
+  /**
+   * 
+   * @param player
+   * @param host
+   * @param port
+   */
   public RemotePlayerClient(Player player, String host, int port) {
     this.player = player;
     this.host = host;
@@ -38,6 +46,9 @@ public class RemotePlayerClient {
     this.lastMessage = "";
   }
 
+  /**
+   * 
+   */
   public void run() {
     try {
       Socket socket = new Socket(host, port);
@@ -114,6 +125,10 @@ public class RemotePlayerClient {
     }
   }
 
+  /**
+   * 
+   * @param writer
+   */
   private void endMessage(BufferedWriter writer) {
     try {
       writer.write('\n');

@@ -23,9 +23,16 @@ import ch.epfl.tchu.game.PublicGameState;
 import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Ticket;
 
+/**
+ * 
+ */
 public class RemotePlayerProxy implements Player {
   private Socket socket;
 
+  /**
+   * 
+   * @param socket
+   */
   public RemotePlayerProxy(Socket socket) {
     this.socket = socket;
   }
@@ -100,6 +107,11 @@ public class RemotePlayerProxy implements Player {
     return Serdes.CARD_SORTED_BAG.deserialize(receive());
   }
 
+  /**
+   * 
+   * @param messageId
+   * @param serializedArgs
+   */
   private void send(MessageId messageId, List<String> serializedArgs) {
     List<String> arguments = new ArrayList<String>();
     arguments.add(messageId.name());
@@ -117,6 +129,10 @@ public class RemotePlayerProxy implements Player {
     }
   }
 
+  /**
+   * 
+   * @return
+   */
   private String receive() {
     try {
       BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), US_ASCII));
