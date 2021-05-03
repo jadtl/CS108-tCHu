@@ -4,22 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.swing.plaf.basic.BasicTabbedPaneUI.MouseHandler;
-
-import org.w3c.dom.css.Rect;
-
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.ChMap;
-import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Route.Level;
 import ch.epfl.tchu.gui.ActionHandlers.ChooseCardsHandler;
 import ch.epfl.tchu.gui.ActionHandlers.ClaimRouteHandler;
 import javafx.beans.property.ObjectProperty;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -49,7 +46,7 @@ class MapViewCreator {
   public static Pane createMapView(ObservableGameState gameState, 
     ObjectProperty<ClaimRouteHandler> claimRouteHandlerProperty, CardChooser cardChooser) {
     List<Node> allRouteGroups = new ArrayList<Node>();
-    ChMap.routes().stream().forEach(r -> allRouteGroups.add(createRouteGroup(r, gameState, claimRouteHandlerProperty)));
+    ChMap.routes().stream().forEach(r -> allRouteGroups.add(createRouteGroup(r, gameState, claimRouteHandlerProperty, cardChooser)));
 
     ImageView background = new ImageView();
 
@@ -60,22 +57,23 @@ class MapViewCreator {
     return mapView;
   }
 
-  private static Group createRouteGroup(Route route, ObservableGameState gameState, ObjectProperty<ClaimRouteHandler> claimRouteHandlerProperty) {
-    Rectangle carRectangle = new Rectangle(36, 12);
-    carRectangle.getStyleClass().add("filled");
-    Circle carCircle1 = new Circle(12, 6, 0);
-    carCircle1.getStyleClass().add("filled");
-    Circle carCircle2 = new Circle(24, 6, 0);
-    carCircle2.getStyleClass().add("filled");
-    Group car = new Group(List.of(carRectangle, carCircle1, carCircle2));
-    car.getStyleClass().add("car");
-
-    Rectangle track = new Rectangle(36, 12);
-    track.getStyleClass().add("track");
-    track.getStyleClass().add("filled");
-
+  private static Group createRouteGroup(Route route, ObservableGameState gameState, 
+    ObjectProperty<ClaimRouteHandler> claimRouteHandlerProperty, CardChooser cardChooser) {
     List<Node> tiles = new ArrayList<Node>();
     for (int i = 1; i <= route.length(); i++) {
+      Rectangle carRectangle = new Rectangle(36, 12);
+      carRectangle.getStyleClass().add("filled");
+      Circle carCircle1 = new Circle(12, 6, 0);
+      carCircle1.getStyleClass().add("filled");
+      Circle carCircle2 = new Circle(24, 6, 0);
+      carCircle2.getStyleClass().add("filled");
+      Group car = new Group(List.of(carRectangle, carCircle1, carCircle2));
+      car.getStyleClass().add("car");
+
+      Rectangle track = new Rectangle(36, 12);
+      track.getStyleClass().add("track");
+      track.getStyleClass().add("filled");
+
       Group tile = new Group(List.of(car, track));
       tile.setId(String.join("_", List.of(route.id(), String.valueOf(i))));
       tiles.add(tile);
@@ -86,23 +84,28 @@ class MapViewCreator {
     routeGroup.getStyleClass().add("route");
     if (route.level().equals(Level.UNDERGROUND)) routeGroup.getStyleClass().add("UNDERGROUND");
     if (Objects.isNull(route.color())) routeGroup.getStyleClass().add("NEUTRAL");
+    else routeGroup.getStyleClass().add(route.color().toString());
 
     gameState.routesOwnershipProperty(route).addListener((o, oV, nV) -> routeGroup.getStyleClass().add(nV.toString()));
 
     routeGroup.disableProperty().bind(
-      claimRouteHandlerProperty.isNull().or(gameState.routeClaimabilityProperty(route).not()));
+      claimRouteHandlerProperty.isNull().or(gameState.routeClaimabilityProperty(route).not())
     );
 
-    routeGroup.setOnMouseClicked(() -> {
-      List<SortedBag<Card>> possibleClaimCards = gameState.possibleClaimCardsProperty(route).get();
-
-      if (possibleClaimCards.size() == 1)
-        claimRouteHandlerProperty.get().onClaimRoute(route, possibleClaimCards.get(0));
-      else {
-        ChooseCardsHandler chooseCardsHandler = chosenCards -> claimRouteHandlerProperty.get().onClaimRoute(route, chosenCards);
-        cardChooser.chooseCards(possibleClaimCards, chooseCardsHandler);
+    routeGroup.setOnMouseClicked((new EventHandler<MouseEvent>(){
+        @Override
+        public void handle(MouseEvent arg0) {
+          List<SortedBag<Card>> possibleClaimCards = gameState.possibleClaimCardsProperty(route).get();
+    
+          if (possibleClaimCards.size() == 1)
+            claimRouteHandlerProperty.get().onClaimRoute(route, possibleClaimCards.get(0));
+          else {
+            ChooseCardsHandler chooseCardsHandler = chosenCards -> claimRouteHandlerProperty.get().onClaimRoute(route, chosenCards);
+            cardChooser.chooseCards(possibleClaimCards, chooseCardsHandler);
+          }
+        }
       }
-    });
+    ));
 
     return routeGroup;
   }
