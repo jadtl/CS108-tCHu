@@ -63,7 +63,7 @@ public class ObservableGameState {
     this.faceUpCards = new ArrayList<ObjectProperty<Card>>();
     Constants.FACE_UP_CARD_SLOTS.forEach(s -> faceUpCards.add(new SimpleObjectProperty<Card>()));
     this.routeOwnerships = ChMap.routes().stream()
-    .collect(Collectors.toMap(r -> r, r -> null));
+    .collect(Collectors.toMap(r -> r, r -> new SimpleObjectProperty<PlayerId>(null)));
 
     this.ticketCount = new SimpleIntegerProperty();
     this.cardCount = new SimpleIntegerProperty();
