@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.swing.plaf.basic.BasicTabbedPaneUI.MouseHandler;
+
 import org.w3c.dom.css.Rect;
 
 import ch.epfl.tchu.SortedBag;
@@ -36,7 +38,7 @@ class MapViewCreator {
 
   /**
    * 
-   * @param observableGameState
+   * @param gameState
    * 
    * @param claimRouteHandlerProperty
    * 
@@ -44,21 +46,21 @@ class MapViewCreator {
    * 
    * @return
    */
-  public static Pane createMapView(ObservableGameState observableGameState, 
+  public static Pane createMapView(ObservableGameState gameState, 
     ObjectProperty<ClaimRouteHandler> claimRouteHandlerProperty, CardChooser cardChooser) {
-      List<Node> allRouteGroups = new ArrayList<Node>();
-      ChMap.routes().stream().forEach(r -> allRouteGroups.add(createRouteGroup(r, observableGameState.routesOwnershipProperty(r).get())));
+    List<Node> allRouteGroups = new ArrayList<Node>();
+    ChMap.routes().stream().forEach(r -> allRouteGroups.add(createRouteGroup(r, gameState, claimRouteHandlerProperty)));
 
-      ImageView background = new ImageView();
+    ImageView background = new ImageView();
 
-      Pane mapView = new Pane(background);
-      mapView.getChildren().addAll(allRouteGroups);
-      mapView.getStylesheets().addAll(List.of("map.css", "colors.css"));
-      
-      return mapView;
+    Pane mapView = new Pane(background);
+    mapView.getChildren().addAll(allRouteGroups);
+    mapView.getStylesheets().addAll(List.of("map.css", "colors.css"));
+    
+    return mapView;
   }
 
-  private static Group createRouteGroup(Route route, PlayerId owner) {
+  private static Group createRouteGroup(Route route, ObservableGameState gameState, ObjectProperty<ClaimRouteHandler> claimRouteHandlerProperty) {
     Rectangle carRectangle = new Rectangle(36, 12);
     carRectangle.getStyleClass().add("filled");
     Circle carCircle1 = new Circle(12, 6, 0);
@@ -84,7 +86,23 @@ class MapViewCreator {
     routeGroup.getStyleClass().add("route");
     if (route.level().equals(Level.UNDERGROUND)) routeGroup.getStyleClass().add("UNDERGROUND");
     if (Objects.isNull(route.color())) routeGroup.getStyleClass().add("NEUTRAL");
-    if (!Objects.isNull(owner)) routeGroup.getStyleClass().add(owner.toString());
+
+    gameState.routesOwnershipProperty(route).addListener((o, oV, nV) -> routeGroup.getStyleClass().add(nV.toString()));
+
+    routeGroup.disableProperty().bind(
+      claimRouteHandlerProperty.isNull().or(gameState.routeClaimabilityProperty(route).not()));
+    );
+
+    routeGroup.setOnMouseClicked(() -> {
+      List<SortedBag<Card>> possibleClaimCards = gameState.possibleClaimCardsProperty(route).get();
+
+      if (possibleClaimCards.size() == 1)
+        claimRouteHandlerProperty.get().onClaimRoute(route, possibleClaimCards.get(0));
+      else {
+        ChooseCardsHandler chooseCardsHandler = chosenCards -> claimRouteHandlerProperty.get().onClaimRoute(route, chosenCards);
+        cardChooser.chooseCards(possibleClaimCards, chooseCardsHandler);
+      }
+    });
 
     return routeGroup;
   }
