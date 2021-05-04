@@ -1,11 +1,16 @@
 package ch.epfl.tchu.gui;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.ChMap;
+import ch.epfl.tchu.game.Constants;
+import ch.epfl.tchu.game.GameState;
+import ch.epfl.tchu.game.Player;
 import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.game.PlayerState;
 import ch.epfl.tchu.game.PublicCardState;
@@ -31,6 +36,15 @@ public final class MainViewTest extends Application {
   @Override
   public void start(Stage primaryStage) {
     ObservableGameState gameState = new ObservableGameState(PlayerId.PLAYER_1);
+    GameState gs = GameState.initial(SortedBag.of(ChMap.tickets()), new Random());
+    Map<PlayerId, PublicPlayerState> playerStates = new HashMap<PlayerId, PublicPlayerState>();
+    for (PlayerId playerId : PlayerId.ALL) {
+      PlayerState ps = gs.playerState(playerId);
+      PublicPlayerState pps = new PublicPlayerState(ps.ticketCount(), ps.cardCount(), ps.routes());
+      playerStates.put(playerId, pps);
+    }
+    
+    gameState.setState(new PublicGameState(gs.ticketsCount(), gs.cardState(), gs.currentPlayerId(), playerStates, gs.lastPlayer()), gs.currentPlayerState());
 
     ObjectProperty<ClaimRouteHandler> claimRoute =
       new SimpleObjectProperty<>(MainViewTest::claimRoute);
