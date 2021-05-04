@@ -8,7 +8,11 @@ import ch.epfl.tchu.game.Constants;
 import ch.epfl.tchu.game.Ticket;
 import ch.epfl.tchu.gui.ActionHandlers.DrawCardHandler;
 import ch.epfl.tchu.gui.ActionHandlers.DrawTicketsHandler;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -17,6 +21,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.input.MouseEvent;
 
 /**
  * 
@@ -64,14 +69,33 @@ class DecksViewCreator {
     ObjectProperty<DrawTicketsHandler> drawTicketsHandlerProperty,
     ObjectProperty<DrawCardHandler> drawCardHandlerProperty) {
     Button ticketsDeck = new Button("Billets");
+    ticketsDeck.setGraphic(createButtonGauge(gameState.remainingTicketsPercentageProperty()));
     ticketsDeck.getStyleClass().add("gauged");
+    ticketsDeck.disableProperty().bind(drawTicketsHandlerProperty.isNull());
+    ticketsDeck.setOnMouseClicked((new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent arg0) {
+          drawTicketsHandlerProperty.get().onDrawTickets();
+        }
+      }
+    ));
 
     Button cardsDeck = new Button("Cartes");
+    cardsDeck.setGraphic(createButtonGauge(gameState.remainingCardsPercentageProperty()));
     cardsDeck.getStyleClass().add("gauged");
+    cardsDeck.disableProperty().bind(drawCardHandlerProperty.isNull());
+    cardsDeck.setOnMouseClicked((new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent arg0) {
+          drawCardHandlerProperty.get().onDrawCard(Constants.DECK_SLOT);
+        }
+      }
+    ));
 
     VBox cardsView = new VBox();
-    cardsView.getChildren().addAll(List.of(ticketsDeck, cardsDeck));
-    cardsView.getChildren().addAll(createFaceUpCardsView(gameState));
+    cardsView.getChildren().add(ticketsDeck);
+    cardsView.getChildren().addAll(createFaceUpCardsView(gameState, drawCardHandlerProperty));
+    cardsView.getChildren().add(cardsDeck);
     cardsView.setId("card-pane");
     cardsView.getStylesheets().addAll(List.of("decks.css", "colors.css"));
 
@@ -81,10 +105,15 @@ class DecksViewCreator {
   private static List<Node> createHandViewCards(ObservableGameState gameState) {
     List<Node> cards = new ArrayList<Node>();
     for (Card card : Card.ALL) {
-      Text count = new Text(String.valueOf(gameState.ownedCardsProperty(card).get()));
+      ReadOnlyIntegerProperty count = gameState.ownedCardsProperty(card);
+      Text counter = new Text();
+      counter.textProperty().bind(Bindings.convert(count));
+      counter.visibleProperty().bind(Bindings.greaterThan(count, 1));
       
-      StackPane cardAndCount = new StackPane(count);
+      StackPane cardAndCount = new StackPane();
+      cardAndCount.visibleProperty().bind(Bindings.greaterThan(count, 0));
       cardAndCount.getChildren().addAll(createCardGeometry());
+      cardAndCount.getChildren().add(counter);
       cardAndCount.getStyleClass().addAll(List.of("card", card.equals(Card.LOCOMOTIVE) ? "NEUTRAL" : card.toString()));
 
       cards.add(cardAndCount);
@@ -93,14 +122,26 @@ class DecksViewCreator {
     return cards;
   }
 
-  private static List<Node> createFaceUpCardsView(ObservableGameState gameState) {
+  private static List<Node> createFaceUpCardsView(ObservableGameState gameState, ObjectProperty<DrawCardHandler> drawCardHandlerProperty) {
     List<Node> faceUpCards = new ArrayList<Node>();
     for(int slot : Constants.FACE_UP_CARD_SLOTS) {
       Card card = gameState.faceUpCard(slot).get();
-      System.out.println(card.color());
       StackPane faceUpCard = new StackPane();
       faceUpCard.getChildren().addAll(createCardGeometry());
       faceUpCard.getStyleClass().addAll(List.of("card", card.equals(Card.LOCOMOTIVE) ? "NEUTRAL" : card.toString()));
+      faceUpCard.disableProperty().bind(drawCardHandlerProperty.isNull());
+      faceUpCard.setOnMouseClicked((new EventHandler<MouseEvent>(){
+          @Override
+          public void handle(MouseEvent arg0) {
+            drawCardHandlerProperty.get().onDrawCard(slot);
+          }
+        }
+      ));
+      gameState.faceUpCard(slot).addListener((o, oV, nV) -> {
+        faceUpCard.getStyleClass().remove(oV.toString());
+        faceUpCard.getStyleClass().add(nV.toString());
+      });
+      
 
       faceUpCards.add(faceUpCard);
     }
@@ -117,5 +158,16 @@ class DecksViewCreator {
     train.getStyleClass().add("train-image");
 
     return List.of(outside, inside, train);
+  }
+
+  private static Group createButtonGauge(ReadOnlyIntegerProperty gauge) {
+    Rectangle background = new Rectangle(50, 5);
+    background.getStyleClass().add("background");
+    Rectangle foreground = new Rectangle(5, 5);
+    foreground.getStyleClass().add("foreground");
+    // FIXME: Doesn't bind
+    foreground.widthProperty().bind(gauge.multiply(50).divide(100));
+
+    return new Group(List.of(background, foreground));
   }
 }
