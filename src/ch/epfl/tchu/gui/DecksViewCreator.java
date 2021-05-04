@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.tchu.game.Card;
+import ch.epfl.tchu.game.Constants;
 import ch.epfl.tchu.game.Ticket;
-import ch.epfl.tchu.gui.ActionHandlers.*;
+import ch.epfl.tchu.gui.ActionHandlers.DrawCardHandler;
+import ch.epfl.tchu.gui.ActionHandlers.DrawTicketsHandler;
 import javafx.beans.property.ObjectProperty;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -58,31 +60,62 @@ class DecksViewCreator {
    * 
    * @return
    */
-  public static VBox createCardsView(ObservableGameState observableGameState, 
+  public static VBox createCardsView(ObservableGameState gameState, 
     ObjectProperty<DrawTicketsHandler> drawTicketsHandlerProperty,
     ObjectProperty<DrawCardHandler> drawCardHandlerProperty) {
-      return null;
+    Button ticketsDeck = new Button("Billets");
+    ticketsDeck.getStyleClass().add("gauged");
+
+    Button cardsDeck = new Button("Cartes");
+    cardsDeck.getStyleClass().add("gauged");
+
+    VBox cardsView = new VBox();
+    cardsView.getChildren().addAll(List.of(ticketsDeck, cardsDeck));
+    cardsView.getChildren().addAll(createFaceUpCardsView(gameState));
+    cardsView.setId("card-pane");
+    cardsView.getStylesheets().addAll(List.of("decks.css", "colors.css"));
+
+    return cardsView;
   }
 
   private static List<Node> createHandViewCards(ObservableGameState gameState) {
     List<Node> cards = new ArrayList<Node>();
     for (Card card : Card.ALL) {
-      Rectangle outside = new Rectangle(60, 90);
-      outside.getStyleClass().add("outside");
-      Rectangle inside = new Rectangle(40, 70);
-      inside.getStyleClass().addAll(List.of("filled", "inside"));
-      Rectangle train = new Rectangle(40, 70);
-      train.getStyleClass().add("train-image");
-
       Text count = new Text(String.valueOf(gameState.ownedCardsProperty(card).get()));
       
       StackPane cardAndCount = new StackPane(count);
-      cardAndCount.getChildren().addAll(List.of(outside, inside, train));
+      cardAndCount.getChildren().addAll(createCardGeometry());
       cardAndCount.getStyleClass().addAll(List.of("card", card.equals(Card.LOCOMOTIVE) ? "NEUTRAL" : card.toString()));
 
       cards.add(cardAndCount);
     }
 
     return cards;
+  }
+
+  private static List<Node> createFaceUpCardsView(ObservableGameState gameState) {
+    List<Node> faceUpCards = new ArrayList<Node>();
+    for(int slot : Constants.FACE_UP_CARD_SLOTS) {
+      Card card = gameState.faceUpCard(slot).get();
+      System.out.println(card.color());
+      StackPane faceUpCard = new StackPane();
+      faceUpCard.getChildren().addAll(createCardGeometry());
+      faceUpCard.getStyleClass().addAll(List.of("card", card.equals(Card.LOCOMOTIVE) ? "NEUTRAL" : card.toString()));
+
+      faceUpCards.add(faceUpCard);
+    }
+
+    return faceUpCards;
+  }
+
+  private static List<Node> createCardGeometry() {
+    Rectangle outside = new Rectangle(60, 90);
+    outside.getStyleClass().add("outside");
+    Rectangle inside = new Rectangle(40, 70);
+    inside.getStyleClass().addAll(List.of("filled", "inside"));
+    Rectangle train = new Rectangle(40, 70);
+    train.getStyleClass().add("train-image");
+
+    return List.of(outside, inside, train);
   }
 }
