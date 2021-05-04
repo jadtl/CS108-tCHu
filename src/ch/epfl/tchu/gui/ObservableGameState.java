@@ -95,7 +95,7 @@ public class ObservableGameState {
       PlayerId.ALL.stream()
       .filter(id -> newState.playerState(id).routes().contains(r))
       .findFirst()
-      .ifPresentOrElse(id -> this.routeOwnerships.replace(r, new SimpleObjectProperty<PlayerId>(id)), () -> this.routeOwnerships.replace(r, null));
+      .ifPresentOrElse(id -> this.routeOwnerships.replace(r, new SimpleObjectProperty<PlayerId>(id)), () -> this.routeOwnerships.replace(r, new SimpleObjectProperty<PlayerId>(null)));
     });
 
     this.ticketCount = new SimpleIntegerProperty(ownState.ticketCount());
