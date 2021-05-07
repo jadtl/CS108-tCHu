@@ -46,8 +46,9 @@ public final class Trip {
      * @return a list of all possible trips
      */
     public static List<Trip> all(List<Station> from, List<Station> to, int points) {
-        List<Trip> tripPossibilities = new ArrayList<>();
+        Preconditions.checkArgument(!from.isEmpty() && !to.isEmpty());
 
+        List<Trip> tripPossibilities = new ArrayList<>();
         for (Station departure : from)
             for (Station arrival : to)
                 tripPossibilities.add(new Trip(departure, arrival, points));
