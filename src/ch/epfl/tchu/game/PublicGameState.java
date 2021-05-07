@@ -47,7 +47,7 @@ public class PublicGameState {
     this.ticketsCount = ticketsCount;
     this.cardState = Objects.requireNonNull(cardState);
     this.currentPlayerId = Objects.requireNonNull(currentPlayerId);
-    this.playerState = playerState;
+    this.playerState = Map.copyOf(playerState);
     this.lastPlayer = lastPlayer;
   }
 
@@ -61,9 +61,9 @@ public class PublicGameState {
   /**
    * Returns the ability to draw tickets
    * 
-   * @return true iff. ticketsCount is non-zero
+   * @return true iff. ticketsCount is greater than zero
    */
-  public boolean canDrawTickets() { return ticketsCount != 0; }
+  public boolean canDrawTickets() { return ticketsCount > 0; }
 
   /**
    * Returns the card state of the game
@@ -108,6 +108,7 @@ public class PublicGameState {
    * 
    * @return the claimed routes of all the players
    */
+  // TODO: Check the TA's comment again
   public List<Route> claimedRoutes() { 
     return playerState.values()
     .stream()
