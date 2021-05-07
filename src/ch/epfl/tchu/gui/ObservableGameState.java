@@ -88,8 +88,8 @@ public class ObservableGameState {
    * @param ownState
    */
   public void setState(PublicGameState newState, PlayerState ownState) {
-    this.remainingTicketsPercentage = new SimpleIntegerProperty(newState.ticketsCount() / ChMap.tickets().size() * 100);
-    this.remainingCardsPercentage = new SimpleIntegerProperty(newState.cardState().deckSize() / Constants.TOTAL_CARDS_COUNT * 100);
+    this.remainingTicketsPercentage = new SimpleIntegerProperty((int)((float)(newState.ticketsCount() / ChMap.tickets().size()) * 100));
+    this.remainingCardsPercentage = new SimpleIntegerProperty((int)((float)(newState.cardState().deckSize() / Constants.TOTAL_CARDS_COUNT )* 100));
     Constants.FACE_UP_CARD_SLOTS.forEach(s -> this.faceUpCards.get(s).set(newState.cardState().faceUpCard(s)));
     ChMap.routes().forEach(r -> {
       PlayerId.ALL.stream()

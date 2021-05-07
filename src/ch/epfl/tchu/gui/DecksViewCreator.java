@@ -69,12 +69,7 @@ class DecksViewCreator {
     ObjectProperty<DrawTicketsHandler> drawTicketsHandlerProperty,
     ObjectProperty<DrawCardHandler> drawCardHandlerProperty) {
     Button ticketsDeck = new Button("Billets");
-    Rectangle background1 = new Rectangle(50, 5);
-    background1.getStyleClass().add("background");
-    Rectangle foreground1 = new Rectangle(5, 5);
-    foreground1.getStyleClass().add("foreground");
-    foreground1.widthProperty().bind(gameState.remainingTicketsPercentageProperty().multiply(50).divide(100));
-    ticketsDeck.setGraphic(new Group(background1, foreground1));
+    ticketsDeck.setGraphic(createButtonGauge(gameState.remainingTicketsPercentageProperty()));
     ticketsDeck.getStyleClass().add("gauged");
     ticketsDeck.disableProperty().bind(drawTicketsHandlerProperty.isNull());
     ticketsDeck.setOnMouseClicked((new EventHandler<MouseEvent>() {
@@ -170,7 +165,6 @@ class DecksViewCreator {
     background.getStyleClass().add("background");
     Rectangle foreground = new Rectangle(5, 5);
     foreground.getStyleClass().add("foreground");
-    // FIXME: Doesn't bind
     foreground.widthProperty().bind(gauge.multiply(50).divide(100));
 
     return new Group(List.of(background, foreground));
