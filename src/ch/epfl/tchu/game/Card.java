@@ -1,8 +1,6 @@
 package ch.epfl.tchu.game;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * An enumeration of the different types
@@ -23,9 +21,9 @@ public enum Card {
     WHITE,
     LOCOMOTIVE;
 
-    public static final List<Card> ALL = Arrays.asList(Card.values());
+    public static final List<Card> ALL = List.of(Card.values());
     public static final int COUNT = ALL.size();
-    public static final List<Card> CARS = ALL.subList(0, ALL.size() - 1);
+    public static final List<Card> CARS = ALL.subList(0, COUNT - 1);
 
     private final Color color;
 
@@ -37,13 +35,26 @@ public enum Card {
      *        The color of the wanted wagon
      */
     public static Card of(Color color) {
-        Card result = null;
-        if (Objects.isNull(color)) return LOCOMOTIVE;
-        for (Card card : CARS) {
-            if (card.toString().equals(color.toString()))
-                result = card;
+        switch (color) {
+          case BLACK:
+            return BLACK;
+          case BLUE:
+            return BLUE;
+          case GREEN:
+            return GREEN;
+          case ORANGE:
+            return ORANGE;
+          case RED:
+            return RED;
+          case VIOLET:
+            return VIOLET;
+          case WHITE:
+            return WHITE;
+          case YELLOW:
+            return YELLOW;
+          default:
+            return LOCOMOTIVE;
         }
-        return result;
     }
 
     /**
