@@ -1,5 +1,7 @@
 package ch.epfl.tchu.game;
 
+import java.util.Objects;
+
 import ch.epfl.tchu.Preconditions;
 
 /**
@@ -27,7 +29,7 @@ public final class Station {
         Preconditions.checkArgument(id >= 0);
 
         this.id = id;
-        this.name = name;
+        this.name = Objects.requireNonNull(name);
     }
 
     /**
