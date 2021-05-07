@@ -1,0 +1,12 @@
+{
+  "configurations": [
+  {
+    "type": "java",
+    "name": "Launch main view test",
+    "request": "launch",
+    "vmArgs": "--module-path ${workspaceFolder}/lib --add-modules javafx.controls",
+    "mainClass": "ch.epfl.tchu.gui.MainViewTest",
+    "projectName": "tCHu_6d06280d"
+  }
+  ]
+}
