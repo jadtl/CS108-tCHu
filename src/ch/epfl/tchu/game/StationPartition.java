@@ -1,5 +1,7 @@
 package ch.epfl.tchu.game;
 
+import java.util.Arrays;
+
 import ch.epfl.tchu.Preconditions;
 
 /**
@@ -17,7 +19,7 @@ public final class StationPartition implements StationConnectivity {
    * @param stationConnectivity
    *        The connectivity of the stations for the player's network
    */
-  private StationPartition(int[] stationConnectivity) { this.stationConnectivity = stationConnectivity; }
+  private StationPartition(int[] stationConnectivity) { this.stationConnectivity = Arrays.copyOf(stationConnectivity, stationConnectivity.length); }
 
   @Override
   public boolean connected(Station s1, Station s2) {
