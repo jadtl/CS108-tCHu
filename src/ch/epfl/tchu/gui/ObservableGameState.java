@@ -104,17 +104,17 @@ public class ObservableGameState {
     this.claimPoints = new SimpleIntegerProperty(ownState.claimPoints());
 
     this.ownedTickets.get().setAll(ownState.tickets().toList());
-    Card.ALL.stream().forEach(c1 -> {
+    Card.ALL.forEach(c1 -> {
       this.ownedCards.replace(c1, new SimpleIntegerProperty((int)ownState.cards().stream().filter(c2 -> c1.equals(c2)).count()));
     });
-    ChMap.routes().stream().forEach(r -> {
+    ChMap.routes().forEach(r -> {
       this.routeClaimability.replace(r, new SimpleBooleanProperty(playerId.get() == newState.currentPlayerId()
         && Objects.isNull(routeOwnerships.get(r)) && !isNeighborClaimed(r) && ownState.canClaimRoute(r)));
     });
 
     this.canDrawTickets = new SimpleBooleanProperty(newState.canDrawTickets());
     this.canDrawCards = new SimpleBooleanProperty(newState.canDrawCards());
-    ChMap.routes().stream().forEach(r -> {
+    ChMap.routes().forEach(r -> {
       possibleClaimCards.replace(r, new SimpleObjectProperty<List<SortedBag<Card>>>(ownState.possibleClaimCards(r)));
     });
   }

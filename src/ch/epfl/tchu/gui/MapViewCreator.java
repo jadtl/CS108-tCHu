@@ -46,7 +46,7 @@ class MapViewCreator {
   public static Pane createMapView(ObservableGameState gameState, 
     ObjectProperty<ClaimRouteHandler> claimRouteHandlerProperty, CardChooser cardChooser) {
     List<Node> allRouteGroups = new ArrayList<Node>();
-    ChMap.routes().stream().forEach(r -> allRouteGroups.add(createRouteGroup(r, gameState, claimRouteHandlerProperty, cardChooser)));
+    ChMap.routes().forEach(r -> allRouteGroups.add(createRouteGroup(r, gameState, claimRouteHandlerProperty, cardChooser)));
 
     ImageView background = new ImageView();
 
