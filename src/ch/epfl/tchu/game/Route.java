@@ -23,7 +23,7 @@ public final class Route {
     private final int length;
     private final Level level;
     private final Color color;
-    private List<SortedBag<Card>> possibleClaimCards;
+    private final List<SortedBag<Card>> possibleClaimCards;
 
     /**
      * The two levels a route can be on
@@ -160,6 +160,7 @@ public final class Route {
     public int additionalClaimCardsCount(SortedBag<Card> claimCards, SortedBag<Card> drawnCards) {
         Preconditions.checkArgument(level() == Level.UNDERGROUND && drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
 
+        // Note: claimCards.get(0).color() could cause problems if SortedBag is changed
         return (int)drawnCards.stream().filter((Card card) -> Objects.isNull(card.color()) || 
         card.color().equals(claimCards.get(0).color())).count();
     }
