@@ -38,11 +38,11 @@ public final class PlayerState extends PublicPlayerState {
 		.collect(Collectors.toSet()).stream().max(Comparator.comparing(Integer::valueOf)).get();
 		StationPartition.Builder stationPartitionBuilder = new StationPartition
 		.Builder(highestId + 1);
-		routes.stream().forEach(route -> stationPartitionBuilder.connect(route.station1(), route.station2()));
+		routes.forEach(route -> stationPartitionBuilder.connect(route.station1(), route.station2()));
 		StationPartition stationPartition = stationPartitionBuilder.build();
 
-		this.tickets = SortedBag.of(tickets);
-		this.cards = SortedBag.of(cards);
+		this.tickets = tickets;
+		this.cards = cards;
 		this.ticketPoints = tickets.stream().map(ticket -> ticket.points(stationPartition)).reduce(0, Integer::sum);
 	}
 
@@ -62,7 +62,7 @@ public final class PlayerState extends PublicPlayerState {
 	public static PlayerState initial(SortedBag<Card> initialCards) {
 		Preconditions.checkArgument(initialCards.size() == Constants.INITIAL_CARDS_COUNT);
 
-		return new PlayerState(new SortedBag.Builder<Ticket>().build(), SortedBag.of(initialCards), new ArrayList<Route>());
+		return new PlayerState(new SortedBag.Builder<Ticket>().build(), initialCards, new ArrayList<Route>());
 	}
 
 	/**
@@ -133,13 +133,7 @@ public final class PlayerState extends PublicPlayerState {
 	 * @return true iff. the player has the needed cars and cards
 	 */
 	public boolean canClaimRoute(Route route) {
-		if (carCount() < route.length()) return false;
-
-		boolean hasClaimCards = false;
-		for(SortedBag<Card> claimCards : possibleClaimCards(route))
-			if(cards().contains(claimCards)) hasClaimCards = true;
-		
-		return hasClaimCards;
+		return carCount() >= route.length() && !possibleClaimCards(route).isEmpty();
 	}
 
 	/**
