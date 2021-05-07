@@ -89,9 +89,7 @@ public final class Deck<C extends Comparable<C>> {
 	 *         If the deck is empty
 	 */
 	public Deck<C> withoutTopCard() {
-		Preconditions.checkArgument(!isEmpty());
-
-		return new Deck<C>(cards.subList(1, size()));
+		return withoutTopCards(1);
 	}
 
 	/**
@@ -109,7 +107,7 @@ public final class Deck<C extends Comparable<C>> {
 		Preconditions.checkArgument(0 <= count && count <= size());
 
 		SortedBag.Builder<C> builder = new SortedBag.Builder<C>();
-		cards.subList(0, count).stream().forEach((C element) -> builder.add(element));
+		cards.subList(0, count).forEach((C element) -> builder.add(element));
 
 		return builder.build();
 	}
