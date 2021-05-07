@@ -24,13 +24,15 @@ public final class Ticket implements Comparable<Ticket> {
      *                      if there are more than one departure station
      */
     public Ticket(List<Trip> trips) {
+        Preconditions.checkArgument(!trips.isEmpty());
+
         Collection<String> fromStations = trips.stream()
         .map(t -> t.from().name())
         .collect(Collectors.toCollection(TreeSet::new));
 
-        Preconditions.checkArgument((trips.size() != 0) && (fromStations.size() == 1));
+        Preconditions.checkArgument(fromStations.size() == 1);
 
-        this.trips = trips;
+        this.trips = List.copyOf(trips);
         this.text = computeText(this.trips);
     }
 
@@ -50,6 +52,7 @@ public final class Ticket implements Comparable<Ticket> {
      *
      * @return the textual representation of the trips
      */
+    // TODO: Make it hold in 5 lines
     private static String computeText(List<Trip> trips) {
         Map<String, Integer> map = new HashMap<>();
 
@@ -98,22 +101,10 @@ public final class Ticket implements Comparable<Ticket> {
      * @return the points value of the ticket according the the player connectivity
      */
     public int points(StationConnectivity connectivity) {
-        boolean noConnectivity = trips.stream()
-        .filter(t -> connectivity.connected(t.from(), t.to()))
-        .count() == 0;
-
-        int points = 0;
-        if (noConnectivity)
-            for (Trip trip : trips) {
-                if (points == 0) points = trip.points();
-                points = Math.min(points, trip.points());
-            }
-        else
-            for (Trip trip : trips)
-                if (connectivity.connected(trip.from(), trip.to()))
-                    points = Math.max(points, trip.points());
-
-        return (noConnectivity) ? -points : points;
+        return trips.stream()
+        .map(t -> t.points(connectivity))
+        .max(Comparator.comparing(Integer::valueOf))
+        .get();
     }
 
     /**
