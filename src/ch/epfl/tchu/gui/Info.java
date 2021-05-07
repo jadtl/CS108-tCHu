@@ -40,13 +40,40 @@ public final class Info {
    * @return card name in singular iff. the absolute value of count is 1
    */
   public static String cardName(Card card, int count) {
-    List<String> cardsStrings = List.of(StringsFr.BLACK_CARD, StringsFr.VIOLET_CARD,
-    StringsFr.BLUE_CARD, StringsFr.GREEN_CARD, StringsFr.YELLOW_CARD, StringsFr.ORANGE_CARD,
-    StringsFr.RED_CARD, StringsFr.WHITE_CARD, StringsFr.LOCOMOTIVE_CARD);
-    
-    return new StringBuilder()
-    .append(cardsStrings.get(card.ordinal()))
-    .append(StringsFr.plural(count)).toString();
+    StringBuilder builder = new StringBuilder();
+    switch(card) {
+      case BLACK:
+        builder.append(StringsFr.BLACK_CARD);
+        break;
+      case BLUE:
+        builder.append(StringsFr.BLUE_CARD);
+        break;
+      case GREEN:
+        builder.append(StringsFr.GREEN_CARD);
+        break;
+      case LOCOMOTIVE:
+        builder.append(StringsFr.LOCOMOTIVE_CARD); 
+        break;
+      case ORANGE:
+        builder.append(StringsFr.ORANGE_CARD);
+        break;
+      case RED:
+        builder.append(StringsFr.RED_CARD);
+        break;
+      case VIOLET:
+        builder.append(StringsFr.VIOLET_CARD);
+        break;
+      case WHITE:
+        builder.append(StringsFr.WHITE_CARD);
+        break;
+      case YELLOW:
+        builder.append(StringsFr.YELLOW_CARD);
+        break;
+      default:
+        break;
+    }
+
+    return builder.append(StringsFr.plural(count)).toString();
   }
 
   /**
@@ -288,6 +315,6 @@ public final class Info {
    * @return a message that describes the route
    */
   private String routeText(Station station1, Station station2) {
-    return new StringBuilder().append(station1.toString()).append(StringsFr.EN_DASH_SEPARATOR).append(station2.toString()).toString();
+    return station1.toString() + StringsFr.EN_DASH_SEPARATOR + station2.toString();
   }
 }
