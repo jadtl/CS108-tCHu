@@ -17,22 +17,11 @@ public final class Trail {
     private final List<Route> routes; 
     private final int length;
 
-    /**
-     * Constructs a trail with its two extreme stations and its length
-     *
-     * @param station1 
-     *        The first station
-     * 
-     * @param station2 
-     *        The second station opposite to the first
-     * 
-     * @param length 
-     *        The length of the trail
-     */
     private Trail(Station station1, Station station2, List<Route> routes) {
         this.station1 = station1;
         this.station2 = station2;
         this.routes = routes;
+        // TODO: Leave the calculation to longest
         this.length = routes.stream()
         .map(r -> r.length())
         .reduce(0, Integer::sum);
@@ -46,6 +35,7 @@ public final class Trail {
      * 
      * @return a trail with the maximum length for the given routes
      */
+    // TODO: Check notes
     public static Trail longest(List<Route> routes) {
         // Filling the list with starting trails from routes
         List<Trail> toExtendTrails = routes.stream()
@@ -67,7 +57,7 @@ public final class Trail {
             updatedTrails.clear();
 
             // Iterating through the trails to be extended
-            toExtendTrails.stream().forEach(t -> {
+            toExtendTrails.forEach(t -> {
                 // Removing from the routes list already used routes as well as the ones that
                 // do not contain the current trail's second station
                 List<Route> eligibleRoutes = routes.stream()
@@ -79,7 +69,7 @@ public final class Trail {
                     deadEndTrails.add(t);
                 else
                     // For every eligible route, a new longer trail is added to the updates
-                    eligibleRoutes.stream().forEach(r -> {
+                    eligibleRoutes.forEach(r -> {
                         List<Route> updatedRoutes = new ArrayList<Route>(t.routes);
                         updatedRoutes.add(r);
                         updatedTrails.add(new Trail(t.station1(), r.stationOpposite(t.station2()), updatedRoutes));
