@@ -84,7 +84,11 @@ public final class CardState extends PublicCardState {
 	 * 
 	 * @return the card on top of the deck
 	 */
-	public Card topDeckCard() { return deck.topCard(); }
+	public Card topDeckCard() { 
+		Preconditions.checkArgument(!isDeckEmpty());
+
+		return deck.topCard(); 
+	}
 
 	/**
 	 * Returns a card state for which the deck top card has been removed
