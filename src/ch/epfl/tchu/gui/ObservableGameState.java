@@ -1,6 +1,7 @@
 package ch.epfl.tchu.gui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,10 +39,10 @@ public class ObservableGameState {
   private final List<ObjectProperty<Card>> faceUpCards;
   private final Map<Route, ObjectProperty<PlayerId>> routeOwnerships;
 
-  private IntegerProperty ticketCount;
-  private IntegerProperty cardCount;
-  private IntegerProperty carCount;
-  private IntegerProperty claimPoints;
+  private final Map<PlayerId, IntegerProperty> ticketCount;
+  private final Map<PlayerId, IntegerProperty> cardCount;
+  private final Map<PlayerId, IntegerProperty> carCount;
+  private final Map<PlayerId, IntegerProperty> claimPoints;
 
   private ObjectProperty<ObservableList<Ticket>> ownedTickets;
   private final Map<Card, IntegerProperty> ownedCards;
@@ -65,10 +66,16 @@ public class ObservableGameState {
     this.routeOwnerships = ChMap.routes().stream()
     .collect(Collectors.toMap(r -> r, r -> new SimpleObjectProperty<PlayerId>(null)));
 
-    this.ticketCount = new SimpleIntegerProperty();
-    this.cardCount = new SimpleIntegerProperty();
-    this.carCount = new SimpleIntegerProperty();
-    this.claimPoints = new SimpleIntegerProperty();
+    ticketCount = new HashMap<PlayerId, IntegerProperty>();
+    cardCount = new HashMap<PlayerId, IntegerProperty>();
+    carCount = new HashMap<PlayerId, IntegerProperty>();
+    claimPoints = new HashMap<PlayerId, IntegerProperty>();
+    PlayerId.ALL.forEach(p -> {
+      ticketCount.put(p, new SimpleIntegerProperty());
+      cardCount.put(p, new SimpleIntegerProperty());
+      carCount.put(p, new SimpleIntegerProperty());
+      claimPoints.put(p, new SimpleIntegerProperty());
+    });
 
     this.ownedTickets = new SimpleObjectProperty<>(FXCollections.observableArrayList());
     this.ownedCards = Card.ALL.stream()
@@ -98,10 +105,12 @@ public class ObservableGameState {
       .ifPresentOrElse(id -> this.routeOwnerships.replace(r, new SimpleObjectProperty<PlayerId>(id)), () -> this.routeOwnerships.replace(r, new SimpleObjectProperty<PlayerId>(null)));
     });
 
-    this.ticketCount = new SimpleIntegerProperty(ownState.ticketCount());
-    this.cardCount = new SimpleIntegerProperty(ownState.cardCount());
-    this.carCount = new SimpleIntegerProperty(ownState.carCount());
-    this.claimPoints = new SimpleIntegerProperty(ownState.claimPoints());
+    PlayerId.ALL.forEach(p -> {
+      ticketCount.replace(p, new SimpleIntegerProperty(newState.playerState(p).ticketCount()));
+      cardCount.replace(p, new SimpleIntegerProperty(newState.playerState(p).cardCount()));
+      carCount.replace(p, new SimpleIntegerProperty(newState.playerState(p).carCount()));
+      claimPoints.replace(p, new SimpleIntegerProperty(newState.playerState(p).claimPoints()));
+    });
 
     this.ownedTickets.get().setAll(ownState.tickets().toList());
     Card.ALL.forEach(c1 -> {
@@ -149,25 +158,25 @@ public class ObservableGameState {
    * 
    * @return
    */
-  public ReadOnlyIntegerProperty ticketCountProperty() { return ticketCount; }
+  public ReadOnlyIntegerProperty ticketCountProperty(PlayerId player) { return ticketCount.get(player); }
 
   /**
    * 
    * @return
    */
-  public ReadOnlyIntegerProperty cardCountProperty() { return cardCount; }
+  public ReadOnlyIntegerProperty cardCountProperty(PlayerId player) { return cardCount.get(player); }
 
   /**
    * 
    * @return
    */
-  public ReadOnlyIntegerProperty carCountProperty() { return carCount; }
+  public ReadOnlyIntegerProperty carCountProperty(PlayerId player) { return carCount.get(player); }
 
   /**
    * 
    * @return
    */
-  public ReadOnlyIntegerProperty claimPointsProperty() { return claimPoints; }
+  public ReadOnlyIntegerProperty claimPointsProperty(PlayerId player) { return claimPoints.get(player); }
 
   /**
    * 
