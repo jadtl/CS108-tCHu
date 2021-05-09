@@ -19,9 +19,12 @@ import ch.epfl.tchu.gui.ActionHandlers.ClaimRouteHandler;
 import ch.epfl.tchu.gui.ActionHandlers.DrawCardHandler;
 import ch.epfl.tchu.gui.ActionHandlers.DrawTicketsHandler;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -35,6 +38,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 public class GraphicalPlayer {
   private ObservableGameState gameState;
@@ -44,14 +48,11 @@ public class GraphicalPlayer {
   private ObjectProperty<DrawTicketsHandler> drawTickets;   
   private ObjectProperty<DrawCardHandler> drawCard;
   private ObjectProperty<ClaimRouteHandler> claimRoute;
-  private ObjectProperty<ChooseTicketsHandler> chooseTickets;
-  private ObjectProperty<ChooseCardsHandler> chooseCards;
 
   public GraphicalPlayer(PlayerId player, Map<PlayerId, String> playerNames) {
     claimRoute = new SimpleObjectProperty<ClaimRouteHandler>(null);
     drawTickets = new SimpleObjectProperty<DrawTicketsHandler>(null);
     drawCard = new SimpleObjectProperty<DrawCardHandler>(null);
-    chooseCards = new SimpleObjectProperty<ChooseCardsHandler>(null);
 
     gameState = new ObservableGameState(player);
     gameInfos = observableArrayList();
@@ -78,6 +79,7 @@ public class GraphicalPlayer {
     gameState.setState(newState, ownState);
   }
 
+  // FIXME: Weird display at 5 messages
   public void receiveInfo(String info) {
     assert Platform.isFxApplicationThread();
 
@@ -105,22 +107,59 @@ public class GraphicalPlayer {
   public void chooseTickets(SortedBag<Ticket> ticketOptions, ChooseTicketsHandler chooseTicketsHandler) {
     assert Platform.isFxApplicationThread();
 
-    ListView<Ticket> items = new ListView<Ticket>(observableArrayList(ticketOptions.toList()));
-    if (Constants.IN_GAME_TICKETS_COUNT > 1) items.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    Stage window = new Stage();
+    ListView<Ticket> items = listView(ticketOptions.toList());
+    Button button = new Button(StringsFr.CHOOSE);
+    button.disableProperty().bind(Bindings.size(items.getSelectionModel().getSelectedItems()).lessThan(ticketOptions.size() - 2));
+    button.setOnAction(new EventHandler<ActionEvent>(){
+      @Override
+      public void handle(ActionEvent event) {
+        window.hide();
+        chooseTickets(ticketOptions, chooseTicketsHandler);
+      }
+    });
 
-    showModalWindow(listView(ticketOptions.toList()), StringsFr.TICKETS_CHOICE, String.format(StringsFr.CHOOSE_TICKETS, List.of(Constants.IN_GAME_TICKETS_COUNT, StringsFr.plural(Constants.IN_GAME_TICKETS_COUNT))));
+    showModalWindow(window, items, button, StringsFr.TICKETS_CHOICE, String.format(StringsFr.CHOOSE_TICKETS, List.of(Constants.IN_GAME_TICKETS_COUNT, StringsFr.plural(Constants.IN_GAME_TICKETS_COUNT))));
   }
 
   public void chooseClaimCards(List<SortedBag<Card>> cardOptions, ChooseCardsHandler chooseCardsHandler) {
     assert Platform.isFxApplicationThread();
 
-    showModalWindow(bagCardlistView(cardOptions), StringsFr.CARDS_CHOICE, StringsFr.CHOOSE_CARDS);
+    Stage window = new Stage();
+    EventHandler<ActionEvent> buttonActionHandler = new EventHandler<ActionEvent>(){
+      @Override
+      public void handle(ActionEvent event) {
+        window.hide();
+        chooseClaimCards(cardOptions, chooseCardsHandler);
+      }
+    };
+
+    showChooseCardsWindow(window, cardOptions, buttonActionHandler, StringsFr.CHOOSE_ADDITIONAL_CARDS);
   }
 
   public void chooseAdditionalCards(List<SortedBag<Card>> cardOptions, ChooseCardsHandler chooseCardsHandler) {
     assert Platform.isFxApplicationThread();
 
-    showModalWindow(bagCardlistView(cardOptions), StringsFr.CARDS_CHOICE, StringsFr.CHOOSE_ADDITIONAL_CARDS);
+    Stage window = new Stage();
+    EventHandler<ActionEvent> buttonActionHandler = new EventHandler<ActionEvent>(){
+      @Override
+      public void handle(ActionEvent event) {
+        window.hide();
+        chooseAdditionalCards(cardOptions, chooseCardsHandler);
+      }
+    };
+
+    showChooseCardsWindow(window, cardOptions, buttonActionHandler, StringsFr.CHOOSE_ADDITIONAL_CARDS);
+  }
+
+  private void showChooseCardsWindow(Stage window, List<SortedBag<Card>> options, EventHandler<ActionEvent> buttonActionH, String prompt) {
+    ListView<SortedBag<Card>> items = bagCardlistView(options);
+
+    Button button = new Button(StringsFr.CHOOSE);
+    button.disableProperty().bind(Bindings.size(items.getSelectionModel().getSelectedItems()).isEqualTo(0));
+    button.setOnAction(buttonActionH);
+
+    showModalWindow(window, items, button, StringsFr.CARDS_CHOICE, prompt);
   }
 
   private <E> ListView<E> listView(List<E> items) {
@@ -138,20 +177,26 @@ public class GraphicalPlayer {
     return listView;
   }
 
-  private <E> void showModalWindow(ListView<E> items, String title, String prompt) {
+  private <E> void showModalWindow(Stage window, ListView<E> items, Button button, String title, String prompt) {
     Text text = new Text(prompt);
     TextFlow textFlow = new TextFlow(text);
-    Button button = new Button();
     VBox box = new VBox();
     box.getChildren().addAll(List.of(textFlow, items, button));
 
     Scene scene = new Scene(box);
     scene.getStylesheets().add("chooser.css");
 
-    Stage selectionWindow = new Stage(StageStyle.UTILITY);
-    selectionWindow.initOwner(mainWindow);
-    selectionWindow.initModality(Modality.WINDOW_MODAL);
-    selectionWindow.show();
+    window.initStyle(StageStyle.UTILITY);
+    window.initOwner(mainWindow);
+    window.initModality(Modality.WINDOW_MODAL);
+    window.setOnCloseRequest(new EventHandler<WindowEvent>(){
+      @Override
+      public void handle(WindowEvent event) {
+        event.consume();
+      }
+    });
+    
+    window.show();
   }
 
   private class CardBagStringConverter extends javafx.util.StringConverter<SortedBag<Card>> {
