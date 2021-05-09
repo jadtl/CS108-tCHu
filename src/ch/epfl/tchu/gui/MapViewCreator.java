@@ -63,10 +63,8 @@ class MapViewCreator {
     for (int i = 1; i <= route.length(); i++) {
       Rectangle carRectangle = new Rectangle(36, 12);
       carRectangle.getStyleClass().add("filled");
-      Circle carCircle1 = new Circle(12, 6, 0);
-      carCircle1.getStyleClass().add("filled");
-      Circle carCircle2 = new Circle(24, 6, 0);
-      carCircle2.getStyleClass().add("filled");
+      Circle carCircle1 = new Circle(12, 6, 3);
+      Circle carCircle2 = new Circle(24, 6, 3);
       Group car = new Group(List.of(carRectangle, carCircle1, carCircle2));
       car.getStyleClass().add("car");
 
@@ -74,7 +72,7 @@ class MapViewCreator {
       track.getStyleClass().add("track");
       track.getStyleClass().add("filled");
 
-      Group tile = new Group(List.of(car, track));
+      Group tile = new Group(List.of(track, car));
       tile.setId(String.join("_", List.of(route.id(), String.valueOf(i))));
       tiles.add(tile);
     }
@@ -86,7 +84,9 @@ class MapViewCreator {
     if (Objects.isNull(route.color())) routeGroup.getStyleClass().add("NEUTRAL");
     else routeGroup.getStyleClass().add(route.color().toString());
 
-    gameState.routesOwnershipProperty(route).addListener((o, oV, nV) -> routeGroup.getStyleClass().add(nV.toString()));
+    gameState.routesOwnershipProperty(route).addListener((o, oV, nV) -> {
+      routeGroup.getStyleClass().add(nV.name()); 
+    });
 
     routeGroup.disableProperty().bind(
       claimRouteHandlerProperty.isNull().or(gameState.routeClaimabilityProperty(route).not())
