@@ -30,7 +30,6 @@ class InfoViewCreator {
       text.textProperty().bind(Bindings.format(StringsFr.PLAYER_STATS, 
       playerNames.get(p), gameState.ticketCountProperty(p), gameState.cardCountProperty(p), gameState.carCountProperty(p), gameState.claimPointsProperty(p)));
 
-
       TextFlow playerInfo = new TextFlow();
       playerInfo.getStyleClass().add(p.name());
       playerInfo.getChildren().addAll(List.of(circle, text));
