@@ -1,5 +1,7 @@
 package ch.epfl.tchu.gui;
 
+import static ch.epfl.tchu.game.Card.LOCOMOTIVE;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +64,7 @@ public class ObservableGameState {
     this.remainingTicketsPercentage = new SimpleIntegerProperty();
     this.remainingCardsPercentage = new SimpleIntegerProperty();
     this.faceUpCards = new ArrayList<ObjectProperty<Card>>();
-    Constants.FACE_UP_CARD_SLOTS.forEach(s -> faceUpCards.add(new SimpleObjectProperty<Card>()));
+    Constants.FACE_UP_CARD_SLOTS.forEach(s -> faceUpCards.add(new SimpleObjectProperty<Card>(LOCOMOTIVE)));
     this.routeOwnerships = ChMap.routes().stream()
     .collect(Collectors.toMap(r -> r, r -> new SimpleObjectProperty<PlayerId>(null)));
 
@@ -95,36 +97,36 @@ public class ObservableGameState {
    * @param ownState
    */
   public void setState(PublicGameState newState, PlayerState ownState) {
-    this.remainingTicketsPercentage = new SimpleIntegerProperty((int)((float)newState.ticketsCount() / (float)ChMap.tickets().size() * 100));
-    this.remainingCardsPercentage = new SimpleIntegerProperty((int)((float)newState.cardState().deckSize() / (float)Constants.TOTAL_CARDS_COUNT * 100));
+    this.remainingTicketsPercentage.set((int)((float)newState.ticketsCount() / (float)ChMap.tickets().size() * 100));
+    this.remainingCardsPercentage.set((int)((float)newState.cardState().deckSize() / (float)Constants.TOTAL_CARDS_COUNT * 100));
     Constants.FACE_UP_CARD_SLOTS.forEach(s -> this.faceUpCards.get(s).set(newState.cardState().faceUpCard(s)));
     ChMap.routes().forEach(r -> {
       PlayerId.ALL.stream()
       .filter(id -> newState.playerState(id).routes().contains(r))
       .findFirst()
-      .ifPresentOrElse(id -> this.routeOwnerships.replace(r, new SimpleObjectProperty<PlayerId>(id)), () -> this.routeOwnerships.replace(r, new SimpleObjectProperty<PlayerId>(null)));
+      .ifPresentOrElse(id -> this.routeOwnerships.get(r).set(id), () -> this.routeOwnerships.get(r).set(null));
     });
 
     PlayerId.ALL.forEach(p -> {
-      ticketCount.replace(p, new SimpleIntegerProperty(newState.playerState(p).ticketCount()));
-      cardCount.replace(p, new SimpleIntegerProperty(newState.playerState(p).cardCount()));
-      carCount.replace(p, new SimpleIntegerProperty(newState.playerState(p).carCount()));
-      claimPoints.replace(p, new SimpleIntegerProperty(newState.playerState(p).claimPoints()));
+      ticketCount.get(p).set(newState.playerState(p).ticketCount());
+      cardCount.get(p).set(newState.playerState(p).cardCount());
+      carCount.get(p).set(newState.playerState(p).carCount());
+      claimPoints.get(p).set(newState.playerState(p).claimPoints());
     });
 
     this.ownedTickets.get().setAll(ownState.tickets().toList());
     Card.ALL.forEach(c1 -> {
-      this.ownedCards.replace(c1, new SimpleIntegerProperty((int)ownState.cards().stream().filter(c2 -> c1.equals(c2)).count()));
+      this.ownedCards.get(c1).set((int)ownState.cards().stream().filter(c2 -> c1.equals(c2)).count());
     });
     ChMap.routes().forEach(r -> {
-      this.routeClaimability.replace(r, new SimpleBooleanProperty(playerId.get() == newState.currentPlayerId()
-        && Objects.isNull(routeOwnerships.get(r)) && !isNeighborClaimed(r) && ownState.canClaimRoute(r)));
+      this.routeClaimability.get(r).set(playerId.get() == newState.currentPlayerId()
+        && Objects.isNull(routeOwnerships.get(r)) && !isNeighborClaimed(r) && ownState.canClaimRoute(r));
     });
 
-    this.canDrawTickets = new SimpleBooleanProperty(newState.canDrawTickets());
-    this.canDrawCards = new SimpleBooleanProperty(newState.canDrawCards());
+    this.canDrawTickets.set(newState.canDrawTickets());
+    this.canDrawCards.set(newState.canDrawCards());
     ChMap.routes().forEach(r -> {
-      possibleClaimCards.replace(r, new SimpleObjectProperty<List<SortedBag<Card>>>(ownState.possibleClaimCards(r)));
+      possibleClaimCards.get(r).set(ownState.possibleClaimCards(r));
     });
   }
 
