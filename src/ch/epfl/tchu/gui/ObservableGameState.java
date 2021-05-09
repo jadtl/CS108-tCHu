@@ -103,7 +103,7 @@ public class ObservableGameState {
     ChMap.routes().forEach(r -> {
       PlayerId.ALL.stream()
       .filter(id -> newState.playerState(id).routes().contains(r))
-      .findFirst()
+      .findAny()
       .ifPresentOrElse(id -> this.routeOwnerships.get(r).set(id), () -> this.routeOwnerships.get(r).set(null));
     });
 
