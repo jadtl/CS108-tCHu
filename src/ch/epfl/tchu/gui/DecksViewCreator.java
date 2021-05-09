@@ -1,5 +1,7 @@
 package ch.epfl.tchu.gui;
 
+import static ch.epfl.tchu.game.Card.LOCOMOTIVE;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,7 +116,7 @@ class DecksViewCreator {
       cardAndCount.visibleProperty().bind(Bindings.greaterThan(count, 0));
       cardAndCount.getChildren().addAll(createCardGeometry());
       cardAndCount.getChildren().add(counter);
-      cardAndCount.getStyleClass().addAll(List.of("card", card.equals(Card.LOCOMOTIVE) ? "NEUTRAL" : card.toString()));
+      cardAndCount.getStyleClass().addAll(List.of("card", card.equals(LOCOMOTIVE) ? "NEUTRAL" : card.toString()));
 
       cards.add(cardAndCount);
     }
@@ -128,7 +130,7 @@ class DecksViewCreator {
       Card card = gameState.faceUpCard(slot).get();
       StackPane faceUpCard = new StackPane();
       faceUpCard.getChildren().addAll(createCardGeometry());
-      faceUpCard.getStyleClass().addAll(List.of("card", card.equals(Card.LOCOMOTIVE) ? "NEUTRAL" : card.toString()));
+      faceUpCard.getStyleClass().addAll(List.of("card", cardStyleClass(card)));
       faceUpCard.disableProperty().bind(drawCardHandlerProperty.isNull());
       faceUpCard.setOnMouseClicked((new EventHandler<MouseEvent>(){
           @Override
@@ -138,15 +140,18 @@ class DecksViewCreator {
         }
       ));
       gameState.faceUpCard(slot).addListener((o, oV, nV) -> {
-        faceUpCard.getStyleClass().remove(oV.toString());
-        faceUpCard.getStyleClass().add(nV.toString());
+        faceUpCard.getStyleClass().remove(cardStyleClass(oV));
+        faceUpCard.getStyleClass().add(cardStyleClass(nV));
       });
-      
 
       faceUpCards.add(faceUpCard);
     }
 
     return faceUpCards;
+  }
+
+  private static String cardStyleClass(Card card) {
+    return card.equals(LOCOMOTIVE) ? "NEUTRAL" : card.toString();
   }
 
   private static List<Node> createCardGeometry() {
