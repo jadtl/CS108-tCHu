@@ -12,12 +12,9 @@ import ch.epfl.tchu.game.Constants;
 import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.game.PlayerState;
 import ch.epfl.tchu.game.PublicGameState;
+import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Ticket;
-import ch.epfl.tchu.gui.ActionHandlers.ChooseCardsHandler;
-import ch.epfl.tchu.gui.ActionHandlers.ChooseTicketsHandler;
-import ch.epfl.tchu.gui.ActionHandlers.ClaimRouteHandler;
-import ch.epfl.tchu.gui.ActionHandlers.DrawCardHandler;
-import ch.epfl.tchu.gui.ActionHandlers.DrawTicketsHandler;
+import ch.epfl.tchu.gui.ActionHandlers.*;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -83,7 +80,7 @@ public class GraphicalPlayer {
   public void receiveInfo(String info) {
     assert Platform.isFxApplicationThread();
 
-    gameInfos.add(new Text(info));
+    gameInfos.add(new Text(info + '\n'));
     if (gameInfos.size() >= 5)
       gameInfos.remove(0);
   }
@@ -91,17 +88,45 @@ public class GraphicalPlayer {
   public void startTurn(DrawTicketsHandler drawTicketsHandler, DrawCardHandler drawCardHandler, ClaimRouteHandler claimRouteHandler) {
     assert Platform.isFxApplicationThread();
     
-    drawTickets = new SimpleObjectProperty<DrawTicketsHandler>(drawTicketsHandler);
-    drawCard = new SimpleObjectProperty<DrawCardHandler>(drawCardHandler);
-    claimRoute = new SimpleObjectProperty<ClaimRouteHandler>(claimRouteHandler);
+    if (gameState.canDrawTicketsProperty().get()) drawTickets.set(new DrawTicketsHandler() {
+      @Override
+      public void onDrawTickets() {
+        drawTicketsHandler.onDrawTickets();
+        drawTickets.set(null);
+        claimRoute.set(null);
+        drawCard.set(null);
+      }
+    });
+    if (gameState.canDrawCardsProperty().get()) drawCard.set(new DrawCardHandler(){
+      @Override
+      public void onDrawCard(int slot) {
+        drawCardHandler.onDrawCard(slot);
+        drawTickets.set(null);
+        claimRoute.set(null);
+        drawCard(this);
+      }
+    });
+    claimRoute.set(new ClaimRouteHandler(){
+      @Override
+      public void onClaimRoute(Route route, SortedBag<Card> claimCards) {
+        claimRouteHandler.onClaimRoute(route, claimCards);
+        drawTickets.set(null);
+        claimRoute.set(null);
+        drawCard.set(null);
+      }
+    });
   }
 
   public void drawCard(DrawCardHandler drawCardHandler) {
     assert Platform.isFxApplicationThread();
 
-    drawTickets = new SimpleObjectProperty<DrawTicketsHandler>(null);
-    drawCard = new SimpleObjectProperty<DrawCardHandler>(drawCardHandler);
-    claimRoute = new SimpleObjectProperty<ClaimRouteHandler>(null);
+    drawCard.set(new DrawCardHandler() {
+      @Override
+      public void onDrawCard(int slot) {
+        drawCardHandler.onDrawCard(slot);
+        drawCard.set(null);
+      }
+    });
   }
 
   public void chooseTickets(SortedBag<Ticket> ticketOptions, ChooseTicketsHandler chooseTicketsHandler) {

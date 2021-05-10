@@ -120,7 +120,7 @@ public class ObservableGameState {
     });
     ChMap.routes().forEach(r -> {
       this.routeClaimability.get(r).set(playerId.get() == newState.currentPlayerId()
-        && Objects.isNull(routeOwnerships.get(r)) && !isNeighborClaimed(r) && ownState.canClaimRoute(r));
+        && Objects.isNull(routeOwnerships.get(r).get()) && !isNeighborClaimed(r) && ownState.canClaimRoute(r));
     });
 
     this.canDrawTickets.set(newState.canDrawTickets());
@@ -227,9 +227,8 @@ public class ObservableGameState {
   private boolean isNeighborClaimed(Route route) {
     Route neighbor = ChMap.routes().stream()
     .filter(r -> r.stations().containsAll(route.stations()) && !r.equals(route))
-    .findFirst()
+    .findAny()
     .orElse(route);
-    
-    return !Objects.isNull(routeOwnerships.get(neighbor));
+    return !Objects.isNull(routeOwnerships.get(neighbor).get());
   }
 }
