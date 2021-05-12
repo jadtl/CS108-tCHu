@@ -110,21 +110,6 @@ public final class PlayerState extends PublicPlayerState {
 	}
 
 	/**
-	 * Returns a state identical to the one applied to, except that
-	 * the given cards were added
-	 * 
-	 * @param additionalCards
-	 * 				The cards to add to the player state
-	 * 
-	 * @return a state identical to the one applied to, except that
-	 * the given cards were added
-	 */
-	public PlayerState withAddedCards(SortedBag<Card> additionalCards) { 
-		return new PlayerState(tickets(), new SortedBag.Builder<Card>()
-		.add(cards()).add(additionalCards).build(), routes());
-	}
-
-	/**
 	 * Returns the ability of the player to claim the given route
 	 * 
 	 * @param route
