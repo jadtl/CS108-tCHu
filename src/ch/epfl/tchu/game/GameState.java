@@ -193,8 +193,6 @@ public final class GameState extends PublicGameState {
    *         If cards can't be drawn
    */
   public GameState withDrawnFaceUpCard(int slot) {
-    Preconditions.checkArgument(canDrawCards());
-
     Card drawnCard = cardState.faceUpCard(slot);
     CardState updatedCardState = cardState.withDrawnFaceUpCard(slot);
 
@@ -215,8 +213,6 @@ public final class GameState extends PublicGameState {
    *         If cards can't be drawn
    */
   public GameState withBlindlyDrawnCard() {
-    Preconditions.checkArgument(canDrawCards());
-
     Card drawnCard = cardState.topDeckCard();
     CardState updatedCardState = cardState.withoutTopDeckCard();
 
