@@ -193,7 +193,7 @@ public final class Game {
 						else {
 							// Computing the list of possible additional claim cards the player can choose to try and claim the tunnel
 							List<SortedBag<Card>> possibleAdditionalClaimCards = gameState.currentPlayerState().possibleAdditionalCards
-							(additionalClaimCardsCount, initialClaimCards, additionalCardsBuilder.build());
+							(additionalClaimCardsCount, initialClaimCards);
 
 							// The player has at least one set of additional claim cards to play
 							if (possibleAdditionalClaimCards.size() > 0) {
