@@ -1,4 +1,4 @@
-
+// TODO: Remote player proxy Javadoc
 package ch.epfl.tchu.net;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;

@@ -1,3 +1,4 @@
+// TODO: Decks view creator Javadoc
 package ch.epfl.tchu.gui;
 
 import static ch.epfl.tchu.game.Card.LOCOMOTIVE;

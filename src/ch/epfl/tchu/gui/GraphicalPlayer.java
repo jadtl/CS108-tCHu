@@ -1,3 +1,4 @@
+// TODO: Graphical player Javadoc
 package ch.epfl.tchu.gui;
 
 import static javafx.collections.FXCollections.observableArrayList;

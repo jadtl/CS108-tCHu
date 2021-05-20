@@ -1,3 +1,4 @@
+// TODO: Map view creator Javadoc
 package ch.epfl.tchu.gui;
 
 import java.util.ArrayList;
