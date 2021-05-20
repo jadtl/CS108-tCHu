@@ -137,13 +137,11 @@ public class GraphicalPlayer {
     ListView<Ticket> items = listView(ticketOptions.toList());
     Button button = new Button(StringsFr.CHOOSE);
     button.disableProperty().bind(Bindings.size(items.getSelectionModel().getSelectedItems()).lessThan(ticketOptions.size() - 2));
-    button.setOnAction(new EventHandler<ActionEvent>(){
-      @Override
-      public void handle(ActionEvent event) {
+    button.setOnAction(e -> {
         window.hide();
         chooseTickets(ticketOptions, chooseTicketsHandler);
       }
-    });
+    );
 
     showModalWindow(window, items, button, StringsFr.TICKETS_CHOICE, String.format(StringsFr.CHOOSE_TICKETS, List.of(Constants.IN_GAME_TICKETS_COUNT, StringsFr.plural(Constants.IN_GAME_TICKETS_COUNT))));
   }
@@ -152,12 +150,9 @@ public class GraphicalPlayer {
     assert Platform.isFxApplicationThread();
 
     Stage window = new Stage();
-    EventHandler<ActionEvent> buttonActionHandler = new EventHandler<ActionEvent>(){
-      @Override
-      public void handle(ActionEvent event) {
+    EventHandler<ActionEvent> buttonActionHandler = e -> {
         window.hide();
         chooseClaimCards(cardOptions, chooseCardsHandler);
-      }
     };
 
     showChooseCardsWindow(window, cardOptions, buttonActionHandler, StringsFr.CHOOSE_ADDITIONAL_CARDS);
@@ -167,12 +162,9 @@ public class GraphicalPlayer {
     assert Platform.isFxApplicationThread();
 
     Stage window = new Stage();
-    EventHandler<ActionEvent> buttonActionHandler = new EventHandler<ActionEvent>(){
-      @Override
-      public void handle(ActionEvent event) {
+    EventHandler<ActionEvent> buttonActionHandler = e -> {
         window.hide();
         chooseAdditionalCards(cardOptions, chooseCardsHandler);
-      }
     };
 
     showChooseCardsWindow(window, cardOptions, buttonActionHandler, StringsFr.CHOOSE_ADDITIONAL_CARDS);
@@ -215,12 +207,10 @@ public class GraphicalPlayer {
     window.initStyle(StageStyle.UTILITY);
     window.initOwner(mainWindow);
     window.initModality(Modality.WINDOW_MODAL);
-    window.setOnCloseRequest(new EventHandler<WindowEvent>(){
-      @Override
-      public void handle(WindowEvent event) {
-        event.consume();
+    window.setOnCloseRequest(e -> {
+        e.consume();
       }
-    });
+    );
     
     window.show();
   }

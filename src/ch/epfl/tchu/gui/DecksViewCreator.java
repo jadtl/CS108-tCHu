@@ -75,13 +75,7 @@ class DecksViewCreator {
     ticketsDeck.setGraphic(createButtonGauge(gameState.remainingTicketsPercentageProperty()));
     ticketsDeck.getStyleClass().add("gauged");
     ticketsDeck.disableProperty().bind(drawTicketsHandlerProperty.isNull());
-    ticketsDeck.setOnMouseClicked((new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent arg0) {
-          drawTicketsHandlerProperty.get().onDrawTickets();
-        }
-      }
-    ));
+    ticketsDeck.setOnMouseClicked(e -> drawTicketsHandlerProperty.get().onDrawTickets());
 
     Button cardsDeck = new Button("Cartes");
     cardsDeck.setGraphic(createButtonGauge(gameState.remainingCardsPercentageProperty()));
@@ -133,13 +127,7 @@ class DecksViewCreator {
       faceUpCard.getChildren().addAll(createCardGeometry());
       faceUpCard.getStyleClass().addAll(List.of("card", cardStyleClass(card)));
       faceUpCard.disableProperty().bind(drawCardHandlerProperty.isNull());
-      faceUpCard.setOnMouseClicked((new EventHandler<MouseEvent>(){
-          @Override
-          public void handle(MouseEvent arg0) {
-            drawCardHandlerProperty.get().onDrawCard(slot);
-          }
-        }
-      ));
+      faceUpCard.setOnMouseClicked(e -> drawCardHandlerProperty.get().onDrawCard(slot));
       gameState.faceUpCard(slot).addListener((o, oV, nV) -> {
         faceUpCard.getStyleClass().remove(cardStyleClass(oV));
         faceUpCard.getStyleClass().add(cardStyleClass(nV));

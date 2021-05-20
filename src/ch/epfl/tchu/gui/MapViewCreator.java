@@ -93,9 +93,7 @@ class MapViewCreator {
       claimRouteHandlerProperty.isNull().or(gameState.routeClaimabilityProperty(route).not())
     );
 
-    routeGroup.setOnMouseClicked((new EventHandler<MouseEvent>(){
-        @Override
-        public void handle(MouseEvent arg0) {
+    routeGroup.setOnMouseClicked(e -> {
           List<SortedBag<Card>> possibleClaimCards = gameState.possibleClaimCardsProperty(route).get();
     
           if (possibleClaimCards.size() == 1)
@@ -105,8 +103,7 @@ class MapViewCreator {
             cardChooser.chooseCards(possibleClaimCards, chooseCardsHandler);
           }
         }
-      }
-    ));
+    );
 
     return routeGroup;
   }
