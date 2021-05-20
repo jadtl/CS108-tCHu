@@ -92,15 +92,15 @@ class MapViewCreator {
     );
 
     routeGroup.setOnMouseClicked(e -> {
-          List<SortedBag<Card>> possibleClaimCards = gameState.possibleClaimCardsProperty(route).get();
-    
-          if (possibleClaimCards.size() == 1)
-            claimRouteHandlerProperty.get().onClaimRoute(route, possibleClaimCards.get(0));
-          else {
-            ChooseCardsHandler chooseCardsHandler = chosenCards -> claimRouteHandlerProperty.get().onClaimRoute(route, chosenCards);
-            cardChooser.chooseCards(possibleClaimCards, chooseCardsHandler);
-          }
+        List<SortedBag<Card>> possibleClaimCards = gameState.possibleClaimCardsProperty(route).get();
+  
+        if (possibleClaimCards.size() == 1)
+          claimRouteHandlerProperty.get().onClaimRoute(route, possibleClaimCards.get(0));
+        else {
+          ChooseCardsHandler chooseCardsHandler = chosenCards -> claimRouteHandlerProperty.get().onClaimRoute(route, chosenCards);
+          cardChooser.chooseCards(possibleClaimCards, chooseCardsHandler);
         }
+      }
     );
 
     return routeGroup;
