@@ -36,8 +36,10 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 
+/**
+ * 
+ */
 public class GraphicalPlayer {
   private ObservableGameState gameState;
   private final ObservableList<Text> gameInfos;
@@ -47,10 +49,15 @@ public class GraphicalPlayer {
   private ObjectProperty<DrawCardHandler> drawCard;
   private ObjectProperty<ClaimRouteHandler> claimRoute;
 
+  /**
+   * 
+   * @param player
+   * @param playerNames
+   */
   public GraphicalPlayer(PlayerId player, Map<PlayerId, String> playerNames) {
-    claimRoute = new SimpleObjectProperty<ClaimRouteHandler>(null);
-    drawTickets = new SimpleObjectProperty<DrawTicketsHandler>(null);
-    drawCard = new SimpleObjectProperty<DrawCardHandler>(null);
+    claimRoute = new SimpleObjectProperty<ClaimRouteHandler>();
+    drawTickets = new SimpleObjectProperty<DrawTicketsHandler>();
+    drawCard = new SimpleObjectProperty<DrawCardHandler>();
 
     gameState = new ObservableGameState(player);
     gameInfos = observableArrayList();
@@ -72,12 +79,20 @@ public class GraphicalPlayer {
     mainWindow.show();
   }
 
+  /**
+   * 
+   * @param newState
+   * @param ownState
+   */
   public void setState(PublicGameState newState, PlayerState ownState) {
     assert Platform.isFxApplicationThread();
     gameState.setState(newState, ownState);
   }
 
-  // FIXME: Weird display at 5 messages
+  /**
+   * 
+   * @param info
+   */
   public void receiveInfo(String info) {
     assert Platform.isFxApplicationThread();
 
@@ -86,6 +101,12 @@ public class GraphicalPlayer {
       gameInfos.remove(0);
   }
 
+  /**
+   * 
+   * @param drawTicketsHandler
+   * @param drawCardHandler
+   * @param claimRouteHandler
+   */
   public void startTurn(DrawTicketsHandler drawTicketsHandler, DrawCardHandler drawCardHandler, ClaimRouteHandler claimRouteHandler) {
     assert Platform.isFxApplicationThread();
     
@@ -118,6 +139,10 @@ public class GraphicalPlayer {
     });
   }
 
+  /**
+   * 
+   * @param drawCardHandler
+   */
   public void drawCard(DrawCardHandler drawCardHandler) {
     assert Platform.isFxApplicationThread();
 
@@ -130,6 +155,11 @@ public class GraphicalPlayer {
     });
   }
 
+  /**
+   * 
+   * @param ticketOptions
+   * @param chooseTicketsHandler
+   */
   public void chooseTickets(SortedBag<Ticket> ticketOptions, ChooseTicketsHandler chooseTicketsHandler) {
     assert Platform.isFxApplicationThread();
 
@@ -146,25 +176,35 @@ public class GraphicalPlayer {
     showModalWindow(window, items, button, StringsFr.TICKETS_CHOICE, String.format(StringsFr.CHOOSE_TICKETS, List.of(Constants.IN_GAME_TICKETS_COUNT, StringsFr.plural(Constants.IN_GAME_TICKETS_COUNT))));
   }
 
+  /**
+   * 
+   * @param cardOptions
+   * @param chooseCardsHandler
+   */
   public void chooseClaimCards(List<SortedBag<Card>> cardOptions, ChooseCardsHandler chooseCardsHandler) {
     assert Platform.isFxApplicationThread();
 
     Stage window = new Stage();
     EventHandler<ActionEvent> buttonActionHandler = e -> {
-        window.hide();
-        chooseClaimCards(cardOptions, chooseCardsHandler);
+      window.hide();
+      chooseClaimCards(cardOptions, chooseCardsHandler);
     };
 
     showChooseCardsWindow(window, cardOptions, buttonActionHandler, StringsFr.CHOOSE_ADDITIONAL_CARDS);
   }
 
+  /**
+   * 
+   * @param cardOptions
+   * @param chooseCardsHandler
+   */
   public void chooseAdditionalCards(List<SortedBag<Card>> cardOptions, ChooseCardsHandler chooseCardsHandler) {
     assert Platform.isFxApplicationThread();
 
     Stage window = new Stage();
     EventHandler<ActionEvent> buttonActionHandler = e -> {
-        window.hide();
-        chooseAdditionalCards(cardOptions, chooseCardsHandler);
+      window.hide();
+      chooseAdditionalCards(cardOptions, chooseCardsHandler);
     };
 
     showChooseCardsWindow(window, cardOptions, buttonActionHandler, StringsFr.CHOOSE_ADDITIONAL_CARDS);
