@@ -1,4 +1,5 @@
 // TODO: Graphical player adapter Javadoc
+// TODO: Find abstraction for interrupted exception handling
 package ch.epfl.tchu.gui;
 
 import java.util.List;
@@ -14,13 +15,23 @@ import ch.epfl.tchu.game.PlayerState;
 import ch.epfl.tchu.game.PublicGameState;
 import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Ticket;
+import ch.epfl.tchu.gui.ActionHandlers.ClaimRouteHandler;
+import ch.epfl.tchu.gui.ActionHandlers.DrawCardHandler;
+import ch.epfl.tchu.gui.ActionHandlers.DrawTicketsHandler;
 
 import static javafx.application.Platform.runLater;
+import static ch.epfl.tchu.game.Player.TurnKind.*;
 
 public class GraphicalPlayerAdapter implements Player {
   private GraphicalPlayer graphicalPlayer;
+  private BlockingQueue<SortedBag<Ticket>> initialTicketsChoice;
+  private BlockingQueue<Integer> slot;
+  private BlockingQueue<Route> route;
+  private BlockingQueue<SortedBag<Card>> claimCards;
 
-  public GraphicalPlayerAdapter() {}
+  public GraphicalPlayerAdapter() {
+    initialTicketsChoice = new ArrayBlockingQueue<>(1);
+  }
 
   @Override
   public void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
@@ -39,19 +50,62 @@ public class GraphicalPlayerAdapter implements Player {
 
   @Override
   public void setInitialTicketChoice(SortedBag<Ticket> tickets) {
-    BlockingQueue<SortedBag<Ticket>> q = new ArrayBlockingQueue<>(1);
+    graphicalPlayer.chooseTickets(tickets, c -> {
+      new Thread(() -> {
+        try {
+          initialTicketsChoice.put(c);
+        } catch (InterruptedException e) {
+          throw new Error();
+        }
+      }).start();
+    });
   }
 
   @Override
   public SortedBag<Ticket> chooseInitialTickets() {
-    // TODO Auto-generated method stub
-    return null;
+    try {
+      return initialTicketsChoice.take();
+    } catch (InterruptedException e) {
+      throw new Error();
+    }
   }
 
   @Override
   public TurnKind nextTurn() {
-    // TODO Auto-generated method stub
-    return null;
+    BlockingQueue<TurnKind> q = new ArrayBlockingQueue<>(1);
+
+    DrawTicketsHandler drawTicketsHandler = () -> {
+      try {
+        q.put(DRAW_TICKETS);
+      } catch (InterruptedException e1) {
+        throw new Error();
+      }
+    };
+    DrawCardHandler drawCardHandler = (s) -> {
+      try {
+        q.put(DRAW_CARDS);
+        slot.put(s);
+      } catch (InterruptedException e) {
+        throw new Error();
+      }
+    };
+    ClaimRouteHandler claimRouteHandler = (r, c) -> {
+      try {
+        q.put(CLAIM_ROUTE);
+        route.put(r);
+        claimCards.put(c);
+      } catch (InterruptedException e) {
+        throw new Error();
+      }
+    };
+
+    graphicalPlayer.startTurn(drawTicketsHandler, drawCardHandler, claimRouteHandler);
+
+    try {
+      return q.take();
+    } catch (InterruptedException e) {
+      throw new Error();
+    }
   }
 
   @Override
@@ -75,26 +129,47 @@ public class GraphicalPlayerAdapter implements Player {
 
   @Override
   public int drawSlot() {
-    // TODO Auto-generated method stub
-    return 0;
+    try {
+      return slot.take();
+    } catch (InterruptedException e) {
+      throw new Error();
+    }
   }
 
   @Override
   public Route claimedRoute() {
-    // TODO Auto-generated method stub
-    return null;
+    try {
+      return route.take();
+    } catch (InterruptedException e) {
+      throw new Error();
+    }
   }
 
   @Override
   public SortedBag<Card> initialClaimCards() {
-    // TODO Auto-generated method stub
-    return null;
+    try {
+      return claimCards.take();
+    } catch (InterruptedException e) {
+      throw new Error();
+    }
   }
 
   @Override
   public SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options) {
-    // TODO Auto-generated method stub
-    return null;
+    BlockingQueue<SortedBag<Card>> q = new ArrayBlockingQueue<>(1);
+
+    runLater(() -> graphicalPlayer.chooseAdditionalCards(options, c -> {
+      try {
+        q.put(c);
+      } catch (InterruptedException e) {
+        throw new Error();
+      }
+    }));
+
+    try {
+      return q.take();
+    } catch (InterruptedException e) {
+      throw new Error();
+    }
   }
-  
 }
