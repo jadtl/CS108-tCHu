@@ -35,7 +35,7 @@ import javafx.collections.ObservableList;
  * 
  */
 public class ObservableGameState {
-  private ObjectProperty<PlayerId> playerId;
+  private ObjectProperty<PlayerId> ownId;
 
   private IntegerProperty remainingTicketsPercentage;
   private IntegerProperty remainingCardsPercentage;
@@ -57,10 +57,10 @@ public class ObservableGameState {
 
   /**
    * 
-   * @param playerId
+   * @param ownId
    */
-  public ObservableGameState(PlayerId playerId) {
-    this.playerId = new SimpleObjectProperty<PlayerId>(playerId);
+  public ObservableGameState(PlayerId ownId) {
+    this.ownId = new SimpleObjectProperty<PlayerId>(ownId);
 
     this.remainingTicketsPercentage = new SimpleIntegerProperty();
     this.remainingCardsPercentage = new SimpleIntegerProperty();
@@ -120,7 +120,7 @@ public class ObservableGameState {
       this.ownedCards.get(c1).set((int)ownState.cards().stream().filter(c2 -> c1.equals(c2)).count());
     });
     ChMap.routes().forEach(r -> {
-      this.routeClaimability.get(r).set(playerId.get() == newState.currentPlayerId()
+      this.routeClaimability.get(r).set(ownId.get() == newState.currentPlayerId()
         && Objects.isNull(routeOwnerships.get(r).get()) && !isNeighborClaimed(r) && ownState.canClaimRoute(r));
     });
 

@@ -54,12 +54,12 @@ public class GraphicalPlayer {
    * @param player
    * @param playerNames
    */
-  public GraphicalPlayer(PlayerId player, Map<PlayerId, String> playerNames) {
+  public GraphicalPlayer(PlayerId ownId, Map<PlayerId, String> playerNames) {
     claimRoute = new SimpleObjectProperty<ClaimRouteHandler>();
     drawTickets = new SimpleObjectProperty<DrawTicketsHandler>();
     drawCard = new SimpleObjectProperty<DrawCardHandler>();
 
-    gameState = new ObservableGameState(player);
+    gameState = new ObservableGameState(ownId);
     gameInfos = observableArrayList();
 
     Node mapView = MapViewCreator
@@ -75,7 +75,7 @@ public class GraphicalPlayer {
     Scene scene = new Scene(pane);
     mainWindow = new Stage();
     mainWindow.setScene(scene);
-    mainWindow.setTitle(String.join(" \u2014 ", List.of("tCHu", playerNames.get(player))));
+    mainWindow.setTitle(String.join(" \u2014 ", List.of("tCHu", playerNames.get(ownId))));
     mainWindow.show();
   }
 
