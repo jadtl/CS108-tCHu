@@ -77,7 +77,7 @@ public final class Game {
 
 		// Informing every player of the number of initially drawn tickets only once everyone has drawn
 		for (PlayerId playerId : PlayerId.ALL)
-			sendInfo(players, playerInfos.get(playerId).keptTickets(gameState.currentPlayerState().ticketCount()));
+			sendInfo(players, playerInfos.get(playerId).keptTickets(gameState.playerState(playerId).ticketCount()));
 
 		// Updating the game state after having drawn the initial tickets
 		gameState = gameState.withoutTopTickets(Constants.INITIAL_TICKETS_COUNT * PlayerId.COUNT);
