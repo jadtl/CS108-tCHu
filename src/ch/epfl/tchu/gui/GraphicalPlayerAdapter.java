@@ -31,11 +31,14 @@ public class GraphicalPlayerAdapter implements Player {
 
   public GraphicalPlayerAdapter() {
     initialTicketsChoice = new ArrayBlockingQueue<>(1);
+    slot = new ArrayBlockingQueue<>(1);
+    route = new ArrayBlockingQueue<>(1);
+    claimCards = new ArrayBlockingQueue<>(1);
   }
 
   @Override
   public void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
-    graphicalPlayer = new GraphicalPlayer(ownId, playerNames);
+    runLater(() -> graphicalPlayer = new GraphicalPlayer(ownId, playerNames));
   }
 
   @Override
@@ -50,15 +53,14 @@ public class GraphicalPlayerAdapter implements Player {
 
   @Override
   public void setInitialTicketChoice(SortedBag<Ticket> tickets) {
-    graphicalPlayer.chooseTickets(tickets, c -> {
-      new Thread(() -> {
+    runLater(() -> graphicalPlayer.chooseTickets(tickets, c -> {
         try {
           initialTicketsChoice.put(c);
         } catch (InterruptedException e) {
           throw new Error();
         }
-      }).start();
-    });
+      })
+    );
   }
 
   @Override
@@ -99,7 +101,7 @@ public class GraphicalPlayerAdapter implements Player {
       }
     };
 
-    graphicalPlayer.startTurn(drawTicketsHandler, drawCardHandler, claimRouteHandler);
+    runLater(() -> graphicalPlayer.startTurn(drawTicketsHandler, drawCardHandler, claimRouteHandler));
 
     try {
       return q.take();
@@ -111,15 +113,16 @@ public class GraphicalPlayerAdapter implements Player {
   @Override
   public SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options) {
     BlockingQueue<SortedBag<Ticket>> q = new ArrayBlockingQueue<>(1);
-    graphicalPlayer.chooseTickets(options, c -> {
-      new Thread(() -> {
-        try {
-          q.put(c);
-        } catch (InterruptedException e) {
-          throw new Error();
-        }
-      }).start();
-    });
+    runLater(() -> graphicalPlayer.chooseTickets(options, c -> {
+        new Thread(() -> {
+          try {
+            q.put(c);
+          } catch (InterruptedException e) {
+            throw new Error();
+          }
+        }).start();
+      })
+    );
     try {
       return q.take();
     } catch (InterruptedException e) {
