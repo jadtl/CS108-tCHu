@@ -119,7 +119,6 @@ public class RemotePlayerProxy implements Player {
     try {
       BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), US_ASCII));
       String message = String.join(" ", arguments);
-      System.out.println(message);
       writer.write(message);
       writer.write('\n');
       writer.flush();

@@ -127,7 +127,8 @@ public class ObservableGameState {
     this.canDrawTickets.set(newState.canDrawTickets());
     this.canDrawCards.set(newState.canDrawCards());
     ChMap.routes().forEach(r -> {
-      possibleClaimCards.get(r).set(ownState.possibleClaimCards(r));
+      // TODO: Check if it fixes the problem
+      possibleClaimCards.get(r).set(ownState.canClaimRoute(r) ? ownState.possibleClaimCards(r) : List.of());
     });
   }
 
