@@ -113,7 +113,7 @@ public class RemotePlayerClient {
           break;
         case UPDATE_STATE:
          PublicGameState newState = Serdes.PUBLIC_GAME_STATE.deserialize(arguments.get(0));
-         PlayerState ownState = Serdes.PLAYER_STATE.deserialize(arguments.get(0));
+         PlayerState ownState = Serdes.PLAYER_STATE.deserialize(arguments.get(1));
          player.updateState(newState, ownState);
           break;
         default:
