@@ -1,4 +1,3 @@
-// TODO: Observable game state Javadoc
 package ch.epfl.tchu.gui;
 
 import static ch.epfl.tchu.game.Card.LOCOMOTIVE;
@@ -32,7 +31,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
+ * The observable state of a tCHu game
  * 
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
  */
 public class ObservableGameState {
   private ObjectProperty<PlayerId> ownId;
@@ -56,8 +58,10 @@ public class ObservableGameState {
   private final Map<Route, ObjectProperty<List<SortedBag<Card>>>> possibleClaimCards;
 
   /**
+   * Constructs an observable game state using the corresponding player identifier
    * 
    * @param ownId
+   *        The identifier of the corresponding player
    */
   public ObservableGameState(PlayerId ownId) {
     this.ownId = new SimpleObjectProperty<PlayerId>(ownId);
@@ -93,9 +97,13 @@ public class ObservableGameState {
   }
 
   /**
+   * Updates every property according to the two given states
    * 
    * @param newState
+   *        The updated public game state
+   * 
    * @param ownState
+   *        The updated current player state
    */
   public void setState(PublicGameState newState, PlayerState ownState) {
     this.remainingTicketsPercentage.set((int)((float)newState.ticketsCount() / (float)ChMap.tickets().size() * 100));
@@ -133,99 +141,102 @@ public class ObservableGameState {
   }
 
   /**
-   * 
-   * @return
+   * @return The read-only property of the remaining tickets percentage
    */
   public ReadOnlyIntegerProperty remainingTicketsPercentageProperty() { return remainingTicketsPercentage; }
 
   /**
-   * 
-   * @return
+   * @return The read-only property of the remaining cards percentage
    */
   public ReadOnlyIntegerProperty remainingCardsPercentageProperty() { return remainingCardsPercentage; }
 
   /**
-   * 
    * @param slot
-   * @return
+   *        The face-up card slot
+   * 
+   * @return The read-only property of the face-up card at the given slot
    */
   public ReadOnlyObjectProperty<Card> faceUpCard(int slot) { return faceUpCards.get(slot); }
 
   /**
-   * 
    * @param route
-   * @return
+   *        The route
+   * 
+   * @return The read-only property of the ownership of the given route
    */
   public ReadOnlyObjectProperty<PlayerId> routesOwnershipProperty(Route route) { return routeOwnerships.get(route); }
 
   /**
+   * @param player
+   *        The player
    * 
-   * @return
+   * @return The read-only property of the given player's ticket count
    */
   public ReadOnlyIntegerProperty ticketCountProperty(PlayerId player) { return ticketCount.get(player); }
 
   /**
+   * @param player
+   *        The player
    * 
-   * @return
+   * @return The read-only property of the given player's card count
    */
   public ReadOnlyIntegerProperty cardCountProperty(PlayerId player) { return cardCount.get(player); }
 
   /**
+   * @param player
+   *        The player
    * 
-   * @return
+   * @return The read-only property of the given player's car count
    */
   public ReadOnlyIntegerProperty carCountProperty(PlayerId player) { return carCount.get(player); }
 
   /**
+   * @param player
+   *        The player
    * 
-   * @return
+   * @return The read-only property of the given player's claim points
    */
   public ReadOnlyIntegerProperty claimPointsProperty(PlayerId player) { return claimPoints.get(player); }
 
   /**
-   * 
-   * @return
+   * @return The read-only property of the observable list of owned tickets
    */
   public ReadOnlyObjectProperty<ObservableList<Ticket>> ownedTicketsProperty() { return ownedTickets; }
 
   /**
-   * 
    * @param card
-   * @return
+   *        The type of player's cards
+   * 
+   * @return The read-only property of the number of cards of the given type in the current player's hand
    */
   public ReadOnlyIntegerProperty ownedCardsProperty(Card card) { return ownedCards.get(card); }
 
   /**
-   * 
    * @param route
-   * @return
+   *        The route
+   * 
+   * @return The read-only property of the claimability of the given route
    */
   public ReadOnlyBooleanProperty routeClaimabilityProperty(Route route) { return routeClaimability.get(route); }
 
   /**
-   * 
-   * @return
+   * @return The read-only property of the ability to draw tickets
    */
   public ReadOnlyBooleanProperty canDrawTicketsProperty() { return canDrawTickets; }
 
   /**
-   * 
-   * @return
+   * @return The read-only property of the ability to draw cards
    */
   public ReadOnlyBooleanProperty canDrawCardsProperty() { return canDrawCards; }
 
   /**
-   * 
    * @param route
-   * @return
+   *        The route
+   * 
+   * @return The read-only property of the list of possible claim cards for the given route
    */
   public ReadOnlyObjectProperty<List<SortedBag<Card>>> possibleClaimCardsProperty(Route route) { return possibleClaimCards.get(route); }
 
-  /**
-   * 
-   * @param route
-   * @return
-   */
   private boolean isNeighborClaimed(Route route) {
     Route neighbor = ChMap.routes().stream()
     .filter(r -> r.stations().containsAll(route.stations()) && !r.equals(route))
