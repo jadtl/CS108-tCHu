@@ -1,4 +1,3 @@
-// TODO: Remote player client Javadoc
 package ch.epfl.tchu.net;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
@@ -11,9 +10,7 @@ import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
 import java.net.Socket;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -27,7 +24,10 @@ import ch.epfl.tchu.game.PublicGameState;
 import ch.epfl.tchu.game.Ticket;
 
 /**
+ * The client of a remote player
  * 
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
  */
 public class RemotePlayerClient {
   private Player player;
@@ -36,13 +36,16 @@ public class RemotePlayerClient {
   private String lastMessage;
 
   /**
+   * Constructs a client using a player, a hostname and a server port
    * 
    * @param player
+   *        The player who needs a remote access
    * 
    * @param host
+   *        The server's hostname      
    * 
    * @param port
-   * 
+   *        The server's port
    */
   public RemotePlayerClient(Player player, String host, int port) {
     this.player = player;
@@ -52,7 +55,8 @@ public class RemotePlayerClient {
   }
 
   /**
-   * 
+   * Waits for a message coming from the server and deserializes it, calls the corresponding 
+   * player's method and serializes the eventual result and sends it back
    */
   public void run() {
     try {

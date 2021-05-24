@@ -23,7 +23,7 @@ import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Ticket;
 
 /**
- * The proxy of a distant player
+ * The proxy of a remote player
  * 
  * @author Sofiya Malamud (313789)
  * @author Jad Tala (310821)
