@@ -17,7 +17,7 @@ public class ClientMain extends Application{
       String hostName = "localhost";
       int port = 5108;
 
-      if(args.size() >= 2){
+      if (args.size() >= 2) {
         hostName = args.get(0);
         port = Integer.valueOf(args.get(1));
       }

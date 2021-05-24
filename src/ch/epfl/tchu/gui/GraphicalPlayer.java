@@ -63,7 +63,7 @@ public class GraphicalPlayer {
     claimRoute = new SimpleObjectProperty<ClaimRouteHandler>();
     drawTickets = new SimpleObjectProperty<DrawTicketsHandler>();
     drawCard = new SimpleObjectProperty<DrawCardHandler>();
-
+    System.out.println(playerNames);
     gameState = new ObservableGameState(ownId);
     gameInfos = observableArrayList();
 

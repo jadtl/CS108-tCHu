@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -37,8 +38,11 @@ public class RemotePlayerClient {
   /**
    * 
    * @param player
+   * 
    * @param host
+   * 
    * @param port
+   * 
    */
   public RemotePlayerClient(Player player, String host, int port) {
     this.player = player;
@@ -79,13 +83,13 @@ public class RemotePlayerClient {
         	endMessage(writer);
           break;
         case CHOOSE_INITIAL_TICKETS:
-        writer.write(Serdes.TICKET_SORTED_BAG.serialize(player.chooseInitialTickets()));
-        endMessage(writer);
+          writer.write(Serdes.TICKET_SORTED_BAG.serialize(player.chooseInitialTickets()));
+          endMessage(writer);
           break;
         case CHOOSE_TICKETS:
-        SortedBag<Ticket> optionTickets = Serdes.TICKET_SORTED_BAG.deserialize(arguments.get(0));
-         writer.write(Serdes.TICKET_SORTED_BAG.serialize(player.chooseTickets(optionTickets)));
-         endMessage(writer);
+          SortedBag<Ticket> optionTickets = Serdes.TICKET_SORTED_BAG.deserialize(arguments.get(0));
+          writer.write(Serdes.TICKET_SORTED_BAG.serialize(player.chooseTickets(optionTickets)));
+          endMessage(writer);
           break;
         case DRAW_SLOT:
           writer.write(Serdes.INTEGER.serialize(player.drawSlot()));
@@ -94,8 +98,7 @@ public class RemotePlayerClient {
         case INIT_PLAYERS:
           PlayerId ownId = Serdes.PLAYER_ID.deserialize(arguments.get(0));
           List<String> names = Serdes.STRING_LIST.deserialize(arguments.get(1));
-          Map<PlayerId, String> playerNames = Map.of(PlayerId.PLAYER_1, names.get(0), PlayerId.PLAYER_2, names.get(1));
-          player.initPlayers(ownId, playerNames);
+          player.initPlayers(ownId, PlayerId.ALL.stream().collect(Collectors.toMap(p -> p, p -> names.get(PlayerId.ALL.indexOf(p)))));
           break;
         case NEXT_TURN:
           writer.write(Serdes.TURN_KIND.serialize(player.nextTurn()));
@@ -112,9 +115,9 @@ public class RemotePlayerClient {
         	player.setInitialTicketChoice(Serdes.TICKET_SORTED_BAG.deserialize(arguments.get(0))); 
           break;
         case UPDATE_STATE:
-         PublicGameState newState = Serdes.PUBLIC_GAME_STATE.deserialize(arguments.get(0));
-         PlayerState ownState = Serdes.PLAYER_STATE.deserialize(arguments.get(1));
-         player.updateState(newState, ownState);
+          PublicGameState newState = Serdes.PUBLIC_GAME_STATE.deserialize(arguments.get(0));
+          PlayerState ownState = Serdes.PLAYER_STATE.deserialize(arguments.get(1));
+          player.updateState(newState, ownState);
           break;
         default:
           break; 
@@ -126,10 +129,6 @@ public class RemotePlayerClient {
     }
   }
 
-  /**
-   * 
-   * @param writer
-   */
   private void endMessage(BufferedWriter writer) {
     try {
       writer.write('\n');
