@@ -1,4 +1,3 @@
-// TODO: Decks view creator Javadoc
 package ch.epfl.tchu.gui;
 
 import static ch.epfl.tchu.game.Card.LOCOMOTIVE;
@@ -27,7 +26,10 @@ import javafx.scene.text.Text;
 import javafx.scene.input.MouseEvent;
 
 /**
+ * A creator for the hand view and the cards view
  * 
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
  */
 class DecksViewCreator {
   /**
@@ -36,11 +38,10 @@ class DecksViewCreator {
   private DecksViewCreator() {}
   
   /**
-   * 
-   * 
    * @param observableGameState
+   *        The current player's observable game state
    * 
-   * @return
+   * @return The hand view displaying the information from the given game state
    */
   public static HBox createHandView(ObservableGameState gameState) {
     HBox cards = new HBox();
@@ -58,15 +59,16 @@ class DecksViewCreator {
   }
 
   /**
-   * 
-   * 
    * @param observableGameState
+   *        The current player's observable game state
    * 
    * @param drawTicketsHandlerProperty
+   *        The property of the tickets drawing handler
    * 
    * @param drawCardHandlerProperty
+   *        The property of the card drawing handler
    * 
-   * @return
+   * @return The cards view displaying the information from the given game state and properties
    */
   public static VBox createCardsView(ObservableGameState gameState, 
     ObjectProperty<DrawTicketsHandler> drawTicketsHandlerProperty,

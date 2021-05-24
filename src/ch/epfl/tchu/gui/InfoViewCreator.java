@@ -13,6 +13,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+/**
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
+ */
 class InfoViewCreator {
   /**
    * The class is non-instanciable

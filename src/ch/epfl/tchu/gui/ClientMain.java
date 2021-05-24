@@ -7,6 +7,12 @@ import ch.epfl.tchu.net.RemotePlayerClient;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * 
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
+ */
 public class ClientMain extends Application{
   
     public static void main(String[] args) { launch(args); }

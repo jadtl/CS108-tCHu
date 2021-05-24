@@ -24,6 +24,9 @@ import ch.epfl.tchu.SortedBag;
 
 /**
  * 
+ * 
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
  */
 public class ServerMain extends Application{
   
