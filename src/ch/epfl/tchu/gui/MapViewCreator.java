@@ -1,4 +1,3 @@
-// TODO: Map view creator Javadoc
 package ch.epfl.tchu.gui;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 /**
- * 
+ * A creator for the map view
  * 
  * @author Sofiya Malamud (313789)
  * @author Jad Tala (310821)
@@ -33,14 +32,16 @@ class MapViewCreator {
   private MapViewCreator() {}
 
   /**
-   * 
    * @param gameState
+   *        The observable game state of the current player
    * 
    * @param claimRouteHandlerProperty
+   *        The property of the route claiming handler
    * 
    * @param cardChooser
+   *        The card chooser interface
    * 
-   * @return
+   * @return The map view pane
    */
   public static Pane createMapView(ObservableGameState gameState, 
     ObjectProperty<ClaimRouteHandler> claimRouteHandlerProperty, CardChooser cardChooser) {
@@ -107,11 +108,19 @@ class MapViewCreator {
   }
 
   /**
-   * 
-   * 
+   * A card selector interface
    */
   @FunctionalInterface
   interface CardChooser {
+    /**
+     * Called when the player has to choose the cards they want to use to claim a route
+     * 
+     * @param options
+     *        The cards options for the player
+     * 
+     * @param handler
+     *        The handler associated with the choice
+     */
     void chooseCards(List<SortedBag<Card>> options, ChooseCardsHandler handler);
   }
 }
