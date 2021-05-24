@@ -1,4 +1,3 @@
-// TODO: Remote player proxy Javadoc
 package ch.epfl.tchu.net;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
@@ -24,14 +23,19 @@ import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Ticket;
 
 /**
+ * The proxy of a distant player
  * 
+ * @author Sofiya Malamud (313789)
+ * @author Jad Tala (310821)
  */
 public class RemotePlayerProxy implements Player {
   private Socket socket;
 
   /**
+   * Constructs a proxy with a socket
    * 
    * @param socket
+   *        A socket to communicate to the client
    */
   public RemotePlayerProxy(Socket socket) {
     this.socket = socket;
@@ -110,9 +114,13 @@ public class RemotePlayerProxy implements Player {
   }
 
   /**
+   * Sends a serialized message to the client using its socket
    * 
    * @param messageId
+   *        The identifier of the server's message
+   * 
    * @param serializedArgs
+   *        A list of serialized arguments to send to the client
    */
   private void send(MessageId messageId, List<String> serializedArgs) {
     List<String> arguments = new ArrayList<String>();
@@ -130,10 +138,6 @@ public class RemotePlayerProxy implements Player {
     }
   }
 
-  /**
-   * 
-   * @return
-   */
   private String receive() {
     try {
       BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), US_ASCII));
