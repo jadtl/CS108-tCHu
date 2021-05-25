@@ -31,11 +31,11 @@ public final class Game {
     /**
      * Makes the given players play a game of tCHu, whose names and identifiers figure in the given maps
      *
-     * @param players     A map linking a player's identifier to their entity
-     * @param playerNames A map linking a player's identifier to their name
-     * @param tickets     The available tickets for the game
-     * @param rng         The random number generator
-     * @throws IllegalArgumentException if one of the two maps has a size different from {@link ch.epfl.tchu.game.PlayerId#COUNT}
+     * @param players     A {@link Map} linking a {@link PlayerId} to their {@link Player}
+     * @param playerNames A {@link Map} linking a {@link PlayerId} to their {@link String} name
+     * @param tickets     The available {@link SortedBag} of {@link Ticket} for the game
+     * @param rng         The {@link Random} number generator
+     * @throws IllegalArgumentException If {@code players} or {@code playerNames} have a size different from {@link ch.epfl.tchu.game.PlayerId#COUNT}
      */
     public static void play(Map<PlayerId, Player> players, Map<PlayerId, String> playerNames, SortedBag<Ticket> tickets, Random rng) {
         Preconditions.checkArgument(players.size() == PlayerId.COUNT && playerNames.size() == PlayerId.COUNT);
@@ -45,8 +45,7 @@ public final class Game {
          * * * * * * * * * */
 
         // Initializing every player
-        PlayerId.ALL
-                .forEach(p -> players.get(p).initPlayers(p, playerNames));
+        PlayerId.ALL.forEach(p -> players.get(p).initPlayers(p, playerNames));
 
         // Generating the initial game state
         GameState gameState = GameState.initial(tickets, rng);
@@ -271,22 +270,10 @@ public final class Game {
         else sendInfo(players, Info.draw(new ArrayList<String>(playerNames.values()), highestScore));
     }
 
-    /**
-     * Transmits to every player a given information
-     *
-     * @param players The map linking players to their identifier
-     * @param info    The information to transmit
-     */
     private static void sendInfo(Map<PlayerId, Player> players, String info) {
         PlayerId.ALL.forEach((PlayerId playerId) -> players.get(playerId).receiveInfo(info));
     }
 
-    /**
-     * Updates every player's state for them to witness changes in-game
-     *
-     * @param players   The map linking players to their identifier
-     * @param gameState The current game's state
-     */
     private static void updatePlayerStates(Map<PlayerId, Player> players, GameState gameState) {
         PlayerId.ALL.forEach((PlayerId playerId) -> players.get(playerId).updateState(gameState, gameState.playerState(playerId)));
     }

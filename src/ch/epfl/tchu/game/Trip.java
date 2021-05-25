@@ -18,13 +18,13 @@ public final class Trip {
     private final int points;
 
     /**
-     * Constructs a trip from a station to another with a given value
+     * A trip from a station to another with a given value
      *
-     * @param from   the departure station
-     * @param to     the arrival station
-     * @param points the value of the trip
-     * @throws IllegalArgumentException if points isn't strictly positive
-     * @throws NullPointerException     if from or to are null
+     * @param from   The departure {@link Station}
+     * @param to     The arrival {@link Station}
+     * @param points The value of the {@link Trip}
+     * @throws IllegalArgumentException If {@code points} isn't strictly positive
+     * @throws NullPointerException     If {@code from} or {@code to} are {@code null}
      */
     public Trip(Station from, Station to, int points) {
         Preconditions.checkArgument(points > 0);
@@ -35,13 +35,12 @@ public final class Trip {
     }
 
     /**
-     * Returns a list of all possible trips from two lists
-     * of departure and arrival stations and their points value
+     * A list of all possible trips from two lists of departure and arrival stations and their points value
      *
-     * @param from   the departure stations
-     * @param to     the arrival stations
-     * @param points the trips value
-     * @return a list of all possible trips
+     * @param from   The {@link List} of departure {@link Station}
+     * @param to     The {@link List} of arrival {@link Station}
+     * @param points The {@link List} of {@link Trip} value
+     * @return A {@link List} of all possible {@link Trip}
      */
     public static List<Trip> all(List<Station> from, List<Station> to, int points) {
         Preconditions.checkArgument(!from.isEmpty() && !to.isEmpty());
@@ -55,38 +54,37 @@ public final class Trip {
     }
 
     /**
-     * Returns the departure station
+     * The departure station
      *
-     * @return the departure station
+     * @return The departure {@link Station}
      */
     public Station from() {
         return from;
     }
 
     /**
-     * Returns the arrival station
+     * The arrival station
      *
-     * @return the arrival station
+     * @return The arrival {@link Station}
      */
     public Station to() {
         return to;
     }
 
     /**
-     * Returns the trip value
+     * The trip value
      *
-     * @return the trip value
+     * @return The {@link Trip} value
      */
     public int points() {
         return points;
     }
 
     /**
-     * Returns the number of points won or lost by the player depending
-     * on whether or not the two trip stations are connected in their network
+     * The number of points won or lost by the player depending on the player's network
      *
-     * @param connectivity the station connectivity of the player network
-     * @return positive points if both stations are connected, negative otherwise
+     * @param connectivity The {@link StationConnectivity} of the player network
+     * @return Positive points if both stations are connected according to {@code connectivity}, negative otherwise
      */
     public int points(StationConnectivity connectivity) {
         return connectivity.connected(from, to) ? points : -points;

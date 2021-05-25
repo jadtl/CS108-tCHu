@@ -6,7 +6,7 @@ import java.util.Objects;
 import ch.epfl.tchu.Preconditions;
 
 /**
- * A Public Card State with face-up cards, a deck and discards
+ * A public card state with face-up cards, a deck and discards
  *
  * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
  * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
@@ -17,12 +17,13 @@ public class PublicCardState {
     private final int discardsSize;
 
     /**
-     * Constructs a Public Card State with its face-up cards, deck and discards
+     * A public card state with its face-up cards, deck and discards
      *
-     * @param faceUpCards  A list of face-up cards
-     * @param deckSize     The size of the deck
+     * @param faceUpCards  A {@link List} of face-up {@link Card}
+     * @param deckSize     The size of the {@link Deck}
      * @param discardsSize The size of the discards
-     * @throws IllegalArgumentException If the numbers of face-up cards, deck cards or discard cards are incorrect
+     * @throws IllegalArgumentException If {@code faceUpCards} count is not {@link Constants#FACE_UP_CARDS_COUNT},
+     *                                  or if deck cards or discard cards are less than zero
      */
     public PublicCardState(List<Card> faceUpCards, int deckSize, int discardsSize) {
         Preconditions.checkArgument(faceUpCards.size() == Constants.FACE_UP_CARDS_COUNT && deckSize >= 0 && discardsSize >= 0);
@@ -33,20 +34,20 @@ public class PublicCardState {
     }
 
     /**
-     * Returns the list of face-up cards
+     * The list of face-up cards
      *
-     * @return the list of face-up cards
+     * @return The {@link List} of face-up {@link Card}
      */
     public List<Card> faceUpCards() {
         return faceUpCards;
     }
 
     /**
-     * Returns the face-up card of the given slot
+     * The face-up card of the given slot
      *
-     * @param slot The index in the face-up cards list
-     * @return the face-up card of the given slot
-     * @throws IndexOutOfBounds If slot is not within faceUpCards range
+     * @param slot The index in the {@link List} of face-up {@link Card}
+     * @return The face-up {@link Card} at {@code slot}
+     * @throws IndexOutOfBoundsException If {@code slot} is not within {@code faceUpCards}' range
      */
     public Card faceUpCard(int slot) {
         Objects.checkIndex(slot, Constants.FACE_UP_CARDS_COUNT);
@@ -55,18 +56,18 @@ public class PublicCardState {
     }
 
     /**
-     * Returns the size of the deck
+     * The size of the deck
      *
-     * @return the size of the deck
+     * @return The size {@link PublicCardState#deckSize} of the deck
      */
     public int deckSize() {
         return deckSize;
     }
 
     /**
-     * Returns true if the deck is empty, false otherwise
+     * Returns true iff. the deck is empty
      *
-     * @return true iff. the deck is empty
+     * @return true iff. {@link PublicCardState#deckSize} is zero
      */
     public boolean isDeckEmpty() {
         return deckSize == 0;
@@ -75,7 +76,7 @@ public class PublicCardState {
     /**
      * Returns the size of the discarded cards pile
      *
-     * @return the size of the discarded cards pile
+     * @return the size {@link PublicCardState#discardsSize} of the discards
      */
     public int discardsSize() {
         return discardsSize;

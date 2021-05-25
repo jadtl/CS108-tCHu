@@ -10,11 +10,12 @@ import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
 
 /**
- * A overground or underground route that links 2 neighbor cities
- * with a length and a color
+ * A route that links two neighbor cities
  *
  * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
  * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
+ * @see Station
+ * @see Color
  */
 public final class Route {
     private final String id;
@@ -31,14 +32,14 @@ public final class Route {
     public enum Level {UNDERGROUND, OVERGROUND}
 
     /**
-     * Constructs a route with its identifier, stations, length, level and colors
+     * A route with its identifier, stations, length, level and colors
      *
-     * @param id       The identifier
-     * @param station1 The first station
-     * @param station2 The second station
+     * @param id       The {@link String} identifier
+     * @param station1 The first {@link Station}
+     * @param station2 The second {@link Station}
      * @param length   The route length
-     * @param level    The route level
-     * @param color    The route color
+     * @param level    The route {@link Level}
+     * @param color    The route {@link Color}
      * @throws IllegalArgumentException If both stations are equal or if the length is incorrect
      * @throws NullPointerException     If the identifier, the stations or the level are null
      */
@@ -56,74 +57,74 @@ public final class Route {
     }
 
     /**
-     * Returns the identifier of the route
+     * The identifier of the route
      *
-     * @return the identifier of the route
+     * @return The {@link String} identifier of the {@link Route}
      */
     public String id() {
         return id;
     }
 
     /**
-     * Returns the first station of the route
+     * The first station of the route
      *
-     * @return the first station of the route
+     * @return The first {@link Station} {@link Route#station1} of the {@link Route}
      */
     public Station station1() {
         return station1;
     }
 
     /**
-     * Returns the second station of the route
+     * The second station of the route
      *
-     * @return the second station of the route
+     * @return The second {@link Station} {@link Route#station2} of the {@link Route}
      */
     public Station station2() {
         return station2;
     }
 
     /**
-     * Returns the length of the route
+     * The length of the route
      *
-     * @return the length of the route
+     * @return The length {@link Route#length} of the {@link Route}
      */
     public int length() {
         return length;
     }
 
     /**
-     * Returns the level of the route
+     * The level of the route
      *
-     * @return the level of the route
+     * @return The {@link Level} of the {@link Route}
      */
     public Level level() {
         return level;
     }
 
     /**
-     * Returns the color of the route
+     * The color of the route
      *
-     * @return the color of the route
+     * @return The {@link Color} of the {@link Route}
      */
     public Color color() {
         return color;
     }
 
     /**
-     * Returns a list composed of the two route stations
+     * A list composed of the two route stations
      *
-     * @return a list composed of the two route stations
+     * @return A {@link List} composed of the two {@link Station} of the {@link Route}
      */
     public List<Station> stations() {
         return List.of(station1(), station2());
     }
 
     /**
-     * Returns the station opposite to a given one
+     * The station opposite to a given one
      *
-     * @param station The given station
-     * @return the station opposite to the given one
-     * @throws IllegalArgumentException If the given station doesn't belong to the route stations
+     * @param station The {@link Station}
+     * @return The {@link Station} opposite to {@code station}
+     * @throws IllegalArgumentException If the {@code station} doesn't belong to {@link Route#stations()}
      */
     public Station stationOpposite(Station station) {
         Preconditions.checkArgument(stations().contains(station));
@@ -132,21 +133,22 @@ public final class Route {
     }
 
     /**
-     * Returns the possible sets of cards a player can use to claim the route
+     * The list of possible sets of cards a player can use to claim the route
      *
-     * @return the possible sets of cards a player can use to claim the route
+     * @return The {@link List} of possible {@link SortedBag} of {@link Card} a player can use to claim the route
      */
     public List<SortedBag<Card>> possibleClaimCards() {
         return possibleClaimCards;
     }
 
     /**
-     * Returns the additional number of cards the player must have to claim the route
+     * The additional number of cards the player must have to claim the route
      *
-     * @param claimCards The cards that the player attempts to claim the route with
-     * @param drawnCards The cards that were drawn to decide of the additional cards count
-     * @return the additional number of cards the player must have to claim the route
-     * @throws IllegalArgumentException If the route is not underground or if the drawn cards are not three
+     * @param claimCards The {@link SortedBag} of {@link Card} that the player attempts to claim the route with
+     * @param drawnCards The {@link SortedBag} of {@link Card} that were drawn to decide of the additional cards count
+     * @return The additional number of cards the player must have to claim the {@link Route}
+     * @throws IllegalArgumentException If the {@link Route} is not {@link Level#UNDERGROUND} or if {@code drawnCards} are not
+     *                                  of size {@link Constants#ADDITIONAL_TUNNEL_CARDS}
      */
     public int additionalClaimCardsCount(SortedBag<Card> claimCards, SortedBag<Card> drawnCards) {
         Preconditions.checkArgument(level() == Level.UNDERGROUND && drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
@@ -157,17 +159,14 @@ public final class Route {
     }
 
     /**
-     * Returns the claim points for the route
+     * The claim points for the route
      *
-     * @return the claim points depending on the length of the route
+     * @return The claim points depending on {@link Route#length()}
      */
     public int claimPoints() {
         return Constants.ROUTE_CLAIM_POINTS.get(length());
     }
 
-    /**
-     * Computes the possible claim cards for the route
-     */
     private List<SortedBag<Card>> computePossibleClaimCards() {
         // Using a linked hash set to keep the order intact as elements are added and to remove duplicates
         Set<SortedBag<Card>> computedPossibleClaimCards = new LinkedHashSet<SortedBag<Card>>();

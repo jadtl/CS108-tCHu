@@ -18,13 +18,12 @@ public class PublicPlayerState {
     private final int claimPoints;
 
     /**
-     * Constructs a public player state with its ticket and card counts as well
-     * as its claimed routes
+     * A public player state with its ticket and card counts as well as its claimed routes
      *
-     * @param ticketCount The number of tickets the player has
-     * @param cardCount   The number of cards the player has
-     * @param routes      The routes the player claimed
-     * @throws IllegalArgumentException If if the number of tickets or cards are strictly negative
+     * @param ticketCount The number of {@link Ticket} the player has
+     * @param cardCount   The number of {@link Card} the player has
+     * @param routes      The {@link List} of {@link Route} the player claimed
+     * @throws IllegalArgumentException If {@code ticketCount} or {@code cardCount} are strictly negative
      */
     public PublicPlayerState(int ticketCount, int cardCount, List<Route> routes) {
         Preconditions.checkArgument(ticketCount >= 0 && cardCount >= 0);
@@ -37,45 +36,45 @@ public class PublicPlayerState {
     }
 
     /**
-     * Returns the number of tickets the player has
+     * The number of tickets the player has
      *
-     * @return the number of tickets the player has
+     * @return The number of {@link Ticket} {@link PublicPlayerState#ticketCount} the player has
      */
     public int ticketCount() {
         return ticketCount;
     }
 
     /**
-     * Returns the number of cards the player has
+     * The number of cards the player has
      *
-     * @return the number of cards the player has
+     * @return The number of {@link Card} {@link PublicPlayerState#cardCount} the player has
      */
     public int cardCount() {
         return cardCount;
     }
 
     /**
-     * Returns the routes the player owns
+     * The routes the player owns
      *
-     * @return the routes the player owns
+     * @return the {@link List} of {@link Route} {@link PublicPlayerState#routes} the player owns
      */
     public List<Route> routes() {
         return routes;
     }
 
     /**
-     * Returns the number of cars the player has
+     * The number of cars the player has
      *
-     * @return the number of cars the player has
+     * @return The number of cars {@link PublicPlayerState#carCount} the player has
      */
     public int carCount() {
         return carCount;
     }
 
     /**
-     * Returns the number of construction points claimed by the player
+     * The number of construction points claimed by the player
      *
-     * @return the number of construction points claimed by the player
+     * @return The number of construction points {@link PublicPlayerState#claimPoints} claimed by the player
      */
     public int claimPoints() {
         return claimPoints;

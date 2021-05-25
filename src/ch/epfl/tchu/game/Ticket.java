@@ -37,8 +37,8 @@ public final class Ticket implements Comparable<Ticket> {
     /**
      * A ticket from a single trip
      *
-     * @param from The departure {@link Station}
-     * @param to The arrival {@link Station}
+     * @param from   The departure {@link Station}
+     * @param to     The arrival {@link Station}
      * @param points The {@link Trip} value
      */
     public Ticket(Station from, Station to, int points) {

@@ -15,11 +15,11 @@ public final class Station {
     private final String name;
 
     /**
-     * Constructs a station with the given identifier number and name
+     * A station with the given identifier number and name
      *
-     * @param id   The station identifier
-     * @param name The station name
-     * @throws IllegalArgumentException if the identifier is strictly negative
+     * @param id   The station's identifier
+     * @param name The station's name
+     * @throws IllegalArgumentException If the {@code id} is strictly negative
      */
     public Station(int id, String name) {
         Preconditions.checkArgument(id >= 0);
@@ -29,27 +29,27 @@ public final class Station {
     }
 
     /**
-     * Returns the station unique identifier number
+     * The station unique identifier number
      *
-     * @return the station unique identifier number
+     * @return The station's unique identifier number {@code id}
      */
     public int id() {
         return id;
     }
 
     /**
-     * Returns the station name
+     * The station name
      *
-     * @return the station name
+     * @return The station's name {@code name}
      */
     public String name() {
         return name;
     }
 
     /**
-     * Returns the station name
+     * The station name
      *
-     * @return the station name
+     * @return The station's name {@code name}
      */
     @Override
     public String toString() {

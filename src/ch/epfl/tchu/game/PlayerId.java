@@ -17,9 +17,9 @@ public enum PlayerId {
     public static final int COUNT = ALL.size();
 
     /**
-     * Returns the identity of the player who follows the one applied to
+     * The identifier of the player who follows the one applied to
      *
-     * @return the identity of the player who follows the one applied to
+     * @return The identifier of the player who follows the one applied to
      */
     public PlayerId next() {
         return ALL.get((this.ordinal() + 1) % COUNT);

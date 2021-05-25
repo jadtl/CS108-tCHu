@@ -15,7 +15,7 @@ public final class StationPartition implements StationConnectivity {
     private final int[] stationConnectivity;
 
     /**
-     * Constructs a station partition with its connectivity
+     * A station partition with its connectivity
      *
      * @param stationConnectivity The connectivity of the stations for the player's network
      */
@@ -38,10 +38,10 @@ public final class StationPartition implements StationConnectivity {
         private final int[] stationConnectivity;
 
         /**
-         * Constructs a station partition builder with a set of stations
+         * A station partition builder with a set of stations
          *
          * @param stationCount The number of stations in the set
-         * @throws IllegalArgumentException If stationCount is strictly negative
+         * @throws IllegalArgumentException If {@code stationCount} is strictly negative
          */
         public Builder(int stationCount) {
             Preconditions.checkArgument(stationCount >= 0);
@@ -52,11 +52,11 @@ public final class StationPartition implements StationConnectivity {
         }
 
         /**
-         * Returns an identical builder except that its two given stations are connected
+         * The same builder except that its two given stations are connected
          *
-         * @param s1 The first station
-         * @param s2 The second station
-         * @return an identical builder except that its two given stations are connected
+         * @param s1 The first {@link Station}
+         * @param s2 The second {@link Station}
+         * @return The same builder except that its two given stations are connected
          */
         public Builder connect(Station s1, Station s2) {
             stationConnectivity[representative(s2.id())] = representative(s1.id());
@@ -65,11 +65,9 @@ public final class StationPartition implements StationConnectivity {
         }
 
         /**
-         * Returns the flat partition of the stations corresponding to the builder's
-         * in-progress deep station partition
+         * The flat partition of the stations corresponding to the builder's deep station partition
          *
-         * @return the flat partition of the stations corresponding to the builder's
-         * in-progress deep station partition
+         * @return The {@link StationPartition} of the stations corresponding to the builder's deep station partition
          */
         public StationPartition build() {
             for (int i = 0; i < stationConnectivity.length; i++)
@@ -79,10 +77,10 @@ public final class StationPartition implements StationConnectivity {
         }
 
         /**
-         * Returns the representative of the given station
+         * The representative of the given station
          *
-         * @param stationId The station
-         * @return the representative of the given station
+         * @param stationId The {@link Station}
+         * @return the representative of {@code stationId}
          */
         private int representative(int stationId) {
             int currentRepresentative = stationConnectivity[stationId];

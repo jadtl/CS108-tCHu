@@ -21,14 +21,14 @@ public class PublicGameState {
     private final PlayerId lastPlayer;
 
     /**
-     * Constructs the public game state of a tCHu game
+     * The public game state of a tCHu game
      *
-     * @param ticketsCount    The deck of tickets size
-     * @param cardState       The public cards state
-     * @param currentPlayerId The current player
-     * @param playerState     The public players state
-     * @param lastPlayer      The identifier of the last player
-     * @throws IllegalArgumentException If ticketsCount is negative or the numbers of players is incorrect
+     * @param ticketsCount    The size of the {@link Deck} of {@link Ticket}
+     * @param cardState       The {@link PublicCardState} of the game
+     * @param currentPlayerId The {@link PlayerId} of the current player
+     * @param playerState     The {@link PublicPlayerState} of the current player
+     * @param lastPlayer      The {@link PlayerId} of the last player
+     * @throws IllegalArgumentException If {@code ticketsCount} is negative or the number of players is incorrect
      */
     public PublicGameState(int ticketsCount, PublicCardState cardState, PlayerId currentPlayerId, Map<PlayerId, PublicPlayerState> playerState, PlayerId lastPlayer) {
         Preconditions.checkArgument(ticketsCount >= 0 && playerState.size() == PlayerId.COUNT);
@@ -41,73 +41,73 @@ public class PublicGameState {
     }
 
     /**
-     * Returns the number of tickets on the board
+     * The number of tickets on the board
      *
-     * @return the number of tickets on the board
+     * @return The number of tickets {@link PublicGameState#ticketsCount} on the board
      */
     public int ticketsCount() {
         return ticketsCount;
     }
 
     /**
-     * Returns the ability to draw tickets
+     * The ability to draw tickets
      *
-     * @return true iff. ticketsCount is greater than zero
+     * @return True iff. {@code ticketsCount} is greater than zero
      */
     public boolean canDrawTickets() {
         return ticketsCount > 0;
     }
 
     /**
-     * Returns the card state of the game
+     * The card state of the game
      *
-     * @return the card state of the game
+     * @return The card state {@link PublicGameState#cardState} of the game
      */
     public PublicCardState cardState() {
         return cardState;
     }
 
     /**
-     * Returns the ability to draw cards
+     * The ability to draw cards
      *
-     * @return true iff. the deck of cards and the discards have 5 or more cards
+     * @return True iff. the deck of cards and the discards have 5 or more cards
      */
     public boolean canDrawCards() {
         return cardState.deckSize() + cardState.discardsSize() >= 5;
     }
 
     /**
-     * Returns the identifier of the current player
+     * The identifier of the current player
      *
-     * @return the identifier of the current player
+     * @return The {@link PlayerId} of the current player
      */
     public PlayerId currentPlayerId() {
         return currentPlayerId;
     }
 
     /**
-     * Returns the player state of the given player
+     * The player state of the given player
      *
-     * @param playerId The player
-     * @return the player state of the given player
+     * @param playerId The player's identifier
+     * @return The {@link PublicPlayerState} of the player of identifier {@code playerId}
      */
     public PublicPlayerState playerState(PlayerId playerId) {
         return playerState.get(playerId);
     }
 
     /**
-     * Returns the player state of the current player
+     * The player state of the current player
      *
-     * @return the player state of the current player
+     * @return The {@link PublicPlayerState} of the player of {@link PublicGameState#currentPlayerId}
      */
     public PublicPlayerState currentPlayerState() {
         return playerState.get(currentPlayerId);
     }
 
     /**
-     * Returns the claimed routes of all the players
+     * The claimed routes of all the players
      *
-     * @return the claimed routes of all the players
+     * @return The claimed {@link List} of {@link Route} of all the players
      */
     // TODO: Check the TA's comment again
     public List<Route> claimedRoutes() {
@@ -118,9 +118,9 @@ public class PublicGameState {
     }
 
     /**
-     * Returns the last player identifier
+     * The last player identifier
      *
-     * @return the last player identifier
+     * @return the last player's {@link PlayerId}
      */
     public PlayerId lastPlayer() {
         return lastPlayer;

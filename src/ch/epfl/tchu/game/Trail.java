@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 public final class Trail {
     private final Station station1;
     private final Station station2;
-    private final List<Route> routes; 
+    private final List<Route> routes;
     private final int length;
 
     private Trail(Station station1, Station station2, List<Route> routes) {
@@ -23,23 +23,22 @@ public final class Trail {
         this.routes = routes;
         // TODO: Leave the calculation to longest
         this.length = routes.stream()
-        .map(r -> r.length())
-        .reduce(0, Integer::sum);
+                .map(r -> r.length())
+                .reduce(0, Integer::sum);
     }
 
     /**
      * The longest path in the network composed of the given routes
      *
      * @param routes The {@link List} of {@link Route} that the player controls
-     * 
      * @return A trail with the maximum length from {@code routes}
      */
     // TODO: Check notes
     public static Trail longest(List<Route> routes) {
         // Filling the list with starting trails from routes
         List<Trail> toExtendTrails = routes.stream()
-        .flatMap(r -> Stream.of(new Trail(r.station1(), r.station2(), List.of(r)), new Trail(r.station2(), r.station1(), List.of(r))))
-        .collect(Collectors.toList());
+                .flatMap(r -> Stream.of(new Trail(r.station1(), r.station2(), List.of(r)), new Trail(r.station2(), r.station1(), List.of(r))))
+                .collect(Collectors.toList());
 
         // A list that stores trails that cannot be extended further
         List<Trail> deadEndTrails = new ArrayList<>();
@@ -60,8 +59,8 @@ public final class Trail {
                 // Removing from the routes list already used routes as well as the ones that
                 // do not contain the current trail's second station
                 List<Route> eligibleRoutes = routes.stream()
-                .filter(r -> !t.routes.contains(r) && r.stations().contains(t.station2()))
-                .collect(Collectors.toList());
+                        .filter(r -> !t.routes.contains(r) && r.stations().contains(t.station2()))
+                        .collect(Collectors.toList());
 
                 if (eligibleRoutes.isEmpty())
                     // If no eligible route exist, the current trail is a dead end
@@ -72,42 +71,50 @@ public final class Trail {
                         List<Route> updatedRoutes = new ArrayList<Route>(t.routes);
                         updatedRoutes.add(r);
                         updatedTrails.add(new Trail(t.station1(), r.stationOpposite(t.station2()), updatedRoutes));
-                    }) ;
+                    });
             });
         }
 
         // Figuring the longest trail among the found dead ends
         return deadEndTrails.stream()
-        .max((t1, t2) -> Integer.compare(t1.length(), t2.length()))
-        .orElse(new Trail(null, null, List.of()));
+                .max((t1, t2) -> Integer.compare(t1.length(), t2.length()))
+                .orElse(new Trail(null, null, List.of()));
     }
 
     /**
      * The length of the trail
-     * 
+     *
      * @return The length {@link Trail#length} of the {@link Trail}
      */
-    public int length() { return length; }
+    public int length() {
+        return length;
+    }
 
     /**
      * The first station of the trail
-     * 
+     *
      * @return the first station {@link Trail#station1} of the {@link Trail}
      */
-    public Station station1() { return station1; }
+    public Station station1() {
+        return station1;
+    }
 
     /**
      * The second station of the trail
-     * 
+     *
      * @return the second station {@link Trail#station2} of the {@link Trail}
      */
-    public Station station2() { return station2; }
+    public Station station2() {
+        return station2;
+    }
 
     /**
      * The string representation of the trail
-     * 
+     *
      * @return The string representation of the trail
      */
     @Override
-    public String toString() { return (station1() + " - " + station2() + " (" + length() + ")"); }
+    public String toString() {
+        return (station1() + " - " + station2() + " (" + length() + ")");
+    }
 }

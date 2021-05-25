@@ -8,12 +8,11 @@ package ch.epfl.tchu.game;
  */
 public interface StationConnectivity {
     /**
-     * Returns the connection status of the two
-     * given stations in the player's network
+     * The connection status of the two given stations in the player's network
      *
-     * @param s1 The departure station
-     * @param s2 The arrival station
-     * @return true if the two stations are connected
+     * @param s1 The departure {@link Station}
+     * @param s2 The arrival {@link Station}
+     * @return true iff. {@code s1} and {@code s2} are connected
      */
     boolean connected(Station s1, Station s2);
 

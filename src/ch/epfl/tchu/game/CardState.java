@@ -9,8 +9,7 @@ import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
 
 /**
- * A overground or underground route that links 2 neighbor cities
- * with a length and a color
+ * A card state of the game
  *
  * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
  * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
@@ -21,11 +20,11 @@ public final class CardState extends PublicCardState {
     private final SortedBag<Card> discardedCards;
 
     /**
-     * Constructs a card state from face-up cards, a deck and discards
+     * A card state from face-up cards, a deck and discards
      *
-     * @param faceUpCards    The visible cards on the board
-     * @param deck           A pile of shuffled cards
-     * @param discardedCards A pile of discarded cards
+     * @param faceUpCards    The visible {@link List} of {@link Card} on the board
+     * @param deck           A {@link Deck} of {@link Card} from which the player can draw
+     * @param discardedCards A discarded {@link SortedBag} of {@link Card}
      */
     private CardState(List<Card> faceUpCards, Deck<Card> deck, SortedBag<Card> discardedCards) {
         super(faceUpCards, deck.size(), discardedCards.size());
@@ -35,11 +34,11 @@ public final class CardState extends PublicCardState {
     }
 
     /**
-     * Returns a new card state from a deck
+     * A card state from a deck
      *
-     * @param deck A deck of cards
-     * @return a new card state from a deck
-     * @throws IllegalArgumentException If the deck size is below the required face-up cards size
+     * @param deck A {@link Deck} of {@link Card}
+     * @return A {@link CardState} from a {@link Deck}
+     * @throws IllegalArgumentException If {@code deck.size()} is below {@link Constants#FACE_UP_CARDS_COUNT}
      */
     public static CardState of(Deck<Card> deck) {
         Preconditions.checkArgument(deck.size() >= Constants.FACE_UP_CARDS_COUNT);
@@ -54,11 +53,11 @@ public final class CardState extends PublicCardState {
     }
 
     /**
-     * Returns a card state for which the chosen face-up card is replaced by the top deck card and discarded
+     * A card state for which the chosen face-up card is replaced by the top deck card and discarded
      *
      * @param slot The index of the drawn face-up card
-     * @return a card state for which the chosen face-up card is replaced by the top deck card and discarded
-     * @throws IndexOutOfBoundsException If slot is not within faceUpCards range
+     * @return A {@link CardState} for which the face-up card at {@code slot} is replaced by {@link CardState#topDeckCard()} and discarded
+     * @throws IndexOutOfBoundsException If {@code slot} is not within {@link CardState#faceUpCards()} range
      */
     public CardState withDrawnFaceUpCard(int slot) {
         Objects.checkIndex(slot, Constants.FACE_UP_CARDS_COUNT);
@@ -70,9 +69,9 @@ public final class CardState extends PublicCardState {
     }
 
     /**
-     * Returns the card on top of the deck
+     * The card on top of the deck
      *
-     * @return the card on top of the deck
+     * @return The {@link Card} on top of {@link CardState#deck}
      */
     public Card topDeckCard() {
         Preconditions.checkArgument(!isDeckEmpty());
@@ -81,19 +80,19 @@ public final class CardState extends PublicCardState {
     }
 
     /**
-     * Returns a card state for which the deck top card has been removed
+     * A card state for which the deck top card has been removed
      *
-     * @return a card state for which the deck top card has been removed
+     * @return A {@link CardState} for which the {@link CardState#topDeckCard()} has been removed
      */
     public CardState withoutTopDeckCard() {
         return new CardState(faceUpCards(), deck.withoutTopCard(), discardedCards);
     }
 
     /**
-     * Returns a card state for which the empty deck has been replaced by the discards, shuffled
+     * A card state for which the empty deck has been replaced by the discards, shuffled
      *
-     * @param rng A random number generator
-     * @return a card state for which the empty deck has been replaced by the discards, shuffled
+     * @param rng A {@link Random} number generator
+     * @return A {@link CardState} for which the empty deck has been replaced by the discards and shuffled
      * @throws IllegalArgumentException If the deck is not empty
      */
     public CardState withDeckRecreatedFromDiscards(Random rng) {
@@ -103,10 +102,10 @@ public final class CardState extends PublicCardState {
     }
 
     /**
-     * Returns the card state for which additionalDiscards has been added to its discards
+     * The card state for which the additional discards have been added to its discards
      *
-     * @param additionalDiscards The cards to add to the discards
-     * @return the card state for which additionalDiscards has been added to its discards
+     * @param additionalDiscards The {@link SortedBag} of {@link Card} to add to the {@link CardState#discardedCards}
+     * @return The {@link CardState} for which {@code additionalDiscards} have been added to its {@link CardState#discardedCards}
      */
     public CardState withMoreDiscardedCards(SortedBag<Card> additionalDiscards) {
         return new CardState(faceUpCards(), deck, new SortedBag.Builder<Card>()

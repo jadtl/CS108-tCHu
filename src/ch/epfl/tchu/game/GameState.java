@@ -32,13 +32,11 @@ public final class GameState extends PublicGameState {
     }
 
     /**
-     * Returns a game state with the given tickets deck and the starter card state and player state
-     * in which four cards have been given to each player
+     * An initial game state with a tickets set, and a random generating number
      *
-     * @param tickets The initial tickets to use in the game
-     * @param rng     The random number generator
-     * @return a game state with the given tickets deck and the starter card state and player state
-     * in which four cards have been given to each player
+     * @param tickets The initial {@link SortedBag} of {@link Ticket} to use in the game
+     * @param rng     The {@link Random} number generator
+     * @return An initial {@link GameState} generated using {@code tickets} and {@code rng}
      */
     public static GameState initial(SortedBag<Ticket> tickets, Random rng) {
         Map<PlayerId, PlayerState> playerState = new EnumMap<>(PlayerId.class);
@@ -62,22 +60,21 @@ public final class GameState extends PublicGameState {
     }
 
     /**
-     * Returns a number of top tickets
+     * A number of top tickets
      *
      * @param count The number of top tickets
-     * @return a sorted bag of count top tickets
+     * @return A sorted bag of {@code count} top tickets
      */
     public SortedBag<Ticket> topTickets(int count) {
         return tickets.topCards(count);
     }
 
     /**
-     * Returns an identical game state except for its tickets deck that
-     * is missing a number of top tickets
+     * The same game state except that its tickets deck has a given number of top tickets removed
      *
      * @param count The number of top tickets to remove
-     * @return the same game state with a tickets deck missing count top cards
-     * @throws IllegalArgumentException If count is incorrect
+     * @return The same {@link GameState} with a {@link Deck} of {@link Ticket} missing {@code count} top cards
+     * @throws IllegalArgumentException If {@code count} is not between 0 and {@link GameState#tickets}' size (exclusive)
      */
     public GameState withoutTopTickets(int count) {
         Preconditions.checkArgument(0 <= count && count <= tickets.size());
@@ -86,9 +83,9 @@ public final class GameState extends PublicGameState {
     }
 
     /**
-     * Returns the top card of the game deck
+     * The top card of the game deck
      *
-     * @return the top card of the game deck
+     * @return The top {@link Card} of the game {@link Deck}
      * @throws IllegalArgumentException If the deck is empty
      */
     public Card topCard() {
@@ -98,10 +95,10 @@ public final class GameState extends PublicGameState {
     }
 
     /**
-     * Returns the same game state except the card state is missing its top deck card
+     * The same game state except that the card state had its top deck card
      *
-     * @return the same game state except the card state is missing its top deck card
-     * @throws IllegalArgumentException If the deck is empty
+     * @return The same {@link GameState} except that the {@link CardState} had its top {@link Deck} {@link Card} removed
+     * @throws IllegalArgumentException If the {@link Deck} is empty
      */
     public GameState withoutTopCard() {
         Preconditions.checkArgument(!cardState.isDeckEmpty());
@@ -110,51 +107,49 @@ public final class GameState extends PublicGameState {
     }
 
     /**
-     * Returns the same game state except the given cards were added to the discards
+     * The same game state except that the given cards were added to the discards
      *
      * @param discardedCards The additional discarded cards
-     * @return the same game state except the given cards were added to the discards
+     * @return the same {@link GameState} except that the given cards were added to the discards
      */
     public GameState withMoreDiscardedCards(SortedBag<Card> discardedCards) {
         return new GameState(tickets, cardState.withMoreDiscardedCards(discardedCards), currentPlayerId(), playerState, lastPlayer());
     }
 
     /**
-     * Returns the same game state except that if the deck is empty, it's recreated from the discards
+     * The same game state except that if the deck is empty, it's recreated from the discards
      *
-     * @param rng The random number generator
-     * @return the same game state except that if the deck is empty, it's recreated from the discards
+     * @param rng The {@link Random} number generator
+     * @return the same {@link GameState} except that the deck is empty, it's recreated from the discards
      */
     public GameState withCardsDeckRecreatedIfNeeded(Random rng) {
         return cardState.isDeckEmpty() ? new GameState(tickets, cardState.withDeckRecreatedFromDiscards(rng), currentPlayerId(), playerState, lastPlayer()) : this;
     }
 
     /**
-     * Returns an identical state except that the given tickets were added to the given player's hand
+     * The same game state except that the given tickets were added to the given player's hand
      *
-     * @param playerId      The player
-     * @param chosenTickets The tickets picked by the player
-     * @return an identical state except that the given tickets were added to the given player's hand
-     * @throws IllegalArgumentException if the given player already has tickets
+     * @param player        The player's {@link PlayerId}
+     * @param chosenTickets The {@link SortedBag} of {@link Ticket} picked by the player
+     * @return An identical state except that {@code chosenTickets} were added to the {@code player}'s hand
+     * @throws IllegalArgumentException if {@code player} already has tickets
      */
-    public GameState withInitiallyChosenTickets(PlayerId playerId, SortedBag<Ticket> chosenTickets) {
-        Preconditions.checkArgument(playerState(playerId).ticketCount() == 0);
+    public GameState withInitiallyChosenTickets(PlayerId player, SortedBag<Ticket> chosenTickets) {
+        Preconditions.checkArgument(playerState(player).ticketCount() == 0);
 
         Map<PlayerId, PlayerState> updatedPlayerState = new EnumMap<PlayerId, PlayerState>(playerState);
-        updatedPlayerState.put(playerId, playerState(playerId).withAddedTickets(chosenTickets));
+        updatedPlayerState.put(player, playerState(player).withAddedTickets(chosenTickets));
 
         return new GameState(tickets, cardState, currentPlayerId(), updatedPlayerState, lastPlayer());
     }
 
     /**
-     * Returns an identical state except the current player drew tickets from the top of the deck
-     * and kept the chosen tickets
+     * The same game state except that the current player drew tickets from the top of the deck and kept the chosen tickets
      *
-     * @param drawnTickets  The tickets drawn by the player
-     * @param chosenTickets The tickets chosen by the player
-     * @return an identical state except the current player drew tickets from the top of the deck
-     * and kept the chosen tickets
-     * @throws IllegalArgumentException If drawnTickets doesn't contain chosenTickets
+     * @param drawnTickets  The {@link SortedBag} of {@link Ticket} drawn by the player
+     * @param chosenTickets The {@link SortedBag} of {@link Ticket} chosen by the player
+     * @return The same {@link GameState} except that the {@link GameState#currentPlayerId()} drew {@code drawnTickets} and kept {@code chosenTickets}
+     * @throws IllegalArgumentException If {@code drawnTickets} doesn't contain {@code chosenTickets}
      */
     public GameState withChosenAdditionalTickets(SortedBag<Ticket> drawnTickets, SortedBag<Ticket> chosenTickets) {
         Preconditions.checkArgument(drawnTickets.contains(chosenTickets));
@@ -166,12 +161,10 @@ public final class GameState extends PublicGameState {
     }
 
     /**
-     * Returns an identical state except that the selected face-up card has been drawn
-     * and placed in the current player's hand
+     * The same game state except that the selected face-up card has been drawn and placed in the current player's hand
      *
      * @param slot The slot of the face-up card to draw
-     * @return an identical state except that the selected face-up card has been drawn
-     * and placed in the current player's hand
+     * @return The same {@link GameState} except that the face-up card at {@code slot} has been placed in {@link GameState#currentPlayerId()}'s hand
      * @throws IllegalArgumentException If cards can't be drawn
      */
     public GameState withDrawnFaceUpCard(int slot) {
@@ -185,11 +178,9 @@ public final class GameState extends PublicGameState {
     }
 
     /**
-     * Returns an identical state except that the top deck card has been drawn and placed
-     * in the player's hand
+     * The same game state except that the top deck card has been drawn and placed in the current player's hand
      *
-     * @return an identical state except that the top deck card has been drawn and placed
-     * in the player's hand
+     * @return The same {@link GameState} except that the top deck card and placed in the {@link GameState#currentPlayerId()}'s hand
      * @throws IllegalArgumentException If cards can't be drawn
      */
     public GameState withBlindlyDrawnCard() {
@@ -203,11 +194,11 @@ public final class GameState extends PublicGameState {
     }
 
     /**
-     * Returns an identical state except that the player claimed the given route using the given cards
+     * The same game state except that the player claimed the given route using the given cards
      *
-     * @param route The claimed route
-     * @param cards The cards the player used to claim the route
-     * @return an identical state except that the player claimed the given route using the given cards
+     * @param route The claimed {@link Route}
+     * @param cards The {@link SortedBag} of {@link Card} the player used to claim the route
+     * @return The same {@link GameState} except that the {@link GameState#currentPlayerId()} claimed the {@code route} using {@code cards}
      */
     public GameState withClaimedRoute(Route route, SortedBag<Card> cards) {
         CardState updatedCardState = cardState.withMoreDiscardedCards(cards);
@@ -219,19 +210,18 @@ public final class GameState extends PublicGameState {
     }
 
     /**
-     * Returns true if the last turn begins
+     * Whether the last turn begins or not
      *
-     * @return true iff. the last player's identifier is unknown and the current player has two or less cars
+     * @return True iff. the {@link GameState#lastPlayer()}'s identifier is unknown and the {@link GameState#currentPlayerId()} has two or less cars
      */
     public boolean lastTurnBegins() {
         return Objects.isNull(lastPlayer()) && currentPlayerState().carCount() <= 2;
     }
 
     /**
-     * Returns an identical state, except that the current player is now the next player, if the last turn begins
-     * the current player becomes the last player
+     * The same game state, except that the current player is now the next player, if the last turn begins the current player becomes the last player
      *
-     * @return an identical state, except that the current player is now the next player
+     * @return The same {@link GameState} except that the {@link GameState#currentPlayerId()} is now the next player
      */
     public GameState forNextTurn() {
         return new GameState(tickets, cardState, currentPlayerId().next(), playerState, lastTurnBegins() ? currentPlayerId() : lastPlayer());
