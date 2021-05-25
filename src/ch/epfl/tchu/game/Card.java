@@ -3,9 +3,7 @@ package ch.epfl.tchu.game;
 import java.util.List;
 
 /**
- * An enumeration of the different types
- * of game cards, i.e. eight wagon cards
- * types and the locomotive card type.
+ * An enumeration of the different types of game cards, i.e. eight wagon cards types and the locomotive card type.
  *
  * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
  * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
@@ -29,7 +27,7 @@ public enum Card {
     private final Color color;
 
     /**
-     * Returns a wagon card type according to the given color
+     * A wagon card type according to the given color
      *
      * @param color The {@link Color} of the wanted wagon
      */
@@ -57,16 +55,16 @@ public enum Card {
     }
 
     /**
-     * Returns the card's color
+     * The card's color
      *
-     * @return a {@link Color} for a wagon and {@code null} for a {@link Card#LOCOMOTIVE}
+     * @return A {@link Color} for a wagon and {@code null} for a {@link Card#LOCOMOTIVE}
      */
     public Color color() {
         return color;
     }
 
     /**
-     * Constructs a card with the given {@link Color} or {@code null} for a {@link Card#LOCOMOTIVE}
+     * A card with the given {@link Color} or {@code null} for a {@link Card#LOCOMOTIVE}
      */
     Card() {
         color = this.toString().equals("LOCOMOTIVE") ? null : Color.valueOf(this.toString());

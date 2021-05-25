@@ -39,7 +39,7 @@ class DecksViewCreator {
     }
 
     /**
-     * @param observableGameState The current player's observable game state
+     * @param gameState The current player's observable game state
      * @return The hand view displaying the information from the given game state
      */
     public static HBox createHandView(ObservableGameState gameState) {
@@ -58,7 +58,7 @@ class DecksViewCreator {
     }
 
     /**
-     * @param observableGameState        The current player's observable game state
+     * @param gameState        The current player's observable game state
      * @param drawTicketsHandlerProperty The property of the tickets drawing handler
      * @param drawCardHandlerProperty    The property of the card drawing handler
      * @return The cards view displaying the information from the given game state and properties
