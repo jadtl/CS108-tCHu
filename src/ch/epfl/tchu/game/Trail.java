@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * A Trail between two stations in the network
+ * A trail between two stations in the network
  *
  * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
  * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
@@ -30,10 +30,9 @@ public final class Trail {
     /**
      * The longest path in the network composed of the given routes
      *
-     * @param routes 
-     *        The list of routes that the player controls
+     * @param routes The {@link List} of {@link Route} that the player controls
      * 
-     * @return a trail with the maximum length for the given routes
+     * @return A trail with the maximum length from {@code routes}
      */
     // TODO: Check notes
     public static Trail longest(List<Route> routes) {
@@ -84,30 +83,30 @@ public final class Trail {
     }
 
     /**
-     * Returns the length of the trail
+     * The length of the trail
      * 
-     * @return the length of the trail
+     * @return The length {@link Trail#length} of the {@link Trail}
      */
     public int length() { return length; }
 
     /**
-     * Returns the first station of the trail
+     * The first station of the trail
      * 
-     * @return the first station of the trail
+     * @return the first station {@link Trail#station1} of the {@link Trail}
      */
     public Station station1() { return station1; }
 
     /**
-     * Returns he second station of the trail
+     * The second station of the trail
      * 
-     * @return the second station of the trail
+     * @return the second station {@link Trail#station2} of the {@link Trail}
      */
     public Station station2() { return station2; }
 
     /**
-     * Returns he string representation of the trail
+     * The string representation of the trail
      * 
-     * @return the string representation of the trail
+     * @return The string representation of the trail
      */
     @Override
     public String toString() { return (station1() + " - " + station2() + " (" + length() + ")"); }
