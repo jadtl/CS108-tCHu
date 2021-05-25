@@ -23,35 +23,38 @@ import static ch.epfl.tchu.game.PlayerId.*;
 import ch.epfl.tchu.SortedBag;
 
 /**
- * 
- * 
- * @author Sofiya Malamud (313789)
- * @author Jad Tala (310821)
+ * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
+ * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
  */
-public class ServerMain extends Application{
-  
-  public static void main(String[] args) { launch(args); }
+public class ServerMain extends Application {
 
-  @Override
-  public void start(Stage primaryStage) {
-      List<String> arguments = this.getParameters().getRaw();
-      int port = 5108;
-      Map<PlayerId, String> names = new HashMap<>(Map.of(PLAYER_1, "Ada", PLAYER_2, "Charles"));
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
 
-      if(arguments.size() >= 2){
-        names.replace(PLAYER_1, arguments.get(0));
-        names.replace(PLAYER_2, arguments.get(1));
-      }
+    @Override
+    public void start(Stage primaryStage) {
+        List<String> arguments = this.getParameters().getRaw();
+        int port = 5108;
+        Map<PlayerId, String> names = new HashMap<>(Map.of(PLAYER_1, "Ada", PLAYER_2, "Charles"));
 
-      try (ServerSocket s0 = new ServerSocket(port)){
-      Socket s = s0.accept(); 
-      Map<PlayerId, Player> players =
-      Map.of(PLAYER_1, new GraphicalPlayerAdapter(),
-        PLAYER_2, new RemotePlayerProxy(s));  
-      new Thread (() -> Game.play(players, names, SortedBag.of(ChMap.tickets()), new Random())).start();
+        if (arguments.size() >= 2) {
+            names.replace(PLAYER_1, arguments.get(0));
+            names.replace(PLAYER_2, arguments.get(1));
+        }
 
-      } catch (IOException exception) {
-      throw new UncheckedIOException(exception);
-      }
-  }
+        try (ServerSocket s0 = new ServerSocket(port)) {
+            Socket s = s0.accept();
+            Map<PlayerId, Player> players =
+                    Map.of(PLAYER_1, new GraphicalPlayerAdapter(),
+                            PLAYER_2, new RemotePlayerProxy(s));
+            new Thread(() -> Game.play(players, names, SortedBag.of(ChMap.tickets()), new Random())).start();
+
+        } catch (IOException exception) {
+            throw new UncheckedIOException(exception);
+        }
+    }
 }

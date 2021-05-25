@@ -8,28 +8,31 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
- * 
- * 
- * @author Sofiya Malamud (313789)
- * @author Jad Tala (310821)
+ * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
+ * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
  */
-public class ClientMain extends Application{
-  
-    public static void main(String[] args) { launch(args); }
+public class ClientMain extends Application {
+
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
-    public void start(Stage primaryStage){
-      List<String> args = this.getParameters().getRaw();
-      String hostName = "localhost";
-      int port = 5108;
+    public void start(Stage primaryStage) {
+        List<String> args = this.getParameters().getRaw();
+        String hostName = "localhost";
+        int port = 5108;
 
-      if (args.size() >= 2) {
-        hostName = args.get(0);
-        port = Integer.valueOf(args.get(1));
-      }
+        if (args.size() >= 2) {
+            hostName = args.get(0);
+            port = Integer.valueOf(args.get(1));
+        }
 
-      RemotePlayerClient remotePlayerClient = new RemotePlayerClient(new GraphicalPlayerAdapter(), hostName, port);
+        RemotePlayerClient remotePlayerClient = new RemotePlayerClient(new GraphicalPlayerAdapter(), hostName, port);
 
-      new Thread (() -> remotePlayerClient.run()).start();
+        new Thread(() -> remotePlayerClient.run()).start();
     }
 }

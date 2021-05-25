@@ -8,8 +8,8 @@ import java.util.stream.Stream;
 /**
  * A Trail between two stations in the network
  *
- * @author Sofiya Malamud (313789)
- * @author Jad Tala (310821)
+ * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
+ * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
  */
 public final class Trail {
     private final Station station1;

@@ -7,8 +7,8 @@ import ch.epfl.tchu.Preconditions;
 /**
  * A station with a name and a unique identifier number
  *
- * @author Sofiya Malamud (313789)
- * @author Jad Tala (310821)
+ * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
+ * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
  */
 public final class Station {
     private final int id;
@@ -17,12 +17,8 @@ public final class Station {
     /**
      * Constructs a station with the given identifier number and name
      *
-     * @param id 
-     *        The station identifier
-     * 
-     * @param name 
-     *        The station name
-     *
+     * @param id   The station identifier
+     * @param name The station name
      * @throws IllegalArgumentException if the identifier is strictly negative
      */
     public Station(int id, String name) {

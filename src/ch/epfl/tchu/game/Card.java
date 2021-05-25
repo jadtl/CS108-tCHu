@@ -7,8 +7,9 @@ import java.util.List;
  * of game cards, i.e. eight wagon cards
  * types and the locomotive card type.
  *
- * @author Sofiya Malamud (313789)
- * @author Jad Tala (310821)
+ * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
+ * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
+ * @see Color
  */
 public enum Card {
     BLACK,
@@ -29,45 +30,43 @@ public enum Card {
 
     /**
      * Returns a wagon card type according to the given color
-     * or a locomotive card if color is null
      *
-     * @param color 
-     *        The color of the wanted wagon
+     * @param color The {@link Color} of the wanted wagon
      */
     public static Card of(Color color) {
         switch (color) {
-          case BLACK:
-            return BLACK;
-          case BLUE:
-            return BLUE;
-          case GREEN:
-            return GREEN;
-          case ORANGE:
-            return ORANGE;
-          case RED:
-            return RED;
-          case VIOLET:
-            return VIOLET;
-          case WHITE:
-            return WHITE;
-          case YELLOW:
-            return YELLOW;
-          default:
-            return LOCOMOTIVE;
+            case BLACK:
+                return BLACK;
+            case BLUE:
+                return BLUE;
+            case GREEN:
+                return GREEN;
+            case ORANGE:
+                return ORANGE;
+            case RED:
+                return RED;
+            case VIOLET:
+                return VIOLET;
+            case WHITE:
+                return WHITE;
+            case YELLOW:
+                return YELLOW;
+            default:
+                return LOCOMOTIVE;
         }
     }
 
     /**
-     * Returns the card color
+     * Returns the card's color
      *
-     * @return a color for a wagon and null for a locomotive
+     * @return a {@link Color} for a wagon and {@code null} for a {@link Card#LOCOMOTIVE}
      */
     public Color color() {
         return color;
     }
 
     /**
-     * Constructs a card with the given color or null for a locomotive card
+     * Constructs a card with the given {@link Color} or {@code null} for a {@link Card#LOCOMOTIVE}
      */
     Card() {
         color = this.toString().equals("LOCOMOTIVE") ? null : Color.valueOf(this.toString());

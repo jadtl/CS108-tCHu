@@ -74,7 +74,7 @@ class GameTest {
     @Test
     void gamePlayFailsWithNotEnoughPlayerNames() {
         var players = Map.of(
-                PlayerId.PLAYER_1, (Player) new TestPlayer(0, List.of()),
+                PlayerId.PLAYER_1, new TestPlayer(0, List.of()),
                 PlayerId.PLAYER_2, (Player) new TestPlayer(0, List.of()));
 
         assertThrows(IllegalArgumentException.class, () -> {
@@ -276,7 +276,7 @@ class GameTest {
         var p1 = new TestPlayer(rng.nextLong(), routes);
         var p2 = new TestPlayer(rng.nextLong(), routes);
         var players = Map.of(
-                PlayerId.PLAYER_1, (Player) p1,
+                PlayerId.PLAYER_1, p1,
                 PlayerId.PLAYER_2, (Player) p2);
         var playerNames = Map.of(
                 PlayerId.PLAYER_1, "Ada",

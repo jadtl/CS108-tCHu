@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ChMap {
-    private ChMap() { }
+    private ChMap() {
+    }
 
     public static List<Station> stations() {
         return ALL_STATIONS;

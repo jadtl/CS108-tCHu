@@ -6,8 +6,8 @@ import java.util.List;
  * An enumeration of the eight colors
  * used in the game for wagons and roads
  *
- * @author Sofiya Malamud (313789)
- * @author Jad Tala (310821)
+ * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
+ * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
  */
 public enum Color {
     BLACK,

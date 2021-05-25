@@ -1,7 +1,8 @@
 package ch.epfl.tchu.gui;
 
 public final class StringsFr {
-    private StringsFr() {}
+    private StringsFr() {
+    }
 
     // Nom des cartes
     public static final String BLACK_CARD = "noire";
@@ -30,7 +31,7 @@ public final class StringsFr {
             "Choisissez les cartes à utiliser pour vous emparer de cette route :";
     public static final String CHOOSE_ADDITIONAL_CARDS =
             "Choisissez les cartes supplémentaires à utiliser pour vous" +
-            " emparer de ce tunnel (ou aucune pour annuler et passer votre tour) :";
+                    " emparer de ce tunnel (ou aucune pour annuler et passer votre tour) :";
 
     // Informations concernant le déroulement de la partie
     public static final String WILL_PLAY_FIRST =
@@ -76,6 +77,7 @@ public final class StringsFr {
 
     /**
      * Retourne une chaîne marquant le pluriel, ou la chaîne vide.
+     *
      * @param value la valeur déterminant la chaîne retournée
      * @return la chaîne vide si la valeur vaut ±1, la chaîne "s" sinon
      */

@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 /**
  * A ticket that holds a number of trips of the same departure station
  *
- * @author Sofiya Malamud (313789)
- * @author Jad Tala (310821)
+ * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
+ * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
  */
 public final class Ticket implements Comparable<Ticket> {
     private final List<Trip> trips;
@@ -19,16 +19,15 @@ public final class Ticket implements Comparable<Ticket> {
      * Constructs a ticket from a list of trips of the same departure station
      *
      * @param trips the list of trips
-     *
      * @throws IllegalArgumentException if the trips list is empty or
-     *                      if there are more than one departure station
+     *                                  if there are more than one departure station
      */
     public Ticket(List<Trip> trips) {
         Preconditions.checkArgument(!trips.isEmpty());
 
         Collection<String> fromStations = trips.stream()
-        .map(t -> t.from().name())
-        .collect(Collectors.toCollection(TreeSet::new));
+                .map(t -> t.from().name())
+                .collect(Collectors.toCollection(TreeSet::new));
 
         Preconditions.checkArgument(fromStations.size() == 1);
 
@@ -39,17 +38,18 @@ public final class Ticket implements Comparable<Ticket> {
     /**
      * Constructs a ticket from a single trip
      *
-     * @param from the departure station
-     * @param to the arrival station
+     * @param from   the departure station
+     * @param to     the arrival station
      * @param points the trip value
      */
-    public Ticket(Station from, Station to, int points) { this(List.of(new Trip(from, to, points))); }
+    public Ticket(Station from, Station to, int points) {
+        this(List.of(new Trip(from, to, points)));
+    }
 
     /**
      * Returns the textual representation of the trips
      *
      * @param trips a list of trips
-     *
      * @return the textual representation of the trips
      */
     // TODO: Make it hold in 5 lines
@@ -61,14 +61,14 @@ public final class Ticket implements Comparable<Ticket> {
 
         // Removing duplicate arrival stations
         Collection<String> arrivalNoDuplicates = trips.stream()
-        .map(t -> t.to().name())
-        .collect(Collectors.toCollection(TreeSet::new));
+                .map(t -> t.to().name())
+                .collect(Collectors.toCollection(TreeSet::new));
 
         // Storing the points for each unique arrival station in a map
         for (String arrivalStation : arrivalNoDuplicates) {
             trips.stream()
-            .filter(t -> t.to().name().equals(arrivalStation))
-            .forEach(t -> map.put(arrivalStation, t.points()));
+                    .filter(t -> t.to().name().equals(arrivalStation))
+                    .forEach(t -> map.put(arrivalStation, t.points()));
         }
 
         // Print the remaining of the text depending on whether the ticket holds a unique trip or more
@@ -91,20 +91,21 @@ public final class Ticket implements Comparable<Ticket> {
      *
      * @return the textual representation of the ticket
      */
-    public String text() { return text; }
+    public String text() {
+        return text;
+    }
 
     /**
      * Returns the points value of the ticket according the the player connectivity
      *
      * @param connectivity the station connectivity of the player network
-     *
      * @return the points value of the ticket according the the player connectivity
      */
     public int points(StationConnectivity connectivity) {
         return trips.stream()
-        .map(t -> t.points(connectivity))
-        .max(Comparator.comparing(Integer::valueOf))
-        .get();
+                .map(t -> t.points(connectivity))
+                .max(Comparator.comparing(Integer::valueOf))
+                .get();
     }
 
     /**
@@ -112,12 +113,13 @@ public final class Ticket implements Comparable<Ticket> {
      * in alphabetical order of their textual representation
      *
      * @param that the ticket to compare the first to
-     *
      * @return a strictly negative integer if this is smaller than that,
-     *              zero if equal and strictly positive otherwise
+     * zero if equal and strictly positive otherwise
      */
     @Override
-    public int compareTo(Ticket that) { return this.text().compareTo(that.text()); }
+    public int compareTo(Ticket that) {
+        return this.text().compareTo(that.text());
+    }
 
     /**
      * Returns the textual representation of the ticket
@@ -125,5 +127,7 @@ public final class Ticket implements Comparable<Ticket> {
      * @return the textual representation of the ticket
      */
     @Override
-    public String toString() { return this.text(); }
+    public String toString() {
+        return this.text();
+    }
 }
