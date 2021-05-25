@@ -23,13 +23,17 @@ import static ch.epfl.tchu.game.PlayerId.*;
 import ch.epfl.tchu.SortedBag;
 
 /**
+ * The server for the tCHu game
+ *
  * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
  * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
  */
 public class ServerMain extends Application {
 
     /**
-     * @param args
+     * Waits for a connection by the client to be made and then starts a game of tCHu
+     *
+     * @param args The arguments of the program, i.e. the players' names
      */
     public static void main(String[] args) {
         launch(args);

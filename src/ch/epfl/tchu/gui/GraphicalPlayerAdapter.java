@@ -23,6 +23,8 @@ import static javafx.application.Platform.runLater;
 import static ch.epfl.tchu.game.Player.TurnKind.*;
 
 /**
+ *
+ *
  * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
  * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
  * @see ch.epfl.tchu.game.Player
@@ -35,7 +37,7 @@ public class GraphicalPlayerAdapter implements Player {
     private final BlockingQueue<SortedBag<Card>> claimCards;
 
     /**
-     * Constructs a graphical player adapter
+     * A graphical player adapter
      */
     public GraphicalPlayerAdapter() {
         initialTicketsChoice = new ArrayBlockingQueue<>(1);

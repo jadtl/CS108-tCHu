@@ -1,10 +1,5 @@
 package ch.epfl.tchu.gui;
 
-import static ch.epfl.tchu.game.Card.LOCOMOTIVE;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.Constants;
 import ch.epfl.tchu.game.Ticket;
@@ -13,7 +8,6 @@ import ch.epfl.tchu.gui.ActionHandlers.DrawTicketsHandler;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -23,7 +17,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.scene.input.MouseEvent;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static ch.epfl.tchu.game.Card.LOCOMOTIVE;
 
 /**
  * A creator for the hand view and the cards view
@@ -39,15 +37,17 @@ class DecksViewCreator {
     }
 
     /**
-     * @param gameState The current player's observable game state
-     * @return The hand view displaying the information from the given game state
+     * The hand view of the graphical interface
+     *
+     * @param gameState The current player's {@link ObservableGameState}
+     * @return The hand view {@link HBox} displaying the information from {@code gameState}
      */
     public static HBox createHandView(ObservableGameState gameState) {
         HBox cards = new HBox();
         cards.getChildren().addAll(createHandViewCards(gameState));
         cards.setId("hand-pane");
 
-        ListView<Ticket> tickets = new ListView<Ticket>(gameState.ownedTicketsProperty().get());
+        ListView<Ticket> tickets = new ListView<>(gameState.ownedTicketsProperty().get());
         tickets.setId("tickets");
 
         HBox handView = new HBox(tickets);
@@ -58,10 +58,12 @@ class DecksViewCreator {
     }
 
     /**
-     * @param gameState        The current player's observable game state
-     * @param drawTicketsHandlerProperty The property of the tickets drawing handler
-     * @param drawCardHandlerProperty    The property of the card drawing handler
-     * @return The cards view displaying the information from the given game state and properties
+     * The cards view of the graphical interface
+     *
+     * @param gameState        The current player's {@link ObservableGameState}
+     * @param drawTicketsHandlerProperty The property of the {@link DrawTicketsHandler}
+     * @param drawCardHandlerProperty    The property of the {@link DrawCardHandler}
+     * @return The cards view {@link VBox} displaying the information from {@code gameState} and using the given handlers
      */
     public static VBox createCardsView(ObservableGameState gameState,
                                        ObjectProperty<DrawTicketsHandler> drawTicketsHandlerProperty,
@@ -76,12 +78,7 @@ class DecksViewCreator {
         cardsDeck.setGraphic(createButtonGauge(gameState.remainingCardsPercentageProperty()));
         cardsDeck.getStyleClass().add("gauged");
         cardsDeck.disableProperty().bind(drawCardHandlerProperty.isNull());
-        cardsDeck.setOnMouseClicked((new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent arg0) {
-                drawCardHandlerProperty.get().onDrawCard(Constants.DECK_SLOT);
-            }
-        }
+        cardsDeck.setOnMouseClicked((e -> drawCardHandlerProperty.get().onDrawCard(Constants.DECK_SLOT)
         ));
 
         VBox cardsView = new VBox();
@@ -95,7 +92,7 @@ class DecksViewCreator {
     }
 
     private static List<Node> createHandViewCards(ObservableGameState gameState) {
-        List<Node> cards = new ArrayList<Node>();
+        List<Node> cards = new ArrayList<>();
         for (Card card : Card.ALL) {
             ReadOnlyIntegerProperty count = gameState.ownedCardsProperty(card);
             Text counter = new Text();
@@ -115,7 +112,7 @@ class DecksViewCreator {
     }
 
     private static List<Node> createFaceUpCardsView(ObservableGameState gameState, ObjectProperty<DrawCardHandler> drawCardHandlerProperty) {
-        List<Node> faceUpCards = new ArrayList<Node>();
+        List<Node> faceUpCards = new ArrayList<>();
         for (int slot : Constants.FACE_UP_CARD_SLOTS) {
             Card card = gameState.faceUpCard(slot).get();
             StackPane faceUpCard = new StackPane();

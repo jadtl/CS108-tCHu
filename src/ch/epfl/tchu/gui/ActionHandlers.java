@@ -18,7 +18,7 @@ public interface ActionHandlers {
     @FunctionalInterface
     interface DrawTicketsHandler {
         /**
-         * Called when the player requests to draw tickets
+         * Called when the player requests to draw a number {@link Ticket}
          */
         void onDrawTickets();
     }
@@ -31,7 +31,7 @@ public interface ActionHandlers {
         /**
          * Called when the player requests to draw a card at the given slot
          *
-         * @param slot The card slot chosen by the player
+         * @param slot The {@link Card} slot chosen by the player
          */
         void onDrawCard(int slot);
     }
@@ -44,8 +44,8 @@ public interface ActionHandlers {
         /**
          * Called when the player requests to claim the given route with the given cards
          *
-         * @param route      The route chosen by the player
-         * @param claimCards The cards chosen by the player to claim the route
+         * @param route      The {@link Route} chosen by the player
+         * @param claimCards The {@link SortedBag} of {@link Card} chosen by the player to claim {@code route}
          */
         void onClaimRoute(Route route, SortedBag<Card> claimCards);
     }
@@ -58,7 +58,7 @@ public interface ActionHandlers {
         /**
          * Called when the player chooses to keep the given tickets after tickets drawing
          *
-         * @param chosenTickets The tickets chosen by the player
+         * @param chosenTickets The {@link SortedBag} of {@link Ticket} chosen by the player
          */
         void onChooseTickets(SortedBag<Ticket> chosenTickets);
     }
@@ -69,11 +69,10 @@ public interface ActionHandlers {
     @FunctionalInterface
     interface ChooseCardsHandler {
         /**
-         * Called when the player chooses to use the given cards to claim a route,
-         * if these are additional claim cards, the bag can be empty, meaning that
-         * the player gave up on claiming the tunnel
+         * Called when the player chooses to use the given cards to claim a route, if these are additional claim cards,
+         * the bag can be empty, meaning that the player gave up on claiming the tunnel
          *
-         * @param chosenCards The cards chosen by the player
+         * @param chosenCards The {@link SortedBag} of {@link Card} chosen by the player
          */
         void onChooseCards(SortedBag<Card> chosenCards);
     }

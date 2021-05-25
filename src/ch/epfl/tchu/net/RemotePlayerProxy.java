@@ -35,7 +35,7 @@ public class RemotePlayerProxy implements Player {
     /**
      * Constructs a proxy with a socket
      *
-     * @param socket A socket to communicate to the client
+     * @param socket A {@link Socket} to communicate to the client
      */
     public RemotePlayerProxy(Socket socket) {
         this.socket = socket;
@@ -116,8 +116,8 @@ public class RemotePlayerProxy implements Player {
     /**
      * Sends a serialized message to the client using its socket
      *
-     * @param messageId      The identifier of the server's message
-     * @param serializedArgs A list of serialized arguments to send to the client
+     * @param messageId      The {@link MessageId} of the server's message
+     * @param serializedArgs A {@link List} of serialized {@link String} arguments to send to the client
      */
     private void send(MessageId messageId, List<String> serializedArgs) {
         List<String> arguments = new ArrayList<>();

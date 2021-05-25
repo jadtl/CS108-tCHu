@@ -38,7 +38,7 @@ public class RemotePlayerClient {
     /**
      * Constructs a client using a player, a hostname and a server port
      *
-     * @param player The player who needs a remote access
+     * @param player The {@link Player} who needs a remote access
      * @param host   The server's hostname
      * @param port   The server's port
      */
@@ -65,9 +65,9 @@ public class RemotePlayerClient {
                     socket.close();
                     return;
                 }
-                MessageId messageId = MessageId.valueOf(Arrays.asList(lastMessage.split(Pattern.quote(" "), -1)).stream()
+                MessageId messageId = MessageId.valueOf(Arrays.stream(lastMessage.split(Pattern.quote(" "), -1))
                         .collect(Collectors.toList()).get(0));
-                List<String> arguments = Arrays.asList(lastMessage.split(Pattern.quote(" "), -1)).stream()
+                List<String> arguments = Arrays.stream(lastMessage.split(Pattern.quote(" "), -1))
                         .collect(Collectors.toList());
                 arguments.remove(0);
 

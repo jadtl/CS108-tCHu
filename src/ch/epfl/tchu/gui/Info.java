@@ -141,7 +141,7 @@ public final class Info {
      *
      * @param route The {@link Route} the player claimed
      * @param cards The {@link SortedBag} of {@link Card} the player claimed {@code route} with
-     * @return A message announcing that the players claimed {@code route} using {@link cards}
+     * @return A message announcing that the players claimed {@code route} using {@code cards}
      */
     public String claimedRoute(Route route, SortedBag<Card> cards) {
         return String.format(StringsFr.CLAIMED_ROUTE, playerName, routeText(route.station1(), route.station2()),

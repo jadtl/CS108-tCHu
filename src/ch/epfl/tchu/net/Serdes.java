@@ -33,7 +33,7 @@ public class Serdes {
     }
 
     /**
-     * The serde applicable to an integer
+     * The {@link Serde} applicable to an {@link Integer}
      */
     public static final Serde<Integer> INTEGER = Serde.of(
             i -> Integer.toString(i),
@@ -41,7 +41,7 @@ public class Serdes {
     );
 
     /**
-     * The serde applicable to a string
+     * The {@link Serde} applicable to a {@link String}
      */
     public static final Serde<String> STRING = Serde.of(
             i -> new String(Base64.getEncoder().encode(i.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8),
@@ -49,62 +49,62 @@ public class Serdes {
     );
 
     /**
-     * The serde applicable to a player identifier
+     * The {@link Serde} applicable to a {@link PlayerId}
      */
     public static final Serde<PlayerId> PLAYER_ID = Serde.oneOf(PlayerId.ALL);
 
     /**
-     * The serde applicable to a turn kind
+     * The {@link Serde} applicable to a {@link ch.epfl.tchu.game.Player.TurnKind}
      */
     public static final Serde<Player.TurnKind> TURN_KIND = Serde.oneOf(Player.TurnKind.ALL);
 
     /**
-     * The serde applicable to a card
+     * The {@link Serde} applicable to a {@link Card}
      */
     public static final Serde<Card> CARD = Serde.oneOf(Card.ALL);
 
     /**
-     * The serde applicable to a route
+     * The {@link Serde} applicable to a {@link Route}
      */
     public static final Serde<Route> ROUTE = Serde.oneOf(ChMap.routes());
 
     /**
-     * The serde applicable to a ticket
+     * The {@link Serde} applicable to a {@link Ticket}
      */
     public static final Serde<Ticket> TICKET = Serde.oneOf(ChMap.tickets());
 
     /**
-     * The serde applicable to a string list
+     * The {@link Serde} applicable to a {@link List} of {@link String}
      */
     public static final Serde<List<String>> STRING_LIST = Serde.listOf(Serdes.STRING, ",");
 
     /**
-     * The serde applicable to a card list
+     * The {@link Serde} applicable to a {@link List} of {@link Card}
      */
     public static final Serde<List<Card>> CARD_LIST = Serde.listOf(Serdes.CARD, ",");
 
     /**
-     * The serde applicable to a route list
+     * The {@link Serde} applicable to a {@link List} of {@link Route}
      */
     public static final Serde<List<Route>> ROUTE_LIST = Serde.listOf(Serdes.ROUTE, ",");
 
     /**
-     * The serde applicable to a sorted bag of cards
+     * The {@link Serde} applicable to a {@link SortedBag} of {@link Card}
      */
     public static final Serde<SortedBag<Card>> CARD_SORTED_BAG = Serde.bagOf(Serdes.CARD, ",");
 
     /**
-     * The serde applicable to a sorted bag of tickets
+     * The {@link Serde} applicable to a {@link SortedBag} of {@link Ticket}
      */
     public static final Serde<SortedBag<Ticket>> TICKET_SORTED_BAG = Serde.bagOf(Serdes.TICKET, ",");
 
     /**
-     * The serde applicable to a list of sorted bags of cards
+     * The {@link Serde} applicable to a {@link List} of {@link SortedBag} of {@link Card}
      */
     public static final Serde<List<SortedBag<Card>>> CARD_SORTED_BAG_LIST = Serde.listOf(Serdes.CARD_SORTED_BAG, ";");
 
     /**
-     * The serde applicable to a public card state
+     * The {@link Serde} applicable to a {@link PublicCardState}
      */
     public static final Serde<PublicCardState> PUBLIC_CARD_STATE = Serde.of(
             i -> String.join(";", List.of(CARD_LIST.serialize(i.faceUpCards()), INTEGER.serialize(i.deckSize()),
@@ -121,7 +121,7 @@ public class Serdes {
     );
 
     /**
-     * The serde applicable to a public player state
+     * The {@link Serde} applicable to a {@link PublicPlayerState}
      */
     public static final Serde<PublicPlayerState> PUBLIC_PLAYER_STATE = Serde.of(
             i -> String.join(";",
@@ -139,7 +139,7 @@ public class Serdes {
     );
 
     /**
-     * The serde applicable to a player state
+     * The {@link Serde} applicable to a {@link PlayerState}
      */
     public static final Serde<PlayerState> PLAYER_STATE = Serde.of(
             i -> String.join(";",
@@ -157,7 +157,7 @@ public class Serdes {
     );
 
     /**
-     * The serde applicable to a public game state
+     * The {@link Serde} applicable to a {@link PublicGameState}
      */
     public static final Serde<PublicGameState> PUBLIC_GAME_STATE = Serde.of(
             i -> String.join(":",

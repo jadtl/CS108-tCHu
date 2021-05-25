@@ -27,10 +27,12 @@ class InfoViewCreator {
     }
 
     /**
-     * @param player      The identifier of the concerned player
-     * @param playerNames The map of the players' names
-     * @param gameState   The observable game state
-     * @param gameInfos   An observable list of infos related to the ongoing game
+     * The info view of the graphical interface
+     *
+     * @param player      The {@link PlayerId} of the concerned player
+     * @param playerNames The {@link Map} of the players' names
+     * @param gameState   The {@link ObservableGameState} of the concerned player
+     * @param gameInfos   An {@link ObservableList} of infos related to the ongoing game
      * @return The {@link javafx.scene.layout.VBox} info view of the game
      */
     public static VBox createInfoView(PlayerId player, Map<PlayerId, String> playerNames, ObservableGameState gameState, ObservableList<Text> gameInfos) {

@@ -27,20 +27,22 @@ import javafx.scene.shape.Rectangle;
  */
 class MapViewCreator {
     /**
-     * The class is non-instanciable
+     * The class is not instantiable
      */
     private MapViewCreator() {
     }
 
     /**
-     * @param gameState                 The observable game state of the concerned player
-     * @param claimRouteHandlerProperty The property of the route claiming handler
-     * @param cardChooser               The card chooser interface
-     * @return The map view pane of the game
+     * The map view of the graphical interface
+     *
+     * @param gameState                 The {@link ObservableGameState} of the concerned player
+     * @param claimRouteHandlerProperty The property of {@link ClaimRouteHandler}
+     * @param cardChooser               The {@link CardChooser}
+     * @return The map view {@link Pane} of the game
      */
     public static Pane createMapView(ObservableGameState gameState,
                                      ObjectProperty<ClaimRouteHandler> claimRouteHandlerProperty, CardChooser cardChooser) {
-        List<Node> allRouteGroups = new ArrayList<Node>();
+        List<Node> allRouteGroups = new ArrayList<>();
         ChMap.routes().forEach(r -> allRouteGroups.add(createRouteGroup(r, gameState, claimRouteHandlerProperty, cardChooser)));
 
         ImageView background = new ImageView();
@@ -54,7 +56,7 @@ class MapViewCreator {
 
     private static Group createRouteGroup(Route route, ObservableGameState gameState,
                                           ObjectProperty<ClaimRouteHandler> claimRouteHandlerProperty, CardChooser cardChooser) {
-        List<Node> tiles = new ArrayList<Node>();
+        List<Node> tiles = new ArrayList<>();
         for (int i = 1; i <= route.length(); i++) {
             Rectangle carRectangle = new Rectangle(36, 12);
             carRectangle.getStyleClass().add("filled");
@@ -79,9 +81,7 @@ class MapViewCreator {
         if (Objects.isNull(route.color())) routeGroup.getStyleClass().add("NEUTRAL");
         else routeGroup.getStyleClass().add(route.color().toString());
 
-        gameState.routesOwnershipProperty(route).addListener((o, oV, nV) -> {
-            routeGroup.getStyleClass().add(nV.name());
-        });
+        gameState.routesOwnershipProperty(route).addListener((o, oV, nV) -> routeGroup.getStyleClass().add(nV.name()));
 
         routeGroup.disableProperty().bind(
                 claimRouteHandlerProperty.isNull().or(gameState.routeClaimabilityProperty(route).not())

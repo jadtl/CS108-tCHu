@@ -58,9 +58,9 @@ public class ObservableGameState {
     private final Map<Route, ObjectProperty<List<SortedBag<Card>>>> possibleClaimCards;
 
     /**
-     * Constructs an observable game state using the corresponding player identifier
+     * An observable game state using the corresponding player identifier
      *
-     * @param ownId The identifier of the corresponding player
+     * @param ownId The {@link PlayerId} of the corresponding player
      */
     public ObservableGameState(PlayerId ownId) {
         this.ownId = new SimpleObjectProperty<PlayerId>(ownId);
@@ -98,8 +98,8 @@ public class ObservableGameState {
     /**
      * Updates every property according to the two given states
      *
-     * @param newState The updated public game state
-     * @param ownState The updated concerned player state
+     * @param newState The updated {@link PublicGameState}
+     * @param ownState The updated concerned {@link PlayerState}
      */
     public void setState(PublicGameState newState, PlayerState ownState) {
         this.remainingTicketsPercentage.set((int) ((float) newState.ticketsCount() / (float) ChMap.tickets().size() * 100));

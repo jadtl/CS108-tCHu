@@ -8,13 +8,16 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
+ * The client for the tCHu game
+ *
  * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
  * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
  */
 public class ClientMain extends Application {
-
     /**
-     * @param args
+     * Connects to the server to play a game of tCHu
+     *
+     * @param args The arguments of the program, i.e. the hostname and the port
      */
     public static void main(String[] args) {
         launch(args);
