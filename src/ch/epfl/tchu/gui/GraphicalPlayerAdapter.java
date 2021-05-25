@@ -23,7 +23,7 @@ import static javafx.application.Platform.runLater;
 import static ch.epfl.tchu.game.Player.TurnKind.*;
 
 /**
- *
+ * An adapter for the graphical player into a player
  *
  * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
  * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>

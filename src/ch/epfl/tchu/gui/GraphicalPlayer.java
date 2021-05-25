@@ -59,8 +59,10 @@ public final class GraphicalPlayer {
     private final ObjectProperty<ClaimRouteHandler> claimRoute;
 
     /**
-     * @param ownId
-     * @param playerNames
+     * A graphical player from an identifier and a map of player names
+     *
+     * @param ownId The {@link PlayerId} of the concerned player
+     * @param playerNames The {@link Map} linking {@link PlayerId}s to their player {@link String} names
      */
     public GraphicalPlayer(PlayerId ownId, Map<PlayerId, String> playerNames) {
         claimRoute = new SimpleObjectProperty<>();
@@ -88,8 +90,10 @@ public final class GraphicalPlayer {
     }
 
     /**
-     * @param newState
-     * @param ownState
+     * Updates the graphical interface of the player
+     *
+     * @param newState The updated {@link PublicGameState}
+     * @param ownState The updated {@link PlayerState} of the concerned player
      */
     public void setState(PublicGameState newState, PlayerState ownState) {
         assert Platform.isFxApplicationThread();
@@ -97,7 +101,9 @@ public final class GraphicalPlayer {
     }
 
     /**
-     * @param info
+     * Adds a given info to the list of informations of the player
+     *
+     * @param info The {@link String} info the player receives
      */
     public void receiveInfo(String info) {
         assert Platform.isFxApplicationThread();
@@ -108,9 +114,11 @@ public final class GraphicalPlayer {
     }
 
     /**
-     * @param drawTicketsHandler
-     * @param drawCardHandler
-     * @param claimRouteHandler
+     * Updates the player's handlers at the start of the turn
+     *
+     * @param drawTicketsHandler The handler for drawing tickets
+     * @param drawCardHandler The handler for drawing cards
+     * @param claimRouteHandler The handler for claiming route
      */
     public void startTurn(DrawTicketsHandler drawTicketsHandler, DrawCardHandler drawCardHandler, ClaimRouteHandler claimRouteHandler) {
         assert Platform.isFxApplicationThread();
@@ -136,7 +144,9 @@ public final class GraphicalPlayer {
     }
 
     /**
-     * @param drawCardHandler
+     * Allows the player to draw cards and is called when the player has to draw their second card
+     *
+     * @param drawCardHandler The handler for drawing cards
      */
     public void drawCard(DrawCardHandler drawCardHandler) {
         assert Platform.isFxApplicationThread();
@@ -148,8 +158,10 @@ public final class GraphicalPlayer {
     }
 
     /**
-     * @param ticketOptions
-     * @param chooseTicketsHandler
+     * Displays the prompt to choose tickets
+     *
+     * @param ticketOptions The {@link SortedBag} of {@link Ticket} representing the options of the player
+     * @param chooseTicketsHandler The handler for choosing tickets
      */
     public void chooseTickets(SortedBag<Ticket> ticketOptions, ChooseTicketsHandler chooseTicketsHandler) {
         assert Platform.isFxApplicationThread();
@@ -185,8 +197,10 @@ public final class GraphicalPlayer {
     }
 
     /**
-     * @param cardOptions
-     * @param chooseCardsHandler
+     * Displays the prompt to choose claim cards
+     *
+     * @param cardOptions The {@link SortedBag} of {@link Card} representing the options of the player
+     * @param chooseCardsHandler The handler for choosing cards
      */
     public void chooseClaimCards(List<SortedBag<Card>> cardOptions, ChooseCardsHandler chooseCardsHandler) {
         assert Platform.isFxApplicationThread();
@@ -224,8 +238,10 @@ public final class GraphicalPlayer {
     }
 
     /**
-     * @param cardOptions
-     * @param chooseCardsHandler
+     * Displays the prompt to choose additional cards
+     *
+     * @param cardOptions The {@link SortedBag} of {@link Card} representing the options of the player
+     * @param chooseCardsHandler The handler for choosing cards
      */
     public void chooseAdditionalCards(List<SortedBag<Card>> cardOptions, ChooseCardsHandler chooseCardsHandler) {
         assert Platform.isFxApplicationThread();
