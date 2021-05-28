@@ -29,7 +29,7 @@ import ch.epfl.tchu.game.Ticket;
  * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
  * @see ch.epfl.tchu.game.Player
  */
-public class RemotePlayerProxy implements Player {
+public final class RemotePlayerProxy implements Player {
     private final Socket socket;
 
     /**

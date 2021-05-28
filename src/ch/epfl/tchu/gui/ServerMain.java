@@ -1,4 +1,3 @@
-// TODO: Server main Javadoc
 package ch.epfl.tchu.gui;
 
 import java.io.IOException;

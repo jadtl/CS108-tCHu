@@ -29,7 +29,7 @@ import ch.epfl.tchu.game.Ticket;
  * @author <a href="https://people.epfl.ch/jad.tala">Jad Tala (310821)</a>
  * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
  */
-public class RemotePlayerClient {
+public final class RemotePlayerClient {
     private final Player player;
     private final String host;
     private final int port;

@@ -84,7 +84,7 @@ class MapViewCreator {
         gameState.routesOwnershipProperty(route).addListener((o, oV, nV) -> routeGroup.getStyleClass().add(nV.name()));
 
         routeGroup.disableProperty().bind(
-                claimRouteHandlerProperty.isNull().or(gameState.routeClaimabilityProperty(route).not())
+                claimRouteHandlerProperty.isNull().or(gameState.routeAvailabilityProperty(route).not())
         );
 
         routeGroup.setOnMouseClicked(e -> {

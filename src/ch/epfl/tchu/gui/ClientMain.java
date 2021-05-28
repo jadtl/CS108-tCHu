@@ -1,4 +1,3 @@
-// TODO: Client main Javadoc
 package ch.epfl.tchu.gui;
 
 import java.util.List;
@@ -31,11 +30,11 @@ public class ClientMain extends Application {
 
         if (args.size() >= 2) {
             hostName = args.get(0);
-            port = Integer.valueOf(args.get(1));
+            port = Integer.parseInt(args.get(1));
         }
 
         RemotePlayerClient remotePlayerClient = new RemotePlayerClient(new GraphicalPlayerAdapter(), hostName, port);
 
-        new Thread(() -> remotePlayerClient.run()).start();
+        new Thread(remotePlayerClient::run).start();
     }
 }

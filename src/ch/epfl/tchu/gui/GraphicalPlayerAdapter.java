@@ -1,5 +1,3 @@
-// TODO: Graphical player adapter Javadoc
-// TODO: Find abstraction for interrupted exception handling
 package ch.epfl.tchu.gui;
 
 import java.util.List;
@@ -29,7 +27,7 @@ import static ch.epfl.tchu.game.Player.TurnKind.*;
  * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
  * @see ch.epfl.tchu.game.Player
  */
-public class GraphicalPlayerAdapter implements Player {
+public final class GraphicalPlayerAdapter implements Player {
     private GraphicalPlayer graphicalPlayer;
     private final BlockingQueue<SortedBag<Ticket>> initialTicketsChoice;
     private final BlockingQueue<Integer> slot;
@@ -123,15 +121,13 @@ public class GraphicalPlayerAdapter implements Player {
     @Override
     public SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options) {
         BlockingQueue<SortedBag<Ticket>> q = new ArrayBlockingQueue<>(1);
-        runLater(() -> graphicalPlayer.chooseTickets(options, c -> {
-                    new Thread(() -> {
-                        try {
-                            q.put(c);
-                        } catch (InterruptedException e) {
-                            throw new Error();
-                        }
-                    }).start();
-                })
+        runLater(() -> graphicalPlayer.chooseTickets(options, c -> new Thread(() -> {
+            try {
+                q.put(c);
+            } catch (InterruptedException e) {
+                throw new Error();
+            }
+        }).start())
         );
         try {
             return q.take();

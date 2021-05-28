@@ -87,7 +87,7 @@ public interface Serde<T> {
                     t.forEach(e -> stringJoiner.add(serde.serialize(e)));
                     return stringJoiner.toString();
                 },
-                t -> t.isEmpty() ? List.of() : Arrays.asList(t.split(Pattern.quote(delimiter), -1)).stream()
+                t -> t.isEmpty() ? List.of() : Arrays.stream(t.split(Pattern.quote(delimiter), -1))
                         .map(serde::deserialize)
                         .collect(Collectors.toList())
         );
@@ -110,11 +110,9 @@ public interface Serde<T> {
                     t.forEach(e -> stringJoiner.add(serde.serialize(e)));
                     return stringJoiner.toString();
                 },
-                t -> {
-                    return t.isEmpty() ? SortedBag.of() : SortedBag.of(Arrays.asList(t.split(Pattern.quote(delimiter), -1)).stream()
-                            .map(serde::deserialize)
-                            .collect(Collectors.toList()));
-                }
+                t -> t.isEmpty() ? SortedBag.of() : SortedBag.of(Arrays.stream(t.split(Pattern.quote(delimiter), -1))
+                        .map(serde::deserialize)
+                        .collect(Collectors.toList()))
         );
     }
 }

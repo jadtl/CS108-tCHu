@@ -68,13 +68,13 @@ class DecksViewCreator {
     public static VBox createCardsView(ObservableGameState gameState,
                                        ObjectProperty<DrawTicketsHandler> drawTicketsHandlerProperty,
                                        ObjectProperty<DrawCardHandler> drawCardHandlerProperty) {
-        Button ticketsDeck = new Button("Billets");
+        Button ticketsDeck = new Button(StringsFr.TICKETS);
         ticketsDeck.setGraphic(createButtonGauge(gameState.remainingTicketsPercentageProperty()));
         ticketsDeck.getStyleClass().add("gauged");
         ticketsDeck.disableProperty().bind(drawTicketsHandlerProperty.isNull());
         ticketsDeck.setOnMouseClicked(e -> drawTicketsHandlerProperty.get().onDrawTickets());
 
-        Button cardsDeck = new Button("Cartes");
+        Button cardsDeck = new Button(StringsFr.CARDS);
         cardsDeck.setGraphic(createButtonGauge(gameState.remainingCardsPercentageProperty()));
         cardsDeck.getStyleClass().add("gauged");
         cardsDeck.disableProperty().bind(drawCardHandlerProperty.isNull());

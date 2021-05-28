@@ -31,7 +31,7 @@ public final class PlayerState extends PublicPlayerState {
         super(tickets.size(), cards.size(), routes);
 
         int highestId = routes.isEmpty() ? 0 : routes.stream().flatMap((Route route) -> (List.of(route.station1().id(), route.station2().id()).stream()))
-                .collect(Collectors.toSet()).stream().max(Comparator.comparing(Integer::valueOf)).get();
+                .collect(Collectors.toSet()).stream().reduce(Integer.MIN_VALUE, Integer::max);
         StationPartition.Builder stationPartitionBuilder = new StationPartition
                 .Builder(highestId + 1);
         routes.forEach(route -> stationPartitionBuilder.connect(route.station1(), route.station2()));
@@ -52,7 +52,7 @@ public final class PlayerState extends PublicPlayerState {
     public static PlayerState initial(SortedBag<Card> initialCards) {
         Preconditions.checkArgument(initialCards.size() == Constants.INITIAL_CARDS_COUNT);
 
-        return new PlayerState(new SortedBag.Builder<Ticket>().build(), initialCards, new ArrayList<Route>());
+        return new PlayerState(new SortedBag.Builder<Ticket>().build(), initialCards, new ArrayList<>());
     }
 
     /**
@@ -132,12 +132,12 @@ public final class PlayerState extends PublicPlayerState {
         Preconditions.checkArgument(!initialCards.isEmpty() && initialCards.toSet().size() <= 2);
 
         SortedBag<Card> remainingCards = cards().difference(initialCards);
-        if (remainingCards.isEmpty()) return new ArrayList<SortedBag<Card>>();
+        if (remainingCards.isEmpty()) return new ArrayList<>();
 
         SortedBag<Card> filteredCards = SortedBag.of(remainingCards.stream()
                 .filter((Card card) -> card.equals(Card.LOCOMOTIVE) || card.equals(initialCards.get(0)))
                 .collect(Collectors.toList()));
-        if (filteredCards.size() < additionalCardsCount) return new ArrayList<SortedBag<Card>>();
+        if (filteredCards.size() < additionalCardsCount) return new ArrayList<>();
 
         return filteredCards.subsetsOfSize(additionalCardsCount).stream()
                 .sorted(Comparator.comparingInt(additionalCards -> additionalCards.countOf(Card.LOCOMOTIVE))).collect(Collectors.toList());

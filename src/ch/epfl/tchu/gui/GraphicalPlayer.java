@@ -1,4 +1,3 @@
-// TODO: Graphical player Javadoc
 package ch.epfl.tchu.gui;
 
 import static javafx.collections.FXCollections.observableArrayList;
@@ -79,7 +78,7 @@ public final class GraphicalPlayer {
         Node handView = DecksViewCreator
                 .createHandView(gameState);
         Node infoView = InfoViewCreator
-                .createInfoView(PlayerId.PLAYER_1, playerNames, gameState, gameInfos);
+                .createInfoView(playerNames, gameState, gameInfos);
 
         BorderPane pane = new BorderPane(mapView, null, cardsView, handView, infoView);
         Scene scene = new Scene(pane);

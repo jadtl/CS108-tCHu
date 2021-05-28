@@ -67,7 +67,7 @@ public final class MainViewTest extends Application {
       new Text("Première information.\n"),
       new Text("\nSeconde information.\n"));
     Node infoView = InfoViewCreator
-      .createInfoView(PlayerId.PLAYER_1, playerNames, gameState, infos);
+      .createInfoView(playerNames, gameState, infos);
 
     BorderPane mainPane =
       new BorderPane(mapView, null, cardsView, handView, infoView);

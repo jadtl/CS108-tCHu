@@ -1,17 +1,16 @@
 package ch.epfl.tchu.game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.Player.TurnKind;
 import ch.epfl.tchu.game.Route.Level;
 import ch.epfl.tchu.gui.Info;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * A game of tCHu
@@ -25,8 +24,7 @@ public final class Game {
     /**
      * The class is not instantiable
      */
-    private Game() {
-    }
+    private Game() {}
 
     /**
      * Makes the given players play a game of tCHu, whose names and identifiers figure in the given maps
@@ -53,47 +51,35 @@ public final class Game {
         // Declaring a map that links a player's identifier to their info class instance
         Map<PlayerId, Info> playerInfos = PlayerId.ALL.stream()
                 .collect(Collectors.toMap(p -> p, p -> new Info(playerNames.get(p))));
+        Info currentInfo = playerInfos.get(gameState.currentPlayerId());
 
         // Informing the players which plays first
         sendInfo(players, playerInfos.get(gameState.currentPlayerId()).willPlayFirst());
 
         // Drawing initial tickets and asking the player which they want to keep
-        // TODO: Tell TA that couldn't get given solution to work
-        for (int i = 0; i < PlayerId.COUNT; i++) {
-            SortedBag<Ticket> initialTickets = gameState.withoutTopTickets(Constants.INITIAL_TICKETS_COUNT * i).topTickets(Constants.INITIAL_TICKETS_COUNT);
-            players.get(PlayerId.ALL.get(i)).setInitialTicketChoice(initialTickets);
+        for (PlayerId player : PlayerId.ALL) {
+            players.get(player).setInitialTicketChoice(gameState.topTickets(Constants.INITIAL_TICKETS_COUNT));
             updatePlayerStates(players, gameState);
-            gameState = gameState.withInitiallyChosenTickets(PlayerId.ALL.get(i), players.get(PlayerId.ALL.get(i)).chooseInitialTickets());
+            gameState = gameState
+                    .withInitiallyChosenTickets(player, players.get(player).chooseInitialTickets())
+                    .withoutTopTickets(Constants.INITIAL_TICKETS_COUNT);
         }
-
         // Informing every player of the number of initially drawn tickets only once everyone has drawn
         for (PlayerId playerId : PlayerId.ALL)
             sendInfo(players, playerInfos.get(playerId).keptTickets(gameState.playerState(playerId).ticketCount()));
-
-        // Updating the game state after having drawn the initial tickets
-        gameState = gameState.withoutTopTickets(Constants.INITIAL_TICKETS_COUNT * PlayerId.COUNT);
 
         /* * * * * * * * * *
          * The Middle Game *
          * * * * * * * * * */
 
-        // TODO: Tell TA that currentPlayerInfo only accesses a map value so doesn't calculate anything
         // Keep playing until the last turn is played
-        while (Objects.isNull(gameState.lastPlayer()) || gameState.currentPlayerId() != gameState.lastPlayer()) {
-            // Informing that the last turn begins if the conditions are met
-            if (gameState.lastTurnBegins())
-                sendInfo(players, playerInfos.get(gameState.currentPlayerId()).lastTurnBegins(gameState.currentPlayerState().carCount()));
-
-            // TODO: Fix the fact that the first player's turn passes
-            // Switching the game state to the next turn
-            gameState = gameState.forNextTurn();
-
-            Info currentPlayerInfo = playerInfos.get(gameState.currentPlayerId());
+        while(true) {
+            currentInfo = playerInfos.get(gameState.currentPlayerId());
 
             // Announcing which player plays this turn
             Player currentPlayer = players.get(gameState.currentPlayerId());
             updatePlayerStates(players, gameState);
-            sendInfo(players, currentPlayerInfo.canPlay());
+            sendInfo(players, currentInfo.canPlay());
 
             // Asks what the player's next move will be
             TurnKind playerMove = currentPlayer.nextTurn();
@@ -102,7 +88,7 @@ public final class Game {
             switch (playerMove) {
                 // The player decides to draw tickets
                 case DRAW_TICKETS:
-                    sendInfo(players, currentPlayerInfo.drewTickets(Constants.IN_GAME_TICKETS_COUNT));
+                    sendInfo(players, currentInfo.drewTickets(Constants.IN_GAME_TICKETS_COUNT));
 
                     // Asking the current player which tickets they want to keep
                     SortedBag<Ticket> chosenTickets = currentPlayer.chooseTickets(gameState.topTickets(Constants.IN_GAME_TICKETS_COUNT));
@@ -111,7 +97,7 @@ public final class Game {
                     gameState = gameState.withChosenAdditionalTickets(gameState.topTickets(Constants.IN_GAME_TICKETS_COUNT), chosenTickets);
 
                     // Informing of the number of tickets drawn by the current player
-                    sendInfo(players, currentPlayerInfo.keptTickets(chosenTickets.size()));
+                    sendInfo(players, currentInfo.keptTickets(chosenTickets.size()));
                     break;
 
                 // The player decides to draw cards
@@ -130,7 +116,7 @@ public final class Game {
                             gameState = gameState.withBlindlyDrawnCard();
 
                             // Informing that the current play drew a deck card
-                            sendInfo(players, currentPlayerInfo.drewBlindCard());
+                            sendInfo(players, currentInfo.drewBlindCard());
                         }
                         // The player draws a face-up card
                         else {
@@ -141,7 +127,7 @@ public final class Game {
                             gameState = gameState.withDrawnFaceUpCard(drawSlot);
 
                             // Informing that the current player drew the given face-up card
-                            sendInfo(players, currentPlayerInfo.drewVisibleCard(drawnCard));
+                            sendInfo(players, currentInfo.drewVisibleCard(drawnCard));
                         }
                     }
                     break;
@@ -154,7 +140,7 @@ public final class Game {
                     // The player attempts to claim a tunnel
                     if (claimedRoute.level().equals(Level.UNDERGROUND)) {
                         // Informs that the current player is trying to claim a Tunnel
-                        sendInfo(players, currentPlayerInfo.attemptsTunnelClaim(claimedRoute, initialClaimCards));
+                        sendInfo(players, currentInfo.attemptsTunnelClaim(claimedRoute, initialClaimCards));
 
                         // Drawing the additional tunnel cards
                         SortedBag.Builder<Card> additionalCardsBuilder = new SortedBag.Builder<>();
@@ -172,7 +158,7 @@ public final class Game {
                         int additionalClaimCardsCount = claimedRoute.additionalClaimCardsCount(initialClaimCards, additionalCards);
 
                         // Informing that the current player drew additional cards to try and claim the tunnel
-                        sendInfo(players, currentPlayerInfo.drewAdditionalCards(additionalCards, additionalClaimCardsCount));
+                        sendInfo(players, currentInfo.drewAdditionalCards(additionalCards, additionalClaimCardsCount));
 
                         // The player does not need to use any additional cards to claim the tunnel
                         if (additionalClaimCardsCount == 0) {
@@ -180,7 +166,7 @@ public final class Game {
                                     .withClaimedRoute(claimedRoute, initialClaimCards);
 
                             // Informing that the current player claimed the tunnel using only the initial claim cards
-                            sendInfo(players, currentPlayerInfo.claimedRoute(claimedRoute, initialClaimCards));
+                            sendInfo(players, currentInfo.claimedRoute(claimedRoute, initialClaimCards));
                         }
                         else {
                             // Computing the list of possible additional claim cards the player can choose to try and claim the tunnel
@@ -195,7 +181,7 @@ public final class Game {
                                 // The player cannot or doesn't want to claim the tunnel
                                 if (chosenAdditionalClaimCards.isEmpty()) {
                                     // Informing that the current player did not claim the tunnel
-                                    sendInfo(players, currentPlayerInfo.didNotClaimRoute(claimedRoute));
+                                    sendInfo(players, currentInfo.didNotClaimRoute(claimedRoute));
                                 }
                                 else {
                                     // Adding the additional claim cards to the initial cards
@@ -203,12 +189,12 @@ public final class Game {
                                     gameState = gameState
                                             .withClaimedRoute(claimedRoute, finalClaimCards);
                                     // Informing that the current player claimed the tunnel using additional cards
-                                    sendInfo(players, currentPlayerInfo.claimedRoute(claimedRoute, finalClaimCards));
+                                    sendInfo(players, currentInfo.claimedRoute(claimedRoute, finalClaimCards));
                                 }
                             }
                             else {
                                 // Informing that the current player didn't claim the route
-                                sendInfo(players, currentPlayerInfo.didNotClaimRoute(claimedRoute));
+                                sendInfo(players, currentInfo.didNotClaimRoute(claimedRoute));
                             }
                         }
                     }
@@ -216,10 +202,19 @@ public final class Game {
                     else if (claimedRoute.level().equals(Level.OVERGROUND)) {
                         gameState = gameState.withClaimedRoute(claimedRoute, initialClaimCards);
                         // Informing that the current player claimed the route
-                        sendInfo(players, currentPlayerInfo.claimedRoute(claimedRoute, initialClaimCards));
+                        sendInfo(players, currentInfo.claimedRoute(claimedRoute, initialClaimCards));
                     }
                     break;
             }
+            // Informing that the last turn begins if the conditions are met
+            if (gameState.lastTurnBegins())
+                sendInfo(players, playerInfos.get(gameState.currentPlayerId()).lastTurnBegins(gameState.currentPlayerState().carCount()));
+
+            if (gameState.currentPlayerId() == gameState.lastPlayer())
+                break;
+
+            // Switching the game state to the next turn
+            gameState = gameState.forNextTurn();
         }
 
         /* * * * * * * * *
@@ -237,10 +232,9 @@ public final class Game {
                 .collect(Collectors.toMap(p -> p, p -> gameStateFinal.playerState(p).finalPoints()));
 
         // Computing the longest trail among the players'
-        Integer longestTrailLength = PlayerId.ALL.stream()
+        int longestTrailLength = PlayerId.ALL.stream()
                 .map(p -> Trail.longest(gameStateFinal.playerState(p).routes()).length())
-                .max(Integer::compare)
-                .get();
+                .reduce(Integer.MIN_VALUE, Integer::max);
 
         // Determining the players who earn the bonus for the longest trail
         List<PlayerId> bonusEarningPlayers = PlayerId.ALL.stream()
@@ -248,26 +242,28 @@ public final class Game {
                 .collect(Collectors.toList());
 
         // Awarding the eligible players the bonus points and informing them
-        bonusEarningPlayers.stream()
+        bonusEarningPlayers
                 .forEach(p -> {
                     playersScores.replace(p, playersScores.get(p) + Constants.LONGEST_TRAIL_BONUS_POINTS);
                     sendInfo(players, playerInfos.get(p).getsLongestTrailBonus(Trail.longest(gameStateFinal.playerState(p).routes())));
                 });
 
         // Getting the highest score from all players
-        Integer highestScore = PlayerId.ALL.stream()
-                .map((PlayerId playerId) -> playersScores.get(playerId))
-                .max(Integer::compareTo).get();
+        int highestScore = PlayerId.ALL.stream()
+                .map(playersScores::get)
+                .reduce(Integer.MIN_VALUE, Integer::max);
 
         // Getting the players who got the highest score
         List<PlayerId> winners = PlayerId.ALL.stream()
-                .filter((PlayerId playerId) -> playersScores.get(playerId) == highestScore)
+                .filter((PlayerId playerId) -> playersScores.get(playerId).equals(highestScore))
                 .collect(Collectors.toList());
 
         // Breaking down the game, declaring either a win for a player or a draw
+        // Note: This would be the only block to change if more players are added as it wouldn't make sense to declare a draw then
         if (winners.size() == 1)
             sendInfo(players, playerInfos.get(winners.get(0)).won(playersScores.get(winners.get(0)), playersScores.get(winners.get(0).next())));
-        else sendInfo(players, Info.draw(new ArrayList<String>(playerNames.values()), highestScore));
+        else
+            sendInfo(players, Info.draw(new ArrayList<>(playerNames.values()), highestScore));
     }
 
     private static void sendInfo(Map<PlayerId, Player> players, String info) {

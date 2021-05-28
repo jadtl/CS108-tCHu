@@ -109,11 +109,9 @@ public class PublicGameState {
      *
      * @return The claimed {@link List} of {@link Route} of all the players
      */
-    // TODO: Check the TA's comment again
     public List<Route> claimedRoutes() {
-        return playerState.values()
-                .stream()
-                .flatMap(pgs -> pgs.routes().stream())
+        return PlayerId.ALL.stream()
+                .flatMap(p -> playerState(p).routes().stream())
                 .collect(Collectors.toList());
     }
 

@@ -1,6 +1,7 @@
 package ch.epfl.tchu.game;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,14 +18,11 @@ public final class Trail {
     private final List<Route> routes;
     private final int length;
 
-    private Trail(Station station1, Station station2, List<Route> routes) {
+    private Trail(Station station1, Station station2, List<Route> routes, int length) {
         this.station1 = station1;
         this.station2 = station2;
         this.routes = routes;
-        // TODO: Leave the calculation to longest
-        this.length = routes.stream()
-                .map(r -> r.length())
-                .reduce(0, Integer::sum);
+        this.length = length;
     }
 
     /**
@@ -33,11 +31,10 @@ public final class Trail {
      * @param routes The {@link List} of {@link Route} that the player controls
      * @return A trail with the maximum length from {@code routes}
      */
-    // TODO: Check notes
     public static Trail longest(List<Route> routes) {
         // Filling the list with starting trails from routes
         List<Trail> toExtendTrails = routes.stream()
-                .flatMap(r -> Stream.of(new Trail(r.station1(), r.station2(), List.of(r)), new Trail(r.station2(), r.station1(), List.of(r))))
+                .flatMap(r -> Stream.of(new Trail(r.station1(), r.station2(), List.of(r), r.length()), new Trail(r.station2(), r.station1(), List.of(r), r.length())))
                 .collect(Collectors.toList());
 
         // A list that stores trails that cannot be extended further
@@ -68,17 +65,23 @@ public final class Trail {
                 else
                     // For every eligible route, a new longer trail is added to the updates
                     eligibleRoutes.forEach(r -> {
-                        List<Route> updatedRoutes = new ArrayList<Route>(t.routes);
+                        List<Route> updatedRoutes = new ArrayList<>(t.routes);
                         updatedRoutes.add(r);
-                        updatedTrails.add(new Trail(t.station1(), r.stationOpposite(t.station2()), updatedRoutes));
+                        updatedTrails.add(new Trail(t.station1(), r.stationOpposite(t.station2()), updatedRoutes, computeTrailLength(updatedRoutes)));
                     });
             });
         }
 
         // Figuring the longest trail among the found dead ends
         return deadEndTrails.stream()
-                .max((t1, t2) -> Integer.compare(t1.length(), t2.length()))
-                .orElse(new Trail(null, null, List.of()));
+                .max(Comparator.comparingInt(Trail::length))
+                .orElse(new Trail(null, null, List.of(), 0));
+    }
+
+    private static int computeTrailLength(List<Route> routes) {
+        return routes.stream()
+                .map(Route::length)
+                .reduce(0, Integer::sum);
     }
 
     /**

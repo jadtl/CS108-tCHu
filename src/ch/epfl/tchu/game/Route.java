@@ -169,7 +169,7 @@ public final class Route {
 
     private List<SortedBag<Card>> computePossibleClaimCards() {
         // Using a linked hash set to keep the order intact as elements are added and to remove duplicates
-        Set<SortedBag<Card>> computedPossibleClaimCards = new LinkedHashSet<SortedBag<Card>>();
+        Set<SortedBag<Card>> computedPossibleClaimCards = new LinkedHashSet<>();
 
         for (int i = 0; i <= (level().equals(Level.UNDERGROUND) ? length() : 0); i++) {
             List<Color> usableColors = (Objects.isNull(color())) ? Color.ALL : List.of(color);
