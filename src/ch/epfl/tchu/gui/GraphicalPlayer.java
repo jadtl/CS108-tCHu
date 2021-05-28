@@ -60,7 +60,7 @@ public final class GraphicalPlayer {
     /**
      * A graphical player from an identifier and a map of player names
      *
-     * @param ownId The {@link PlayerId} of the concerned player
+     * @param ownId       The {@link PlayerId} of the concerned player
      * @param playerNames The {@link Map} linking {@link PlayerId}s to their player {@link String} names
      */
     public GraphicalPlayer(PlayerId ownId, Map<PlayerId, String> playerNames) {
@@ -116,8 +116,8 @@ public final class GraphicalPlayer {
      * Updates the player's handlers at the start of the turn
      *
      * @param drawTicketsHandler The handler for drawing tickets
-     * @param drawCardHandler The handler for drawing cards
-     * @param claimRouteHandler The handler for claiming route
+     * @param drawCardHandler    The handler for drawing cards
+     * @param claimRouteHandler  The handler for claiming route
      */
     public void startTurn(DrawTicketsHandler drawTicketsHandler, DrawCardHandler drawCardHandler, ClaimRouteHandler claimRouteHandler) {
         assert Platform.isFxApplicationThread();
@@ -159,7 +159,7 @@ public final class GraphicalPlayer {
     /**
      * Displays the prompt to choose tickets
      *
-     * @param ticketOptions The {@link SortedBag} of {@link Ticket} representing the options of the player
+     * @param ticketOptions        The {@link SortedBag} of {@link Ticket} representing the options of the player
      * @param chooseTicketsHandler The handler for choosing tickets
      */
     public void chooseTickets(SortedBag<Ticket> ticketOptions, ChooseTicketsHandler chooseTicketsHandler) {
@@ -198,7 +198,7 @@ public final class GraphicalPlayer {
     /**
      * Displays the prompt to choose claim cards
      *
-     * @param cardOptions The {@link SortedBag} of {@link Card} representing the options of the player
+     * @param cardOptions        The {@link SortedBag} of {@link Card} representing the options of the player
      * @param chooseCardsHandler The handler for choosing cards
      */
     public void chooseClaimCards(List<SortedBag<Card>> cardOptions, ChooseCardsHandler chooseCardsHandler) {
@@ -219,27 +219,13 @@ public final class GraphicalPlayer {
         button.setOnAction(buttonActionHandler);
 
         Text text = new Text(StringsFr.CHOOSE_CARDS);
-        TextFlow textFlow = new TextFlow(text);
-        VBox box = new VBox();
-        box.getChildren().addAll(List.of(textFlow, listView, button));
-
-        Scene scene = new Scene(box);
-        scene.getStylesheets().add("chooser.css");
-
-        window.initStyle(StageStyle.UTILITY);
-        window.initOwner(mainWindow);
-        window.initModality(Modality.WINDOW_MODAL);
-        window.setOnCloseRequest(Event::consume);
-        window.setTitle(StringsFr.CARDS_CHOICE);
-        window.setScene(scene);
-
-        window.show();
+        showCardsModalWindow(window, listView, button, text);
     }
 
     /**
      * Displays the prompt to choose additional cards
      *
-     * @param cardOptions The {@link SortedBag} of {@link Card} representing the options of the player
+     * @param cardOptions        The {@link SortedBag} of {@link Card} representing the options of the player
      * @param chooseCardsHandler The handler for choosing cards
      */
     public void chooseAdditionalCards(List<SortedBag<Card>> cardOptions, ChooseCardsHandler chooseCardsHandler) {
@@ -260,6 +246,10 @@ public final class GraphicalPlayer {
         button.setOnAction(buttonActionHandler);
 
         Text text = new Text(StringsFr.CHOOSE_ADDITIONAL_CARDS);
+        showCardsModalWindow(window, listView, button, text);
+    }
+
+    private void showCardsModalWindow(Stage window, ListView<SortedBag<Card>> listView, Button button, Text text) {
         TextFlow textFlow = new TextFlow(text);
         VBox box = new VBox();
         box.getChildren().addAll(List.of(textFlow, listView, button));
