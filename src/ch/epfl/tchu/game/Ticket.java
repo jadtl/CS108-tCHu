@@ -88,15 +88,18 @@ public final class Ticket implements Comparable<Ticket> {
     }
 
     private static String computeText(List<Trip> trips) {
-        StringBuilder text = new StringBuilder(trips.get(0).from().name() + " - ");
+        StringBuilder stringBuilder = new StringBuilder(trips.get(0).from().name() + " - ");
         Collection<String> arrivalStations = trips.stream()
                 .map(t -> String.format("%s (%s)", t.to().name(), t.points()))
                 .collect(Collectors.toCollection(TreeSet::new));
         if (trips.size() > 1)
-            text.append("{" + String.join(", ", arrivalStations) + "}");
+            stringBuilder
+                    .append("{")
+                    .append(String.join(", ", arrivalStations))
+                    .append("}");
         else
-            text.append(String.join(", ", arrivalStations));
+            stringBuilder.append(String.join(", ", arrivalStations));
 
-        return text.toString();
+        return stringBuilder.toString();
     }
 }

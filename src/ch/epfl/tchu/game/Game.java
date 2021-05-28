@@ -54,7 +54,7 @@ public final class Game {
         Info currentInfo = playerInfos.get(gameState.currentPlayerId());
 
         // Informing the players which plays first
-        sendInfo(players, playerInfos.get(gameState.currentPlayerId()).willPlayFirst());
+        sendInfo(players, currentInfo.willPlayFirst());
 
         // Drawing initial tickets and asking the player which they want to keep
         for (PlayerId player : PlayerId.ALL) {
