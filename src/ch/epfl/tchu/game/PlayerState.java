@@ -30,16 +30,9 @@ public final class PlayerState extends PublicPlayerState {
     public PlayerState(SortedBag<Ticket> tickets, SortedBag<Card> cards, List<Route> routes) {
         super(tickets.size(), cards.size(), routes);
 
-        int highestId = routes.isEmpty() ? 0 : routes.stream().flatMap((Route route) -> (List.of(route.station1().id(), route.station2().id()).stream()))
-                .collect(Collectors.toSet()).stream().reduce(Integer.MIN_VALUE, Integer::max);
-        StationPartition.Builder stationPartitionBuilder = new StationPartition
-                .Builder(highestId + 1);
-        routes.forEach(route -> stationPartitionBuilder.connect(route.station1(), route.station2()));
-        StationPartition stationPartition = stationPartitionBuilder.build();
-
         this.tickets = tickets;
         this.cards = cards;
-        this.ticketPoints = tickets.stream().map(ticket -> ticket.points(stationPartition)).reduce(0, Integer::sum);
+        this.ticketPoints = tickets.stream().map(ticket -> ticket.points(connectivity())).reduce(0, Integer::sum);
     }
 
     /**

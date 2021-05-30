@@ -54,8 +54,17 @@ Button.gauged .foreground {
 /* Hand pane (tickets and cards held) */
 
 #tickets {
-    -fx-pref-width: 400;
+    -fx-pref-width: 480;
     -fx-pref-height: 0;
+}
+
+Label.losing-ticket {
+    -fx-padding: 0 0 0 10;
+    -fx-text-fill: red;
+}
+Label.winning-ticket {
+    -fx-padding: 0 0 0 10;
+    -fx-text-fill: green;
 }
 
 #hand-pane {

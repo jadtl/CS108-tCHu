@@ -180,7 +180,7 @@ public final class GraphicalPlayer {
 
         Text text = new Text(String.format(StringsFr.CHOOSE_TICKETS, Constants.IN_GAME_TICKETS_COUNT, StringsFr.plural(Constants.IN_GAME_TICKETS_COUNT)));
         TextFlow textFlow = new TextFlow(text);
-        VBox box = new VBox(3, textFlow, listView, button);
+        VBox box = new VBox(textFlow, listView, button);
 
         Scene scene = new Scene(box);
         scene.getStylesheets().add("chooser.css");

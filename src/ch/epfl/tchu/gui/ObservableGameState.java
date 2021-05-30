@@ -10,14 +10,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import ch.epfl.tchu.SortedBag;
-import ch.epfl.tchu.game.Card;
-import ch.epfl.tchu.game.ChMap;
-import ch.epfl.tchu.game.Constants;
-import ch.epfl.tchu.game.PlayerId;
-import ch.epfl.tchu.game.PlayerState;
-import ch.epfl.tchu.game.PublicGameState;
-import ch.epfl.tchu.game.Route;
-import ch.epfl.tchu.game.Ticket;
+import ch.epfl.tchu.game.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -52,6 +45,7 @@ public final class ObservableGameState {
     private final ObjectProperty<ObservableList<Ticket>> ownedTickets;
     private final Map<Card, IntegerProperty> ownedCards;
     private final Map<Route, BooleanProperty> routeAvailability;
+    private final ObjectProperty<StationConnectivity> ownConnectivity;
 
     private final BooleanProperty canDrawTickets;
     private final BooleanProperty canDrawCards;
@@ -70,7 +64,7 @@ public final class ObservableGameState {
         this.faceUpCards = new ArrayList<>();
         Constants.FACE_UP_CARD_SLOTS.forEach(s -> faceUpCards.add(new SimpleObjectProperty<>(LOCOMOTIVE)));
         this.routeOwnerships = ChMap.routes().stream()
-                .collect(Collectors.toMap(r -> r, r -> new SimpleObjectProperty<>(null)));
+                .collect(Collectors.toMap(r -> r, r -> new SimpleObjectProperty<>()));
 
         this.ticketCount = new HashMap<>();
         this.cardCount = new HashMap<>();
@@ -88,6 +82,7 @@ public final class ObservableGameState {
                 .collect(Collectors.toMap(c -> c, c -> new SimpleIntegerProperty()));
         this.routeAvailability = ChMap.routes().stream()
                 .collect(Collectors.toMap(r -> r, r -> new SimpleBooleanProperty()));
+        this.ownConnectivity = new SimpleObjectProperty<>();
 
         this.canDrawTickets = new SimpleBooleanProperty();
         this.canDrawCards = new SimpleBooleanProperty();
@@ -121,6 +116,7 @@ public final class ObservableGameState {
         Card.ALL.forEach(c1 -> this.ownedCards.get(c1).set((int) ownState.cards().stream().filter(c1::equals).count()));
         ChMap.routes().forEach(r -> this.routeAvailability.get(r).set(ownId.get() == newState.currentPlayerId()
                 && Objects.isNull(routeOwnerships.get(r).get()) && !isNeighborClaimed(r) && ownState.canClaimRoute(r)));
+        this.ownConnectivity.set(ownState.connectivity());
 
         this.canDrawTickets.set(newState.canDrawTickets());
         this.canDrawCards.set(newState.canDrawCards());
@@ -130,9 +126,7 @@ public final class ObservableGameState {
     /**
      * @return The read-only property of the concerned player's identifier
      */
-    public ReadOnlyObjectProperty<PlayerId> ownIdProperty() {
-        return ownId;
-    }
+    public ReadOnlyObjectProperty<PlayerId> ownIdProperty() { return ownId; }
 
     /**
      * @return The read-only property of the remaining tickets percentage
@@ -218,6 +212,11 @@ public final class ObservableGameState {
     public ReadOnlyBooleanProperty routeAvailabilityProperty(Route route) {
         return routeAvailability.get(route);
     }
+
+    /**
+     * @return The read-only property of player's connectivity
+     */
+    public ReadOnlyObjectProperty<StationConnectivity> ownConnectivityProperty() { return ownConnectivity; }
 
     /**
      * @return The read-only property of the ability to draw tickets

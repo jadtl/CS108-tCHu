@@ -104,18 +104,6 @@ class PlayerStateTest {
     }
 
     @Test
-    void playerStateWithAddedCardsAddsCards() {
-        var cards = shuffledCards(TestRandomizer.newRandom());
-        for (int batchSize = 1; batchSize < 5; batchSize += 1) {
-            var playerState = new PlayerState(SortedBag.of(), SortedBag.of(), List.of());
-            for (int i = 0; i + batchSize < cards.size(); i += batchSize) {
-                var nextI = i + batchSize;
-                assertEquals(SortedBag.of(cards.subList(0, nextI)), playerState.cards());
-            }
-        }
-    }
-
-    @Test
     void playerStateCanClaimRouteWorksWhenNotEnoughCars() {
         var chMap = new ChMap();
         var cards = sixOfEachCard();

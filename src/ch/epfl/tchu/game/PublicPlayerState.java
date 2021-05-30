@@ -1,6 +1,7 @@
 package ch.epfl.tchu.game;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.epfl.tchu.Preconditions;
 
@@ -11,6 +12,7 @@ import ch.epfl.tchu.Preconditions;
  * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
  */
 public class PublicPlayerState {
+    private final StationConnectivity connectivity;
     private final int ticketCount;
     private final int cardCount;
     private final List<Route> routes;
@@ -28,12 +30,26 @@ public class PublicPlayerState {
     public PublicPlayerState(int ticketCount, int cardCount, List<Route> routes) {
         Preconditions.checkArgument(ticketCount >= 0 && cardCount >= 0);
 
+        int highestId = routes.isEmpty() ? 0 : routes.stream().flatMap((Route route) -> (List.of(route.station1().id(), route.station2().id()).stream()))
+                .collect(Collectors.toSet()).stream().reduce(Integer.MIN_VALUE, Integer::max);
+        StationPartition.Builder connectivityBuilder = new StationPartition
+                .Builder(highestId + 1);
+        routes.forEach(route -> connectivityBuilder.connect(route.station1(), route.station2()));
+
+        this.connectivity = connectivityBuilder.build();
         this.ticketCount = ticketCount;
         this.cardCount = cardCount;
         this.routes = List.copyOf(routes);
         this.carCount = Constants.INITIAL_CAR_COUNT - routes.stream().map(Route::length).reduce(0, Integer::sum);
         this.claimPoints = routes.stream().map(Route::claimPoints).reduce(0, Integer::sum);
     }
+
+    /**
+     * The station connectivity of the player
+     *
+     * @return The {@link StationConnectivity} of the player
+     */
+    public StationConnectivity connectivity() { return connectivity; }
 
     /**
      * The number of tickets the player has

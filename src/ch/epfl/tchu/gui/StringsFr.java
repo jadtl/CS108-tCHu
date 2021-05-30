@@ -75,6 +75,9 @@ public final class StringsFr {
     public static final String AND_SEPARATOR = " et ";
     public static final String EN_DASH_SEPARATOR = " – ";
 
+    public static final String WINNING_TICKET = "Au moins un voyage sur ce ticket est accomplissable avec votre réseau (+%s points)";
+    public static final String LOSING_TICKET = "Aucun voyage sur ce ticket n'est accomplissable avec votre réseau (%s points)";
+
     /**
      * Retourne une chaîne marquant le pluriel, ou la chaîne vide.
      *

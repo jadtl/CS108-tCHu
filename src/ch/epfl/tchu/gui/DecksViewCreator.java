@@ -11,15 +11,18 @@ import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static ch.epfl.tchu.game.Card.LOCOMOTIVE;
 
@@ -47,11 +50,28 @@ class DecksViewCreator {
         cards.getChildren().addAll(createHandViewCards(gameState));
         cards.setId("hand-pane");
 
-        ListView<Ticket> tickets = new ListView<>(gameState.ownedTicketsProperty().get());
+        Label selectedTicketInfo = new Label();
+        ListView<Ticket> ticketsView = new ListView<>(gameState.ownedTicketsProperty().get());
+        ticketsView.getSelectionModel().selectedItemProperty()
+                .addListener((o, oV, nV) -> {
+                    if (!Objects.isNull(nV)) {
+                        int points = nV.points(gameState.ownConnectivityProperty().get());
+                        if (points > 0) {
+                            // TODO: Language abstraction
+                            selectedTicketInfo.setText(String.format(StringsFr.WINNING_TICKET, points));
+                            selectedTicketInfo.getStyleClass().setAll("winning-ticket");
+                        }
+                        else {
+                            selectedTicketInfo.setText(String.format(StringsFr.LOSING_TICKET, points));
+                            selectedTicketInfo.getStyleClass().setAll("losing-ticket");
+                        }
+                    }
+                    else selectedTicketInfo.setText("");
+                });
+        VBox tickets = new VBox(ticketsView, selectedTicketInfo);
         tickets.setId("tickets");
 
-        HBox handView = new HBox(tickets);
-        handView.getChildren().add(cards);
+        HBox handView = new HBox(tickets, cards);
         handView.getStylesheets().addAll(List.of("decks.css", "colors.css"));
 
         return handView;
@@ -103,7 +123,7 @@ class DecksViewCreator {
             cardAndCount.visibleProperty().bind(Bindings.greaterThan(count, 0));
             cardAndCount.getChildren().addAll(createCardGeometry());
             cardAndCount.getChildren().add(counter);
-            cardAndCount.getStyleClass().addAll(List.of("card", card.equals(LOCOMOTIVE) ? "NEUTRAL" : card.toString()));
+            cardAndCount.getStyleClass().addAll(List.of("card", cardStyleClass(card)));
 
             cards.add(cardAndCount);
         }
