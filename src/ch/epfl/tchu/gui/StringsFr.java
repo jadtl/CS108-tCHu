@@ -74,10 +74,21 @@ public final class StringsFr {
 
     // Séparateurs textuels
     public static final String AND_SEPARATOR = " et ";
+    public static final String OR_SEPARATOR = " ou ";
     public static final String EN_DASH_SEPARATOR = " – ";
 
+    // Tickets types according to the player's network
     public static final String WINNING_TICKET = "Au moins un voyage sur ce ticket est accomplissable avec votre réseau (+%s points)";
     public static final String LOSING_TICKET = "Aucun voyage sur ce ticket n'est accomplissable avec votre réseau (%s points)";
+
+    // Information on what stations to link the current one to to earn points
+    public static final String LINK_STATION_TO = "Reliez cette station à %s pour obtenir des points";
+
+    // Names of countries
+    public static final String FRANCE = "la France";
+    public static final String GERMANY = "l'Allemagne";
+    public static final String AUSTRIA = "l'Autriche";
+    public static final String ITALY = "l'Italie";
 
     /**
      * Retourne une chaîne marquant le pluriel, ou la chaîne vide.

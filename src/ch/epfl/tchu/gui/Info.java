@@ -5,6 +5,7 @@ import ch.epfl.tchu.game.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A class that generates texts describing various events in the game
@@ -151,7 +152,7 @@ public final class Info {
     /**
      * A message announcing that the player attempts to claim a given tunnel using the given cards
      *
-     * @param route The {@link Route} tunnel the player attempts to claim
+     * @param route        The {@link Route} tunnel the player attempts to claim
      * @param initialCards The {@link SortedBag} of {@link Card} the player attempts to claim {@code route}
      * @return A message announcing that the player attempts to claim {@code route} using {@code initialCards}
      */
@@ -163,7 +164,7 @@ public final class Info {
     /**
      * A message announcing that the player drew the additional cards and their induced additional cost
      *
-     * @param drawnCards The additional {@link SortedBag} of {@link Card} the player drew
+     * @param drawnCards     The additional {@link SortedBag} of {@link Card} the player drew
      * @param additionalCost The additional cost associated to the {@code drawnCards}
      * @return A message announcing that the player drew the additional cards and their induced additional cost
      */
@@ -216,6 +217,16 @@ public final class Info {
     }
 
     /**
+     * A message that indicates what stations the player should link the current one to
+     *
+     * @param stations The list of stations to link the current one to
+     * @return A message that indicates what stations the player should link the current one to
+     */
+    public static String linkStationTo(List<String> stations) {
+        return String.format(StringsFr.LINK_STATION_TO, stationEnumeration(stations));
+    }
+
+    /**
      * A string enumeration of the given cards
      *
      * @param cards The {@link List} of {@link Card} to enumerate
@@ -237,6 +248,37 @@ public final class Info {
         else
             return stringBuilder.append(String.join(", ", words.subList(0, words.size() - 1)))
                     .append(StringsFr.AND_SEPARATOR).append(words.get(words.size() - 1)).toString();
+    }
+
+    private static String stationEnumeration(List<String> stations) {
+        StringBuilder stringBuilder = new StringBuilder();
+        List<String> formattedStations = stations.stream()
+                .map(s -> stationName(s))
+                .collect(Collectors.toList());
+
+        if (formattedStations.size() == 1)
+            return stationName(formattedStations.get(0));
+        else if (formattedStations.size() == 0)
+            return "";
+        else
+            return stringBuilder.append(String.join(", ", formattedStations.subList(0, formattedStations.size() - 1)))
+                    .append(StringsFr.OR_SEPARATOR)
+                    .append(stationName(formattedStations.get(formattedStations.size() - 1))).toString();
+    }
+
+    private static String stationName(String station) {
+        switch (station) {
+            case "France":
+                return StringsFr.FRANCE;
+            case "Allemagne":
+                return StringsFr.GERMANY;
+            case "Autriche":
+                return StringsFr.AUSTRIA;
+            case "Italie":
+                return StringsFr.ITALY;
+            default:
+                return station;
+        }
     }
 
     private String routeText(Station station1, Station station2) {
