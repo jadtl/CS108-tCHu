@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import ch.epfl.tchu.game.ChMap;
 import ch.epfl.tchu.game.Game;
@@ -15,6 +17,8 @@ import ch.epfl.tchu.game.Player;
 import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.net.RemotePlayerProxy;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.stage.Stage;
 
 import static ch.epfl.tchu.game.PlayerId.*;
@@ -28,7 +32,6 @@ import ch.epfl.tchu.SortedBag;
  * @author <a href="https://people.epfl.ch/sofiya.malamud">Sofiya Malamud (313789)</a>
  */
 public class ServerMain extends Application {
-
     /**
      * Waits for a connection by the client to be made and then starts a game of tCHu
      *

@@ -74,12 +74,20 @@ class MapViewCreator {
 
             gameState.longestTrailsProperty().addListener((o, oV, nV) -> nV.forEach(t -> {
                 if (t.routes().contains(route))
-                    car.getStyleClass().setAll("longest", "car");
+                    car.getStyleClass().add(0, "longest");
             }));
+
 
             Rectangle track = new Rectangle(36, 12);
             track.getStyleClass().add("track");
             track.getStyleClass().add("filled");
+
+            gameState.routeAvailabilityProperty(route).addListener(c -> {
+                if (gameState.routeAvailabilityProperty(route).get())
+                    track.getStyleClass().add(0, "claimable");
+                else
+                    track.getStyleClass().remove("claimable");
+            });
 
             Group tile = new Group(List.of(track, car));
             tile.setId(String.join("_", List.of(route.id(), String.valueOf(i))));
