@@ -49,6 +49,75 @@ ImageView {
     visibility: visible;
 }
 
+/* Style of station indicators */
+
+.country-station Circle {
+    -fx-stroke-width: 4;
+    -fx-stroke: darkslategray;
+    -fx-fill: transparent;
+}
+
+.city-station Circle {
+    -fx-stroke-width: 4;
+    -fx-stroke: darkslategray;
+    -fx-fill: transparent;
+}
+
+/* Position of individual stations */
+
+#S0 { -fx-translate-x: 547; -fx-translate-y: 144 }
+#S1 { -fx-translate-x: 396; -fx-translate-y: 120 }
+#S2 { -fx-translate-x: 754; -fx-translate-y: 595 }
+#S3 { -fx-translate-x: 361; -fx-translate-y: 337 }
+#S4 { -fx-translate-x: 489; -fx-translate-y: 545 }
+#S5 { -fx-translate-x: 996; -fx-translate-y: 566 }
+#S6 { -fx-translate-x: 852; -fx-translate-y: 375 }
+#S7 { -fx-translate-x: 964; -fx-translate-y: 374 }
+#S8 { -fx-translate-x: 312; -fx-translate-y: 191 }
+#S9 { -fx-translate-x: 307; -fx-translate-y: 390 }
+#S10 { -fx-translate-x: 44; -fx-translate-y: 595 }
+#S11 { -fx-translate-x: 465; -fx-translate-y: 436 }
+#S12 { -fx-translate-x: 777; -fx-translate-y: 85 }
+#S13 { -fx-translate-x: 182; -fx-translate-y: 473 }
+#S14 { -fx-translate-x: 186; -fx-translate-y: 270 }
+#S15 { -fx-translate-x: 682; -fx-translate-y: 612 }
+#S16 { -fx-translate-x: 562; -fx-translate-y: 300 }
+#S17 { -fx-translate-x: 736; -fx-translate-y: 661 }
+#S18 { -fx-translate-x: 256; -fx-translate-y: 635 }
+#S19 { -fx-translate-x: 237; -fx-translate-y: 320 }
+#S20 { -fx-translate-x: 460; -fx-translate-y: 206 }
+#S21 { -fx-translate-x: 691; -fx-translate-y: 253 }
+#S22 { -fx-translate-x: 821; -fx-translate-y: 312 }
+#S23 { -fx-translate-x: 628; -fx-translate-y: 54 }
+#S24 { -fx-translate-x: 642; -fx-translate-y: 317 }
+#S25 { -fx-translate-x: 346; -fx-translate-y: 574 }
+#S26 { -fx-translate-x: 381; -fx-translate-y: 221 }
+#S27 { -fx-translate-x: 813; -fx-translate-y: 153 }
+#S28 { -fx-translate-x: 864; -fx-translate-y: 255 }
+#S29 { -fx-translate-x: 643; -fx-translate-y: 428 }
+#S30 { -fx-translate-x: 658; -fx-translate-y: 120 }
+#S31 { -fx-translate-x: 169; -fx-translate-y: 392 }
+#S32 { -fx-translate-x: 615; -fx-translate-y: 253 }
+#S33 { -fx-translate-x: 614; -fx-translate-y: 180 }
+#S34 { -fx-translate-x: 409; -fx-translate-y: 49 }
+#S35 { -fx-translate-x: 689; -fx-translate-y: 19 }
+#S36 { -fx-translate-x: 741; -fx-translate-y: 19 }
+#S37 { -fx-translate-x: 830; -fx-translate-y: 33 }
+#S38 { -fx-translate-x: 908; -fx-translate-y: 89 }
+#S39 { -fx-translate-x: 1001; -fx-translate-y: 233 }
+#S40 { -fx-translate-x: 939; -fx-translate-y: 244 }
+#S41 { -fx-translate-x: 1104; -fx-translate-y: 309 }
+#S42 { -fx-translate-x: 1102; -fx-translate-y: 428 }
+#S43 { -fx-translate-x: 1052; -fx-translate-y: 666 }
+#S44 { -fx-translate-x: 807; -fx-translate-y: 694 }
+#S45 { -fx-translate-x: 635; -fx-translate-y: 708 }
+#S46 { -fx-translate-x: 580; -fx-translate-y: 676 }
+#S47 { -fx-translate-x: 173; -fx-translate-y: 714 }
+#S48 { -fx-translate-x: 32; -fx-translate-y: 667 }
+#S49 { -fx-translate-x: 80; -fx-translate-y: 219 }
+#S50 { -fx-translate-x: 326; -fx-translate-y: 77 }
+
+
 /* Position of individual track segments */
 #BAD_BAL_1_1 { -fx-translate-x: 497; -fx-translate-y: 123; -fx-rotate: 27 }
 #BAD_BAL_1_2 { -fx-translate-x: 457; -fx-translate-y: 107; -fx-rotate: 17 }

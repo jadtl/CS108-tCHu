@@ -16,7 +16,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
@@ -50,14 +49,14 @@ class DecksViewCreator {
         cards.getChildren().addAll(createHandViewCards(gameState));
         cards.setId("hand-pane");
 
-        Label selectedTicketInfo = new Label();
         ListView<Ticket> ticketsView = new ListView<>(gameState.ownedTicketsProperty().get());
-        ticketsView.getSelectionModel().selectedItemProperty()
+        Label selectedTicketInfo = new Label();
+        ticketsView.getSelectionModel()
+                .selectedItemProperty()
                 .addListener((o, oV, nV) -> {
                     if (!Objects.isNull(nV)) {
                         int points = nV.points(gameState.ownConnectivityProperty().get());
                         if (points > 0) {
-                            // TODO: Language abstraction
                             selectedTicketInfo.setText(String.format(StringsFr.WINNING_TICKET, points));
                             selectedTicketInfo.getStyleClass().setAll("winning-ticket");
                         }
@@ -80,7 +79,7 @@ class DecksViewCreator {
     /**
      * The cards view of the graphical interface
      *
-     * @param gameState        The current player's {@link ObservableGameState}
+     * @param gameState                  The current player's {@link ObservableGameState}
      * @param drawTicketsHandlerProperty The property of the {@link DrawTicketsHandler}
      * @param drawCardHandlerProperty    The property of the {@link DrawCardHandler}
      * @return The cards view {@link VBox} displaying the information from {@code gameState} and using the given handlers
@@ -131,7 +130,8 @@ class DecksViewCreator {
         return cards;
     }
 
-    private static List<Node> createFaceUpCardsView(ObservableGameState gameState, ObjectProperty<DrawCardHandler> drawCardHandlerProperty) {
+    private static List<Node> createFaceUpCardsView(ObservableGameState gameState,
+                                                    ObjectProperty<DrawCardHandler> drawCardHandlerProperty) {
         List<Node> faceUpCards = new ArrayList<>();
         for (int slot : Constants.FACE_UP_CARD_SLOTS) {
             Card card = gameState.faceUpCard(slot).get();
