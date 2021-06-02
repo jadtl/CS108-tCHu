@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 public final class Ticket implements Comparable<Ticket> {
     private final List<Trip> trips;
     private final String text;
+    private final String fromStation;
+    private final List<String> toStations;
 
     /**
      * A ticket from a list of trips of the same departure station
@@ -32,6 +34,11 @@ public final class Ticket implements Comparable<Ticket> {
 
         this.trips = List.copyOf(trips);
         this.text = computeText(this.trips);
+        this.fromStation = fromStations.iterator().next();
+        this.toStations = List.copyOf(trips.stream()
+                .map(t -> t.to().name())
+                .collect(Collectors.toCollection(TreeSet::new)));
+        System.out.println(toStations);
     }
 
     /**
@@ -44,6 +51,16 @@ public final class Ticket implements Comparable<Ticket> {
     public Ticket(Station from, Station to, int points) {
         this(List.of(new Trip(from, to, points)));
     }
+
+    /**
+     * @return The departure station of the ticket
+     */
+    public String fromStation() { return fromStation; }
+
+    /*
+     * @return The arrival stations of the ticket
+     */
+    public List<String> toStations() { return List.copyOf(toStations); }
 
     /**
      * The textual representation of the ticket

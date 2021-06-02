@@ -8,7 +8,11 @@ import ch.epfl.tchu.game.Route.Level;
 import ch.epfl.tchu.game.Station;
 import ch.epfl.tchu.gui.ActionHandlers.ChooseCardsHandler;
 import ch.epfl.tchu.gui.ActionHandlers.ClaimRouteHandler;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Tooltip;
@@ -115,10 +119,13 @@ class MapViewCreator {
         Group stationGroup = new Group(indicator);
         stationGroup.setId("S" + station.id());
         stationGroup.getStyleClass().add(station.id() > 33 ? "country-station" : "city-station");
+        stationGroup.visibleProperty().bind(gameState.toLinkStationsProperty(station).emptyProperty().not());
 
-        Tooltip ticketInfo = new Tooltip(String.valueOf(station.id()));
-        ticketInfo.setShowDelay(Duration.seconds(0.25));
-        Tooltip.install(stationGroup, ticketInfo);
+        gameState.toLinkStationsProperty(station).addListener((o, oV, nV) -> {
+            Tooltip ticketInfo = new Tooltip(nV.toString());
+            ticketInfo.setShowDelay(Duration.seconds(0.25));
+            Tooltip.install(stationGroup, ticketInfo);
+        });
 
         return stationGroup;
     }

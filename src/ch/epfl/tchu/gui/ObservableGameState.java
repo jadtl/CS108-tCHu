@@ -11,15 +11,7 @@ import java.util.stream.Collectors;
 
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.*;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -45,6 +37,7 @@ public final class ObservableGameState {
     private final ObjectProperty<ObservableList<Ticket>> ownedTickets;
     private final Map<Card, IntegerProperty> ownedCards;
     private final Map<Route, BooleanProperty> routeAvailability;
+    private final Map<Station, ListProperty<String>> toLinkStations;
     private final ObjectProperty<StationConnectivity> ownConnectivity;
 
     private final BooleanProperty canDrawTickets;
@@ -82,6 +75,8 @@ public final class ObservableGameState {
                 .collect(Collectors.toMap(c -> c, c -> new SimpleIntegerProperty()));
         this.routeAvailability = ChMap.routes().stream()
                 .collect(Collectors.toMap(r -> r, r -> new SimpleBooleanProperty()));
+        this.toLinkStations = ChMap.stations().stream()
+                .collect(Collectors.toMap(s -> s, s -> new SimpleListProperty<>()));
         this.ownConnectivity = new SimpleObjectProperty<>();
 
         this.canDrawTickets = new SimpleBooleanProperty();
@@ -116,6 +111,19 @@ public final class ObservableGameState {
         Card.ALL.forEach(c1 -> this.ownedCards.get(c1).set((int) ownState.cards().stream().filter(c1::equals).count()));
         ChMap.routes().forEach(r -> this.routeAvailability.get(r).set(ownId.get() == newState.currentPlayerId()
                 && Objects.isNull(routeOwnerships.get(r).get()) && !isNeighborClaimed(r) && ownState.canClaimRoute(r)));
+        ChMap.stations().forEach(s -> {
+            List<Ticket> tickets = ownState.tickets().stream()
+                    .filter(t -> t.points(ownState.connectivity()) < 0 && (t.fromStation().equals(s.name()) || t.toStations().contains(s.name())))
+                    .collect(Collectors.toList());
+            List<String> toLinkStations = new ArrayList<>();
+            tickets.forEach(t -> {
+                if (t.fromStation().equals(s.name()))
+                    toLinkStations.addAll(t.toStations());
+                else
+                    toLinkStations.add(t.fromStation());
+            });
+            this.toLinkStations.get(s).set(FXCollections.observableArrayList(toLinkStations));
+        });
         this.ownConnectivity.set(ownState.connectivity());
 
         this.canDrawTickets.set(newState.canDrawTickets());
@@ -211,6 +219,14 @@ public final class ObservableGameState {
      */
     public ReadOnlyBooleanProperty routeAvailabilityProperty(Route route) {
         return routeAvailability.get(route);
+    }
+
+    /**
+     * @param station The station
+     * @return The read-only property of the stations the player has to link to the given station to earn points
+     */
+    public ReadOnlyListProperty<String> toLinkStationsProperty(Station station) {
+        return toLinkStations.get(station);
     }
 
     /**
