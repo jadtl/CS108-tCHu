@@ -43,6 +43,7 @@ public final class ObservableGameState {
     private final BooleanProperty canDrawTickets;
     private final BooleanProperty canDrawCards;
     private final Map<Route, ObjectProperty<List<SortedBag<Card>>>> possibleClaimCards;
+    private final ObjectProperty<List<Trail>> longestTrails;
 
     /**
      * An observable game state using the corresponding player identifier
@@ -83,6 +84,7 @@ public final class ObservableGameState {
         this.canDrawCards = new SimpleBooleanProperty();
         this.possibleClaimCards = ChMap.routes().stream()
                 .collect(Collectors.toMap(r -> r, r -> new SimpleObjectProperty<>()));
+        this.longestTrails = new SimpleObjectProperty<>();
     }
 
     /**
@@ -129,12 +131,24 @@ public final class ObservableGameState {
         this.canDrawTickets.set(newState.canDrawTickets());
         this.canDrawCards.set(newState.canDrawCards());
         ChMap.routes().forEach(r -> possibleClaimCards.get(r).set(ownState.canClaimRoute(r) ? ownState.possibleClaimCards(r) : List.of()));
+
+        if (newState.gameEnded()) {
+            int longestTrailLength = PlayerId.ALL.stream()
+                    .map(p -> Trail.longest(newState.playerState(p).routes()).length())
+                    .reduce(Integer.MIN_VALUE, Integer::max);
+            this.longestTrails.set(PlayerId.ALL.stream()
+                    .map(p -> Trail.longest(newState.playerState(p).routes()))
+                    .filter(t -> t.length() == longestTrailLength)
+                    .collect(Collectors.toList()));
+        }
     }
 
     /**
      * @return The read-only property of the concerned player's identifier
      */
-    public ReadOnlyObjectProperty<PlayerId> ownIdProperty() { return ownId; }
+    public ReadOnlyObjectProperty<PlayerId> ownIdProperty() {
+        return ownId;
+    }
 
     /**
      * @return The read-only property of the remaining tickets percentage
@@ -232,7 +246,9 @@ public final class ObservableGameState {
     /**
      * @return The read-only property of player's connectivity
      */
-    public ReadOnlyObjectProperty<StationConnectivity> ownConnectivityProperty() { return ownConnectivity; }
+    public ReadOnlyObjectProperty<StationConnectivity> ownConnectivityProperty() {
+        return ownConnectivity;
+    }
 
     /**
      * @return The read-only property of the ability to draw tickets
@@ -254,6 +270,13 @@ public final class ObservableGameState {
      */
     public ReadOnlyObjectProperty<List<SortedBag<Card>>> possibleClaimCardsProperty(Route route) {
         return possibleClaimCards.get(route);
+    }
+
+    /**
+     * @return The read-only property of the longest trails at the end of the game
+     */
+    public ReadOnlyObjectProperty<List<Trail>> longestTrailsProperty() {
+        return longestTrails;
     }
 
     private boolean isNeighborClaimed(Route route) {

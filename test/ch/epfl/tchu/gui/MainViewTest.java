@@ -45,7 +45,7 @@ public final class MainViewTest extends Application {
       playerStates.put(playerId, pps);
     }
     
-    gameState.setState(new PublicGameState(gs.ticketsCount(), gs.cardState(), gs.currentPlayerId(), playerStates, gs.lastPlayer()), gs.currentPlayerState());
+    gameState.setState(new PublicGameState(gs.ticketsCount(), gs.cardState(), gs.currentPlayerId(), playerStates, gs.lastPlayer(), false), gs.currentPlayerState());
 
     ObjectProperty<ClaimRouteHandler> claimRoute =
       new SimpleObjectProperty<>(MainViewTest::claimRoute);
@@ -91,7 +91,7 @@ public final class MainViewTest extends Application {
     PublicCardState cardState =
       new PublicCardState(Card.ALL.subList(0, 5), 110 - 2 * 4 - 5, 0);
     PublicGameState publicGameState =
-      new PublicGameState(36, cardState, PlayerId.PLAYER_1, pubPlayerStates, null);
+      new PublicGameState(36, cardState, PlayerId.PLAYER_1, pubPlayerStates, null, false);
     gameState.setState(publicGameState, p1State);
   }
 

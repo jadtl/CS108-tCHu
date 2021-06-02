@@ -23,7 +23,7 @@ class PublicGameStateTest {
             var ticketsCount = i;
             assertThrows(IllegalArgumentException.class, () -> {
                 var p1 = PLAYER_1;
-                new PublicGameState(ticketsCount, cardState, p1, playerState, p1);
+                new PublicGameState(ticketsCount, cardState, p1, playerState, p1, false);
             });
         }
     }
@@ -35,7 +35,7 @@ class PublicGameStateTest {
         var initialPlayerState = (PublicPlayerState) PlayerState.initial(SortedBag.of(4, Card.RED));
         var playerState = Map.of(PLAYER_1, initialPlayerState);
         assertThrows(IllegalArgumentException.class, () -> {
-            new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_1);
+            new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_1, false);
         });
     }
 
@@ -48,16 +48,16 @@ class PublicGameStateTest {
                 PLAYER_1, initialPlayerState,
                 PLAYER_2, initialPlayerState);
         assertThrows(NullPointerException.class, () -> {
-            new PublicGameState(1, null, PLAYER_1, playerState, PLAYER_1);
+            new PublicGameState(1, null, PLAYER_1, playerState, PLAYER_1, false);
         });
         assertThrows(NullPointerException.class, () -> {
-            new PublicGameState(1, cardState, null, playerState, PLAYER_1);
+            new PublicGameState(1, cardState, null, playerState, PLAYER_1, false);
         });
         assertThrows(NullPointerException.class, () -> {
-            new PublicGameState(1, cardState, PLAYER_1, null, PLAYER_1);
+            new PublicGameState(1, cardState, PLAYER_1, null, PLAYER_1, false);
         });
         assertDoesNotThrow(() -> {
-            new PublicGameState(1, cardState, PLAYER_1, playerState, null);
+            new PublicGameState(1, cardState, PLAYER_1, playerState, null, false);
         });
     }
 
@@ -70,7 +70,7 @@ class PublicGameStateTest {
                 PLAYER_1, initialPlayerState,
                 PLAYER_2, initialPlayerState);
         for (var ticketsCount = 0; ticketsCount < 10; ticketsCount++) {
-            var pgs = new PublicGameState(ticketsCount, cardState, PLAYER_1, playerState, PLAYER_1);
+            var pgs = new PublicGameState(ticketsCount, cardState, PLAYER_1, playerState, PLAYER_1, false);
             assertEquals(ticketsCount, pgs.ticketsCount());
         }
     }
@@ -84,7 +84,7 @@ class PublicGameStateTest {
                 PLAYER_1, initialPlayerState,
                 PLAYER_2, initialPlayerState);
         for (var ticketsCount = 0; ticketsCount < 10; ticketsCount++) {
-            var pgs = new PublicGameState(ticketsCount, cardState, PLAYER_1, playerState, PLAYER_1);
+            var pgs = new PublicGameState(ticketsCount, cardState, PLAYER_1, playerState, PLAYER_1, false);
             var canDraw = ticketsCount > 0;
             assertEquals(canDraw, pgs.canDrawTickets());
         }
@@ -98,7 +98,7 @@ class PublicGameStateTest {
         var playerState = Map.of(
                 PLAYER_1, initialPlayerState,
                 PLAYER_2, initialPlayerState);
-        var pgs = new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_1);
+        var pgs = new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_1, false);
         assertEquals(cardState, pgs.cardState());
     }
 
@@ -114,7 +114,7 @@ class PublicGameStateTest {
             for (var deckSize = 0; deckSize <= totalCards; deckSize += 1) {
                 var discardsSize = totalCards - deckSize;
                 var cardState = new PublicCardState(faceUpCards, deckSize, discardsSize);
-                var pgs = new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_1);
+                var pgs = new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_1, false);
                 assertEquals(canDraw, pgs.canDrawCards());
             }
         }
@@ -129,7 +129,7 @@ class PublicGameStateTest {
                 PLAYER_1, initialPlayerState,
                 PLAYER_2, initialPlayerState);
         for (var playerId : List.of(PLAYER_1, PLAYER_2)) {
-            var pgs = new PublicGameState(1, cardState, playerId, playerState, PLAYER_1);
+            var pgs = new PublicGameState(1, cardState, playerId, playerState, PLAYER_1, false);
             assertEquals(playerId, pgs.currentPlayerId());
         }
     }
@@ -143,7 +143,7 @@ class PublicGameStateTest {
         var playerState = Map.of(
                 PLAYER_1, initialPlayerState1,
                 PLAYER_2, initialPlayerState2);
-        var pgs = new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_1);
+        var pgs = new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_1, false);
         assertEquals(initialPlayerState1, pgs.playerState(PLAYER_1));
         assertEquals(initialPlayerState2, pgs.playerState(PLAYER_2));
     }
@@ -157,9 +157,9 @@ class PublicGameStateTest {
         var playerState = Map.of(
                 PLAYER_1, initialPlayerState1,
                 PLAYER_2, initialPlayerState2);
-        var pgs1 = new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_1);
+        var pgs1 = new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_1, false);
         assertEquals(initialPlayerState1, pgs1.currentPlayerState());
-        var pgs2 = new PublicGameState(1, cardState, PLAYER_2, playerState, PLAYER_1);
+        var pgs2 = new PublicGameState(1, cardState, PLAYER_2, playerState, PLAYER_1, false);
         assertEquals(initialPlayerState2, pgs2.currentPlayerState());
     }
 
@@ -184,7 +184,7 @@ class PublicGameStateTest {
                     PLAYER_1, new PublicPlayerState(0, 0, routes1),
                     PLAYER_2, new PublicPlayerState(0, 0, routes2));
 
-            var pgs = new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_1);
+            var pgs = new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_1, false);
             assertEquals(routes12, new HashSet<>(pgs.claimedRoutes()));
         }
     }
@@ -197,11 +197,11 @@ class PublicGameStateTest {
         var playerState = Map.of(
                 PLAYER_1, initialPlayerState,
                 PLAYER_2, initialPlayerState);
-        var pgs1 = new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_1);
+        var pgs1 = new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_1, false);
         assertEquals(PLAYER_1, pgs1.lastPlayer());
-        var pgs2 = new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_2);
+        var pgs2 = new PublicGameState(1, cardState, PLAYER_1, playerState, PLAYER_2, false);
         assertEquals(PLAYER_2, pgs2.lastPlayer());
-        var pgsN = new PublicGameState(1, cardState, PLAYER_1, playerState, null);
+        var pgsN = new PublicGameState(1, cardState, PLAYER_1, playerState, null, false);
         assertNull(pgsN.lastPlayer());
     }
 

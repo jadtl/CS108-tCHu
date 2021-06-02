@@ -33,7 +33,7 @@ public final class GraphicalPlayerTest extends Application {
     PublicCardState cardState =
       new PublicCardState(Card.ALL.subList(0, 5), 110 - 2 * 4 - 5, 0);
     PublicGameState publicGameState =
-      new PublicGameState(36, cardState, PlayerId.PLAYER_1, pubPlayerStates, null);
+      new PublicGameState(36, cardState, PlayerId.PLAYER_1, pubPlayerStates, null, false);
 
     player.setState(publicGameState, p1State);
   }

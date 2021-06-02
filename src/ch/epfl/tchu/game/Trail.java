@@ -96,7 +96,7 @@ public final class Trail {
     /**
      * The first station of the trail
      *
-     * @return the first station {@link Trail#station1} of the {@link Trail}
+     * @return The first station {@link Trail#station1} of the {@link Trail}
      */
     public Station station1() {
         return station1;
@@ -105,11 +105,18 @@ public final class Trail {
     /**
      * The second station of the trail
      *
-     * @return the second station {@link Trail#station2} of the {@link Trail}
+     * @return The second station {@link Trail#station2} of the {@link Trail}
      */
     public Station station2() {
         return station2;
     }
+
+    /**
+     * The routes of the trail
+     *
+     * @return The routes of the trail
+     */
+    public List<Route> routes() { return List.copyOf(routes); }
 
     /**
      * The string representation of the trail

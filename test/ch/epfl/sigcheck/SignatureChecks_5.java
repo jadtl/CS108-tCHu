@@ -9,7 +9,7 @@ final class SignatureChecks_5 {
     private SignatureChecks_5() {}
 
     void checkPublicGameState() {
-        v01 = new ch.epfl.tchu.game.PublicGameState(v02, v03, v04, v05, v04);
+        v01 = new ch.epfl.tchu.game.PublicGameState(v02, v03, v04, v05, v04, false);
         v06 = v01.canDrawCards();
         v06 = v01.canDrawTickets();
         v03 = v01.cardState();

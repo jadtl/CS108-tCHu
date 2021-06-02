@@ -33,6 +33,14 @@ public class Serdes {
     }
 
     /**
+     * The {@link Serde} applicable to an {@link Boolean}
+     */
+    public static final Serde<Boolean> BOOLEAN = Serde.of(
+            i -> i ? "1" : "0",
+            Boolean::valueOf
+    );
+
+    /**
      * The {@link Serde} applicable to an {@link Integer}
      */
     public static final Serde<Integer> INTEGER = Serde.of(
@@ -165,7 +173,8 @@ public class Serdes {
                             PLAYER_ID.serialize(i.currentPlayerId()),
                             PUBLIC_PLAYER_STATE.serialize(i.playerState(PlayerId.PLAYER_1)),
                             PUBLIC_PLAYER_STATE.serialize(i.playerState(PlayerId.PLAYER_2)),
-                            PLAYER_ID.serialize(i.lastPlayer()))),
+                            PLAYER_ID.serialize(i.lastPlayer()),
+                            BOOLEAN.serialize(i.gameEnded()))),
 
             i -> {
                 String[] r = i.split(Pattern.quote(":"), -1);
@@ -175,9 +184,10 @@ public class Serdes {
                 PublicPlayerState PPS1 = PUBLIC_PLAYER_STATE.deserialize(r[3]);
                 PublicPlayerState PPS2 = PUBLIC_PLAYER_STATE.deserialize(r[4]);
                 PlayerId lastPlayer = PLAYER_ID.deserialize(r[5]);
+                boolean gameEnded = BOOLEAN.deserialize(r[6]);
 
                 return new PublicGameState(ticketCount, cardState, currentPlayerId,
-                        Map.of(PlayerId.PLAYER_1, PPS1, PlayerId.PLAYER_2, PPS2), lastPlayer);
+                        Map.of(PlayerId.PLAYER_1, PPS1, PlayerId.PLAYER_2, PPS2), lastPlayer, gameEnded);
             }
     );
 }

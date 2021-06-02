@@ -222,6 +222,7 @@ public final class Game {
          * * * * * * * * */
 
         // Letting the players know how the game effectively ended
+        gameState = gameState.gameHasEnded();
         updatePlayerStates(players, gameState);
 
         // Declaring an effectively final game state to use in lambdas

@@ -84,6 +84,9 @@ public final class StringsFr {
     // Information on what stations to link the current one to to earn points
     public static final String LINK_STATION_TO = "Reliez cette station à %s pour obtenir des points";
 
+    // Information on the longest trail
+    public static final String IS_THE_LONGEST_TRAIL = "%s est le plus long trajet";
+
     // Names of countries
     public static final String FRANCE = "la France";
     public static final String GERMANY = "l'Allemagne";

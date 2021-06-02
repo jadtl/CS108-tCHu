@@ -19,6 +19,7 @@ public class PublicGameState {
     private final PlayerId currentPlayerId;
     private final Map<PlayerId, PublicPlayerState> playerState;
     private final PlayerId lastPlayer;
+    private final boolean gameEnded;
 
     /**
      * The public game state of a tCHu game
@@ -30,7 +31,8 @@ public class PublicGameState {
      * @param lastPlayer      The {@link PlayerId} of the last player
      * @throws IllegalArgumentException If {@code ticketsCount} is negative or the number of players is incorrect
      */
-    public PublicGameState(int ticketsCount, PublicCardState cardState, PlayerId currentPlayerId, Map<PlayerId, PublicPlayerState> playerState, PlayerId lastPlayer) {
+    public PublicGameState(int ticketsCount, PublicCardState cardState, PlayerId currentPlayerId,
+                           Map<PlayerId, PublicPlayerState> playerState, PlayerId lastPlayer, boolean gameEnded) {
         Preconditions.checkArgument(ticketsCount >= 0 && playerState.size() == PlayerId.COUNT);
 
         this.ticketsCount = ticketsCount;
@@ -38,6 +40,7 @@ public class PublicGameState {
         this.currentPlayerId = Objects.requireNonNull(currentPlayerId);
         this.playerState = Map.copyOf(playerState);
         this.lastPlayer = lastPlayer;
+        this.gameEnded = gameEnded;
     }
 
     /**
@@ -123,4 +126,11 @@ public class PublicGameState {
     public PlayerId lastPlayer() {
         return lastPlayer;
     }
+
+    /**
+     * Whether the game ended or not
+     *
+     * @return Whether the game ended or not
+     */
+    public boolean gameEnded() { return gameEnded; }
 }

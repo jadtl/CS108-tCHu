@@ -253,7 +253,7 @@ public final class Info {
     private static String stationEnumeration(List<String> stations) {
         StringBuilder stringBuilder = new StringBuilder();
         List<String> formattedStations = stations.stream()
-                .map(s -> stationName(s))
+                .map(Info::stationName)
                 .collect(Collectors.toList());
 
         if (formattedStations.size() == 1)

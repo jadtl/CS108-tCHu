@@ -41,6 +41,19 @@ ImageView {
     -fx-fill: white;
 }
 
+.longest Rectangle {
+    -fx-stroke-type: centered;
+    -fx-stroke: darkslategrey;
+    -fx-stroke-width: 4;
+}
+
+.longest Circle {
+    -fx-stroke-width: 2;
+    -fx-stroke: darkslategrey;
+    -fx-fill: white;
+}
+
+
 .PLAYER_1 .car {
     visibility: visible;
 }
@@ -51,17 +64,12 @@ ImageView {
 
 /* Style of station indicators */
 
-.country-station Circle {
+.station Circle {
     -fx-stroke-width: 4;
     -fx-stroke: darkslategray;
     -fx-fill: transparent;
 }
 
-.city-station Circle {
-    -fx-stroke-width: 4;
-    -fx-stroke: darkslategray;
-    -fx-fill: transparent;
-}
 
 /* Position of individual stations */
 

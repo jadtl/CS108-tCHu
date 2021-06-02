@@ -38,7 +38,6 @@ public final class Ticket implements Comparable<Ticket> {
         this.toStations = List.copyOf(trips.stream()
                 .map(t -> t.to().name())
                 .collect(Collectors.toCollection(TreeSet::new)));
-        System.out.println(toStations);
     }
 
     /**

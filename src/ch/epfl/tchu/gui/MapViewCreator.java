@@ -69,8 +69,13 @@ class MapViewCreator {
             carRectangle.getStyleClass().add("filled");
             Circle carCircle1 = new Circle(12, 6, 3);
             Circle carCircle2 = new Circle(24, 6, 3);
-            Group car = new Group(List.of(carRectangle, carCircle1, carCircle2));
+            Group car = new Group(carRectangle, carCircle1, carCircle2);
             car.getStyleClass().add("car");
+
+            gameState.longestTrailsProperty().addListener((o, oV, nV) -> nV.forEach(t -> {
+                if (t.routes().contains(route))
+                    car.getStyleClass().setAll("longest", "car");
+            }));
 
             Rectangle track = new Rectangle(36, 12);
             track.getStyleClass().add("track");
@@ -114,7 +119,7 @@ class MapViewCreator {
 
         Group stationGroup = new Group(indicator);
         stationGroup.setId("S" + station.id());
-        stationGroup.getStyleClass().add(station.id() > 33 ? "country-station" : "city-station");
+        stationGroup.getStyleClass().add("station");
         stationGroup.visibleProperty().bind(gameState.toLinkStationsProperty(station).emptyProperty().not());
 
         gameState.toLinkStationsProperty(station).addListener((o, oV, nV) -> {
