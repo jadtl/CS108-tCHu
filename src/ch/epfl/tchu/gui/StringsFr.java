@@ -78,8 +78,8 @@ public final class StringsFr {
     public static final String EN_DASH_SEPARATOR = " – ";
 
     // Tickets types according to the player's network
-    public static final String WINNING_TICKET = "Au moins un voyage sur ce ticket est accomplissable avec votre réseau (+%s points)";
-    public static final String LOSING_TICKET = "Aucun voyage sur ce ticket n'est accomplissable avec votre réseau (%s points)";
+    public static final String WINNING_TICKET = "Au moins un voyage sur ce ticket est réalisable avec votre réseau (+%s points)";
+    public static final String LOSING_TICKET = "Aucun voyage sur ce ticket n'est réalisable avec votre réseau (%s points)";
 
     // Information on what stations to link the current one to to earn points
     public static final String LINK_STATION_TO = "Reliez cette station à %s pour obtenir des points";
