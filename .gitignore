@@ -2,7 +2,8 @@ tCHu.iml
 out
 *.code-workspace
 archive.sh
-archive.zip
+project.zip
+project/*
 **/.DS_Store
 .*
 !.gitignore
